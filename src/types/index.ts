@@ -1,0 +1,220 @@
+export type Language = 'en' | 'hi';
+
+export interface LocalizedString {
+  en: string;
+  hi?: string;
+}
+
+export type ContentStatus = 'verified' | 'placeholder';
+
+export type ReviewStatus = 'draft' | 'doctor-reviewed';
+
+export interface Qualification {
+  id: string;
+  degree: LocalizedString;
+  institution: LocalizedString;
+  year?: string;
+  status: ContentStatus;
+}
+
+export interface Experience {
+  id: string;
+  role: LocalizedString;
+  organization: LocalizedString;
+  period: LocalizedString;
+  status: ContentStatus;
+}
+
+export interface Doctor {
+  id: string;
+  name: LocalizedString;
+  title: LocalizedString;
+  tagline: LocalizedString;
+  shortBio: LocalizedString;
+  fullBio: LocalizedString[];
+  qualifications: Qualification[];
+  experiences: Experience[];
+  memberships: LocalizedString[];
+  specialties: LocalizedString[];
+  clinicalPhilosophy: LocalizedString;
+  languagesSpoken: LocalizedString[];
+  registrationNumber: string;
+  registrationStatus: ContentStatus;
+}
+
+export interface Service {
+  id: string;
+  slug: string;
+  title: LocalizedString;
+  shortDescription: LocalizedString;
+  fullDescription: LocalizedString;
+  category: 'clinical' | 'monitoring' | 'lifestyle' | 'preventive';
+  indications: LocalizedString[];
+  clinicalApproach: LocalizedString[];
+  status: ContentStatus;
+}
+
+export interface Condition {
+  id: string;
+  slug: string;
+  name: LocalizedString;
+  category: 'diabetes' | 'thyroid' | 'weight-management' | 'metabolic-health' | 'other';
+  summary: LocalizedString;
+  symptoms: LocalizedString[];
+  managementApproach: LocalizedString[];
+  status: ContentStatus;
+}
+
+export type NoticeCategory =
+  | 'general'
+  | 'clinic_schedule'
+  | 'emergency_advisory'
+  | 'health_camp';
+
+export interface Notice {
+  id: string;
+  title: LocalizedString;
+  content: LocalizedString;
+  category: NoticeCategory;
+  effectiveDate: string;
+  expiryDate?: string;
+  isImportant: boolean;
+  status: ContentStatus;
+}
+
+export interface Article {
+  id: string;
+  slug: string;
+  title: LocalizedString;
+  excerpt: LocalizedString;
+  category: LocalizedString;
+  readTimeMinutes: number;
+  contentParagraphs: LocalizedString[];
+  keyTakeaways: LocalizedString[];
+  reviewStatus: ReviewStatus;
+  publishedAt: string;
+  status: ContentStatus;
+}
+
+export interface FAQ {
+  id: string;
+  category: 'general' | 'treatment' | 'diet_lifestyle' | 'emergency';
+  question: LocalizedString;
+  answer: LocalizedString;
+  reviewStatus: ReviewStatus;
+  status: ContentStatus;
+}
+
+export interface Video {
+  id: string;
+  title: LocalizedString;
+  description: LocalizedString;
+  durationMinutes: number;
+  youtubeId?: string;
+  category: LocalizedString;
+  status: ContentStatus;
+}
+
+export interface Review {
+  id: string;
+  patientInitials: string;
+  conditionManaged: LocalizedString;
+  comment: LocalizedString;
+  year: string;
+  status: ContentStatus;
+}
+
+export interface Facility {
+  id: string;
+  name: LocalizedString;
+  description: LocalizedString;
+  status: ContentStatus;
+}
+
+export interface ClinicTiming {
+  dayOfWeek: LocalizedString;
+  timeSlot: LocalizedString;
+  isAvailable: boolean;
+}
+
+export interface Clinic {
+  id: string;
+  name: LocalizedString;
+  facilityType: LocalizedString;
+  address: {
+    line1: LocalizedString;
+    line2?: LocalizedString;
+    city: LocalizedString;
+    pincode: string;
+    landmark?: LocalizedString;
+  };
+  phone: string;
+  whatsapp: string;
+  email: string;
+  mapsUrl?: string;
+  timings: ClinicTiming[];
+  consultationFee: string;
+  facilities: Facility[];
+  status: ContentStatus;
+}
+
+export interface ReportTopic {
+  id: string;
+  title: LocalizedString;
+  testName: LocalizedString; // e.g. "HbA1c", "Lipid Profile", "uACR"
+  whatItMeasures: LocalizedString;
+  clinicalSignificance: LocalizedString;
+  reviewStatus: ReviewStatus;
+  status: ContentStatus;
+}
+
+export interface PatientGuide {
+  id: string;
+  slug: string;
+  title: LocalizedString;
+  summary: LocalizedString;
+  steps: LocalizedString[];
+  emergencyWarning?: LocalizedString;
+  reviewStatus: ReviewStatus;
+  status: ContentStatus;
+}
+
+export interface AppointmentRequest {
+  patientName: string;
+  phone: string;
+  email?: string;
+  age?: number;
+  consultationType: 'in_clinic' | 'telemedicine';
+  preferredClinicId: string;
+  preferredDate: string;
+  preferredSlot: 'morning' | 'afternoon' | 'evening';
+  reasonForVisit?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'assistant' | 'system';
+  text: string;
+  timestamp: string;
+}
+
+export interface SearchResult {
+  id: string;
+  title: LocalizedString;
+  snippet: LocalizedString;
+  url: string;
+  category: 'service' | 'condition' | 'article' | 'faq' | 'clinic';
+}
+
+export interface NavigationSubItem {
+  name: LocalizedString;
+  href: string;
+  description?: LocalizedString;
+}
+
+export interface NavigationItem {
+  id: string;
+  name: LocalizedString;
+  href: string;
+  children?: NavigationSubItem[];
+}

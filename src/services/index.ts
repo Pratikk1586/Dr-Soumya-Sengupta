@@ -1,20 +1,48 @@
-import { LocalDoctorService } from './LocalDoctorService';
-import { LocalClinicService } from './LocalClinicService';
-import { LocalMedicalContentService } from './LocalMedicalContentService';
-import { LocalAppointmentService } from './LocalAppointmentService';
-import type { IDoctorService } from './IDoctorService';
-import type { IClinicService } from './IClinicService';
-import type { IMedicalContentService } from './IMedicalContentService';
-import type { IAppointmentService } from './IAppointmentService';
+import {
+  LocalDoctorService,
+  LocalServiceCatalogService,
+  LocalConditionService,
+  LocalNoticeService,
+  LocalArticleService,
+  LocalFaqService,
+  LocalVideoService,
+  LocalReviewService,
+  LocalClinicService,
+  LocalReportService,
+  LocalGuideService,
+  LocalProblemService,
+  LocalAppointmentService,
+} from './localServices';
+import type {
+  DoctorService,
+  ServiceCatalogService,
+  ConditionService,
+  NoticeService,
+  ArticleService,
+  FaqService,
+  VideoService,
+  ReviewService,
+  ClinicService,
+  ReportService,
+  GuideService,
+  ProblemService,
+  AppointmentService,
+} from './types';
 
-export const doctorService: IDoctorService = new LocalDoctorService();
-export const clinicService: IClinicService = new LocalClinicService();
-export const medicalContentService: IMedicalContentService = new LocalMedicalContentService();
-export const appointmentService: IAppointmentService = new LocalAppointmentService();
+// Central Service Registry / IoC Container
+// Future Api* implementations can replace Local* instances here without touching any UI component.
+export const doctorService: DoctorService = new LocalDoctorService();
+export const serviceCatalogService: ServiceCatalogService = new LocalServiceCatalogService();
+export const conditionService: ConditionService = new LocalConditionService();
+export const noticeService: NoticeService = new LocalNoticeService();
+export const articleService: ArticleService = new LocalArticleService();
+export const faqService: FaqService = new LocalFaqService();
+export const videoService: VideoService = new LocalVideoService();
+export const reviewService: ReviewService = new LocalReviewService();
+export const clinicService: ClinicService = new LocalClinicService();
+export const reportService: ReportService = new LocalReportService();
+export const guideService: GuideService = new LocalGuideService();
+export const problemService: ProblemService = new LocalProblemService();
+export const appointmentService: AppointmentService = new LocalAppointmentService();
 
-export type {
-  IDoctorService,
-  IClinicService,
-  IMedicalContentService,
-  IAppointmentService,
-};
+export * from './types';

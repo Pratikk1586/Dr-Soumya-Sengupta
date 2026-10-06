@@ -1,48 +1,41 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import type { Language, LocalizedString } from '../types/content';
-import { getLocalizedText } from '../utils/localization';
+import React, { useEffect, useCallback } from 'react';
+import type { Language, LocalizedString } from '../types';
+import { getTranslation, localize as localizeHelper } from '../i18n';
 import { LanguageContext } from './languageContextDef';
-
-const STORAGE_KEY = 'dr_sengupta_preferred_lang';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === 'hi' || saved === 'en') {
-        return saved;
-      }
-    } catch {
-      // Ignore storage access restrictions
-    }
-    return 'en';
-  });
-
-  const setLanguage = useCallback((lang: Language) => {
-    setLanguageState(lang);
-    try {
-      localStorage.setItem(STORAGE_KEY, lang);
-    } catch {
-      // Ignore
-    }
-  }, []);
+  const [language, setLanguage] = useLocalStorage<Language>('dr_sengupta_preferred_lang', 'en');
 
   const toggleLanguage = useCallback(() => {
-    setLanguage(language === 'en' ? 'hi' : 'en');
-  }, [language, setLanguage]);
+    setLanguage((prev) => (prev === 'en' ? 'hi' : 'en'));
+  }, [setLanguage]);
 
   useEffect(() => {
-    document.documentElement.lang = language;
-    if (language === 'hi') {
-      document.documentElement.classList.add('font-devanagari');
-    } else {
-      document.documentElement.classList.remove('font-devanagari');
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = language;
+      if (language === 'hi') {
+        document.documentElement.classList.add('font-devanagari');
+      } else {
+        document.documentElement.classList.remove('font-devanagari');
+      }
     }
   }, [language]);
 
+  const localize = useCallback(
+    (obj: LocalizedString | undefined | null) => {
+      return localizeHelper(obj, language);
+    },
+    [language]
+  );
+
   const t = useCallback(
-    (localized: LocalizedString | undefined | null) => {
-      return getLocalizedText(localized, language);
+    (keyOrObj: string | LocalizedString | undefined | null) => {
+      if (!keyOrObj) return '';
+      if (typeof keyOrObj === 'string') {
+        return getTranslation(keyOrObj, language);
+      }
+      return localizeHelper(keyOrObj, language);
     },
     [language]
   );
@@ -54,6 +47,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setLanguage,
         toggleLanguage,
         t,
+        localize,
         isHindi: language === 'hi',
       }}
     >

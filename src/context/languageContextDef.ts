@@ -1,11 +1,12 @@
 import { createContext } from 'react';
-import type { Language, LocalizedString } from '../types/content';
+import type { Language, LocalizedString } from '../types';
 
 export interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   toggleLanguage: () => void;
-  t: (localized: LocalizedString | undefined | null) => string;
+  t: (keyOrObj: string | LocalizedString | undefined | null) => string;
+  localize: (obj: LocalizedString | undefined | null) => string;
   isHindi: boolean;
 }
 

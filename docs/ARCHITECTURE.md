@@ -6,7 +6,7 @@ The web platform for **Dr. Soumya Sengupta, Diabetologist** is an authoritative,
 
 ---
 
-## 2. Architectural Principles & Non-Negotiables
+## 2. Architectural Principles & Layering
 
 ### 2.1 Pure Frontend Architecture
 - **Zero Backend / Zero Database / Zero Auth**: No server-side runtime, database connections, admin portals, or sensitive storage.
@@ -14,106 +14,192 @@ The web platform for **Dr. Soumya Sengupta, Diabetologist** is an authoritative,
 - **Client-Side Service Abstraction**: Every domain is decoupled via explicit TypeScript interfaces. UI components **never** directly access `src/data/*`.
 
 ```
-┌────────────────────────────────────────────────────────┐
-│                   UI Layer (React 19)                  │
-│       Pages, Clinical Components, 3D Canvas, A11y      │
-└───────────────────────────▲────────────────────────────┘
-                            │ (uses hooks / services)
-┌───────────────────────────┴────────────────────────────┐
-│                    Service Interface Layer             │
-│    IDoctorService, IClinicService, IMedicalContent...   │
-└─────────────▲──────────────────────────────▲───────────┘
-              │                              │
-┌─────────────┴─────────────┐  ┌─────────────┴───────────┐
-│   Local Implementations   │  │   Future API Adaptor    │
-│    (LocalDoctorService)   │  │   (ApiDoctorService)    │
-└─────────────▲─────────────┘  └─────────────────────────┘
-              │
-┌─────────────┴─────────────┐
-│    Local Seed Datasets    │
-│   (src/data/_placeholders)│
-└───────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                    UI Layer (React 19 + TS)                     │
+│    Pages, Shell (Navbar/Footer/BottomNav), Primitives, A11y     │
+└────────────────────────────────▲────────────────────────────────┘
+                                 │ (uses hooks: useService/useAsync)
+┌────────────────────────────────┴────────────────────────────────┐
+│                     Service Interface Layer                     │
+│    DoctorService, ServiceCatalogService, ConditionService,      │
+│    NoticeService, ArticleService, FaqService, VideoService,     │
+│    ReviewService, ClinicService, ReportService, GuideService... │
+└───────────────▲─────────────────────────────────▲───────────────┘
+                │                                 │
+┌───────────────┴───────────────┐ ┌───────────────┴───────────────┐
+│     Local Implementations     │ │      Future API Adaptor       │
+│     (src/services/local*)     │ │     (src/services/api*)       │
+└───────────────▲───────────────┘ └───────────────────────────────┘
+                │
+┌───────────────┴───────────────┐
+│      Local Seed Datasets      │
+│    (doctor, services, etc.)   │
+│    (src/data/_placeholders)   │
+└───────────────────────────────┘
 ```
 
----
-
-## 3. Localization Architecture (Bilingual EN / हिन्दी)
-
-### 3.1 Data Model
-Every user-facing piece of text is typed via `LocalizedString`:
-```ts
-export type Language = 'en' | 'hi';
-
-export interface LocalizedString {
-  en: string;
-  hi?: string;
+### 2.2 ESLint Architectural Enforcement
+Direct imports from `src/data` are strictly forbidden for components, pages, hooks, and contexts via ESLint `no-restricted-imports`:
+```js
+{
+  files: ['src/components/**/*', 'src/pages/**/*', 'src/hooks/**/*', 'src/context/**/*'],
+  rules: {
+    'no-restricted-imports': ['error', { patterns: [{ group: ['*data/*', '**/data/*', '../data/*', '../../data/*'] }] }]
+  }
 }
 ```
-- **Fallback Rule**: If `hi` is undefined or blank, the resolver fallback mechanism immediately displays `en`.
-- **Devanagari Font System**: Hindi text automatically renders using `Noto Sans Devanagari` alongside `Inter` for Latin scripts.
-- **Language Switcher**: Global toggle synced with `<html>` `lang="hi"` / `lang="en"` attributes, ensuring screen readers (VoiceOver, TalkBack, NVDA) read phonetics accurately.
 
 ---
 
-## 4. Content Safety Protocol & Placeholder Management
+## 3. Complete Folder Structure
 
-Medical websites operate under strict regulatory and ethical constraints. Inventing qualifications, timings, numbers, or hospital privileges is unacceptable.
-
-### 4.1 The Marker Protocol
-- Any unverified field must carry the visible indicator:
-  `"[CONTENT TO BE VERIFIED]"`
-- Every placeholder must be cataloged in `src/data/_placeholders.ts`.
-- The UI exposes a subtle yet unmistakable badge or note when placeholder content is rendered, enabling the doctor and clinic staff to audit and verify exact details prior to public release.
-
-### 4.2 Medical Disclaimer & Educational Bounds
-- Educational articles and guides are strictly informational and non-prescriptive.
-- All educational material carries `reviewStatus: 'draft'` until signed off.
-- Mandatory universal disclaimer:
-  > *"For medical diagnosis or treatment, please consult a qualified doctor."*
+```
+website/
+├── docs/
+│   └── ARCHITECTURE.md          # Architecture specification & route mappings
+├── public/
+│   ├── _redirects               # Netlify SPA rewrite rule
+│   ├── robots.txt               # Web crawler guidance
+│   ├── sitemap.xml              # Generated search engine sitemap
+│   └── site.webmanifest         # PWA / web application manifest
+├── scripts/
+│   ├── content-audit.mjs        # Scans for unresolved placeholders (npm run content:audit)
+│   └── generate-sitemap.mjs     # Generates public/sitemap.xml
+├── src/
+│   ├── components/
+│   │   ├── common/              # Base primitives: Button, Card, Badge, SmartImage, etc.
+│   │   └── layout/              # AppLayout, Navbar, MobileDrawer, BottomNav, Footer
+│   ├── config/
+│   │   ├── constants.ts         # Safety markers, standard disclaimer constants
+│   │   ├── env.ts               # Safe, typed environment variables
+│   │   └── navigation.ts        # Unified navigation item mapping
+│   ├── context/
+│   │   ├── LanguageContext.tsx  # Bilingual context provider
+│   │   ├── languageContextDef.ts# Context interface definitions
+│   │   └── useLanguage.ts       # Hook accessing language state
+│   ├── data/
+│   │   ├── _placeholders.ts     # Content verification registry
+│   │   ├── articles.ts          # Clinical articles
+│   │   ├── clinic.ts            # Chamber schedule and locations
+│   │   ├── conditions.ts        # Endocrine and metabolic conditions
+│   │   ├── doctor.ts            # Doctor qualifications and experience
+│   │   ├── faqs.ts              # Patient frequently asked questions
+│   │   ├── guides.ts            # Patient self-care guides
+│   │   ├── notices.ts           # Chamber schedule announcements
+│   │   ├── problems.ts          # Clinical problem navigator
+│   │   ├── reports.ts           # Biomarker and lab report guides
+│   │   ├── reviews.ts           # Patient experience feedback
+│   │   ├── services.ts          # Structured diabetes programs
+│   │   └── videos.ts            # Educational video metadata
+│   ├── hooks/
+│   │   ├── useAsync.ts          # Async state handler (loading/error)
+│   │   ├── useLocalStorage.ts   # Guarded SSR-safe storage persistence
+│   │   └── useService.ts        # Service consumption hook
+│   ├── i18n/
+│   │   ├── en.ts                # English dictionary
+│   │   ├── hi.ts                # Hindi dictionary (preserves standard medical terms)
+│   │   └── index.ts             # Dot-notation translation resolver
+│   ├── pages/
+│   │   ├── clinic/              # Chamber overview, facilities, photos, timings, location
+│   │   ├── conditions/          # Condition list and detail pages (:slug)
+│   │   ├── diabetes/            # Care overview and sub-program pages (:slug)
+│   │   ├── resources/           # Hub, articles, FAQs, videos, reports, guides
+│   │   ├── AboutPage.tsx        # Doctor credentials with anchor sections
+│   │   ├── BookAppointmentPage.tsx # Consultation inquiry flow
+│   │   ├── ContactPage.tsx      # Multi-channel chamber contact
+│   │   ├── DisclaimerPage.tsx   # Universal medical disclaimer
+│   │   ├── HomePage.tsx         # Practice homepage
+│   │   ├── NotFoundPage.tsx     # 404 handler
+│   │   └── PrivacyPage.tsx      # Privacy statement
+│   ├── routes/
+│   │   └── index.tsx            # Route-level lazy loading and Suspense configuration
+│   ├── services/
+│   │   ├── index.ts             # IoC container exporting singleton service instances
+│   │   ├── localServices.ts     # Local data implementations
+│   │   └── types.ts             # Service interface declarations
+│   ├── styles/
+│   │   └── globals.css          # Tailwind CSS v4 design tokens and a11y rules
+│   ├── tests/
+│   │   └── smoke.test.ts        # Vitest smoke tests
+│   ├── types/
+│   │   └── index.ts             # TypeScript domain types
+│   ├── utils/
+│   │   └── cn.ts                # Class merging utility
+│   ├── App.tsx                  # Root application wrapper
+│   ├── index.css                # Style import entry
+│   └── main.tsx                 # Client bootstrap
+├── .env.example                 # Environment template
+├── eslint.config.js             # ESLint configuration with architecture rules
+├── package.json                 # Pinned dependencies and execution scripts
+├── tsconfig.json                # TypeScript project configuration
+├── vercel.json                  # SPA rewrite configuration
+└── vitest.config.ts             # Unit test runner configuration
+```
 
 ---
 
-## 5. Graceful Degradation & Environment Configuration
+## 4. Route-to-Navbar Exact Mapping
 
-Configuration values (`VITE_CLINIC_PHONE`, `VITE_WHATSAPP_NUMBER`, `VITE_MAPS_URL`, etc.) are processed through `src/config/env.ts`.
-
-| Environment Variable | If Available | If Missing / Empty |
-|---|---|---|
-| `VITE_CLINIC_PHONE` | Interactive `tel:` call button | Disabled state with "Contact details being updated" tooltip |
-| `VITE_WHATSAPP_NUMBER` | Direct WhatsApp messaging link | Button hidden or inactive with status notice |
-| `VITE_CLINIC_MAP_URL` | External Google Maps navigation | Fallback address text with direction instructions |
-| `VITE_TELEMEDICINE_ENABLED` | Online consultation inquiry form | Shows in-clinic consultation only |
-
-No broken links, blank `href=""`, or console runtime errors will ever occur.
+| Navbar Item | Route / Anchor | Component / Shell | Purpose |
+|---|---|---|---|
+| **Home** | `/` | `HomePage` | Practice overview, doctor bio summary, clinical specializations |
+| **About Doctor** | `/about` | `AboutPage` | Full clinical biography and philosophy |
+| └ *Overview* | `/about#overview` | `AboutPage` | Practice background & philosophy |
+| └ *Qualifications* | `/about#qualifications` | `AboutPage` | MBBS, MD, and Diabetology credentials |
+| └ *Experience* | `/about#experience` | `AboutPage` | Hospital & chamber practice tenure |
+| └ *Expertise* | `/about#expertise` | `AboutPage` | Type 1, Type 2, CGM, and organ preservation |
+| └ *Memberships* | `/about#memberships` | `AboutPage` | RSSDI, API, and Endocrine Society affiliations |
+| **Diabetes Care** | `/diabetes-care` | `DiabetesCarePage` | Specialized care program catalog |
+| └ *Comprehensive Care* | `/diabetes-care/management` | `ServiceDetailPage` | Glycemic optimization protocols |
+| └ *Prediabetes & Remission*| `/diabetes-care/prediabetes` | `ServiceDetailPage` | Halting disease progression |
+| └ *CGM & Sensor Training* | `/diabetes-care/education` | `ServiceDetailPage` | Sensor application and Time in Range |
+| └ *Cardiometabolic Balance*| `/diabetes-care/lifestyle` | `ServiceDetailPage` | Heart, lipid, and blood pressure coordination |
+| └ *Complication Screening* | `/diabetes-care/complications`| `ServiceDetailPage` | Kidney, neuropathy, and retinopathy screening |
+| **Conditions** | `/conditions` | `ConditionsListPage` | Metabolic conditions index |
+| └ *Type 1 & 2 Diabetes* | `/conditions/diabetes` | `ConditionDetailPage` | Diabetes symptom & management profiles |
+| └ *Thyroid Disorders* | `/conditions/thyroid` | `ConditionDetailPage` | TSH, Hypo/Hyperthyroidism care |
+| └ *Weight Management* | `/conditions/weight-management`| `ConditionDetailPage` | Visceral fat & metabolic obesity |
+| └ *Metabolic Syndrome* | `/conditions/metabolic-health`| `ConditionDetailPage` | Triglycerides, HDL, and vascular health |
+| └ *Other Endocrine* | `/conditions/other` | `ConditionDetailPage` | Gestational shifts, bone and adrenal health |
+| **Patient Resources** | `/patient-resources` | `ResourcesHubPage` | Central educational library |
+| └ *Knowledge Hub* | `/patient-resources/knowledge-hub` | `ResourcesHubPage` | Knowledge library overview |
+| └ *Clinical Articles* | `/patient-resources/articles` | `ArticlesListPage` | Physician-reviewed articles |
+| └ *Article Detail* | `/patient-resources/articles/:slug` | `ArticleDetailPage` | In-depth medical explainer |
+| └ *FAQs* | `/patient-resources/faqs` | `FaqsPage` | Categorized patient questions |
+| └ *Educational Videos* | `/patient-resources/videos` | `VideosPage` | Demonstration videos |
+| └ *Lab Reports* | `/patient-resources/reports` | `ReportsPage` | HbA1c, uACR, and lipid biomarker guides |
+| └ *Patient Guides* | `/patient-resources/guides` | `GuidesPage` | Fasting prep and foot self-care |
+| **Chamber & Clinic** | `/clinic` | `ClinicOverviewPage` | Chamber logistics overview |
+| └ *Facilities* | `/clinic/facilities` | `FacilitiesPage` | Diagnostic equipment on-site |
+| └ *Photos* | `/clinic/photos` | `PhotosPage` | Consultation environment gallery |
+| └ *OPD Timings* | `/clinic/timings` | `TimingsPage` | Consultation schedule & slots |
+| └ *Location & Map* | `/clinic/location` | `LocationPage` | Address, landmarks, and transit |
+| **Contact** | `/contact` | `ContactPage` | Direct phone, WhatsApp, and email |
+| **Book Appointment** | `/book-appointment` | `BookAppointmentPage` | Consultation slot request flow |
+| **Privacy Policy** | `/privacy` | `PrivacyPage` | Patient confidentiality & data terms |
+| **Medical Disclaimer** | `/disclaimer` | `DisclaimerPage` | Non-prescriptive informational terms |
+| **Fallback** | `*` | `NotFoundPage` | 404 error page |
 
 ---
 
-## 6. Visual Design System & Aesthetics
+## 5. Localization & Translation Architecture
 
-### 6.1 Clinical Color Palette
-- **Deep Slate Teal** (`#0C3E4A` / `#0F4C5C`): Deep, calm, medical authority.
-- **Soft Surgical Teal** (`#1E6B7B` / `#E6F4F6`): Precision and clinical clarity.
-- **Clinical Warm Linen** (`#FAF9F5` / `#F3F4F1`): Non-clinical warmth, relieving medical anxiety.
-- **Endocrine Renewal Sage** (`#427A5B` / `#EBF5F0`): Vitality, metabolic restoration, and lifestyle balance.
-- **Notice Amber** (`#D97706`): Dignified, visible status for unverified fields without alarming users.
-
-### 6.2 Typography Hierarchy
-- Primary Sans: `Inter` (neutral, legible, optimized for medical interfaces).
-- Devanagari Sans: `Noto Sans Devanagari` (harmonious baseline and weight matching Inter).
-- Editorial Serif Accents: `Newsreader` / `Georgia` for doctor's introductory philosophy and quotes.
+- Typed dictionary: `src/i18n/en.ts` and `src/i18n/hi.ts`.
+- Dot-notation resolver: `getTranslation(path, lang)` with fallback to English.
+- Helper `localize(LocalizedString, lang)` for bilingual content objects.
+- Devanagari rules: line-height increased to `1.75`, strictly `letter-spacing: normal !important` for clean script rendering.
+- Standard medical terms (HbA1c, TSH, CGM, uACR) are kept intact with Hindi explanations.
 
 ---
 
-## 7. Performance & Accessibility (WCAG 2.2 AA)
+## 6. Content Safety Protocol & Auditing
 
-1. **Accessibility**:
-   - Contrast ratio $\ge 4.5:1$ for normal text and $\ge 3:1$ for large headings.
-   - Visible keyboard focus rings (`focus-visible:ring-2 focus-visible:ring-teal-700`).
-   - Screen-reader landmarks (`<header>`, `<nav>`, `<main>`, `<article>`, `<aside>`, `<footer>`).
-   - `aria-expanded`, `aria-controls`, `aria-label` on all interactive toggles.
-2. **Motion & 3D (Three.js)**:
-   - Full support for `prefers-reduced-motion: reduce`.
-   - The Three.js 3D metabolic/glucose visualizer dynamically checks device capability and user motion preference. If reduced motion is requested or WebGL is unsupported, it presents an accessible SVG/canvas static anatomical diagram.
-3. **Core Web Vitals**:
-   - Zero Cumulative Layout Shift (CLS) via explicit aspect ratios and skeleton placeholders.
-   - Sub-second LCP with font preloading and optimized hero imagery.
+- Placeholder indicator: `[CONTENT TO BE VERIFIED]`.
+- Registered items cataloged in `src/data/_placeholders.ts`.
+- Content verification script:
+  ```bash
+  npm run content:audit
+  ```
+  Audits all data files and outputs line-by-line unresolved items requiring doctor approval.
+- Educational materials default to `reviewStatus: 'draft'`.
+- Universal disclaimer: *"For medical diagnosis or treatment, please consult a qualified doctor."*

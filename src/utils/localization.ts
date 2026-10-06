@@ -1,4 +1,4 @@
-import type { Language, LocalizedString } from '../types/content';
+import type { Language, LocalizedString } from '../types';
 
 /**
  * Resolves a LocalizedString according to the active language.

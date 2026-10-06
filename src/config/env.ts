@@ -1,58 +1,74 @@
 /**
- * Safe client-side environment variable configuration.
- * Adheres strictly to the graceful degradation protocol:
- * If an environment variable is unset or empty, the system marks the channel as unavailable
- * preventing broken links, empty tel:/mailto: hrefs, or invalid maps navigation.
+ * Typed client-side environment configuration and graceful degradation helper.
+ * Normalizes and validates VITE_* environment variables.
+ * If variables are empty, provides safe fallbacks and status flags to prevent broken UI.
  */
 
-interface EnvConfig {
+export interface AppEnvConfig {
   clinicPhone: string;
   hasPhone: boolean;
   whatsappNumber: string;
   hasWhatsapp: boolean;
   clinicEmail: string;
   hasEmail: boolean;
+  clinicAddress: string;
+  hasAddress: boolean;
   googleMapsUrl: string;
   hasGoogleMaps: boolean;
+  doctorName: string;
+  siteUrl: string;
   telemedicineEnabled: boolean;
-  appTitle: string;
 }
 
-const rawPhone = (import.meta.env.VITE_CLINIC_PHONE ?? '').trim();
-const rawWhatsapp = (import.meta.env.VITE_WHATSAPP_NUMBER ?? '').trim();
-const rawEmail = (import.meta.env.VITE_CLINIC_EMAIL ?? '').trim();
-const rawMaps = (import.meta.env.VITE_CLINIC_MAPS_URL ?? '').trim();
-const rawTelemedicine = (import.meta.env.VITE_TELEMEDICINE_ENABLED ?? 'true').trim();
+function cleanString(val: unknown): string {
+  if (typeof val !== 'string') return '';
+  return val.trim();
+}
 
-export const ENV: EnvConfig = {
+function sanitizePhone(raw: string): string {
+  return raw.replace(/[^+\d]/g, '');
+}
+
+const rawPhone = cleanString(import.meta.env.VITE_CLINIC_PHONE);
+const rawWhatsapp = cleanString(import.meta.env.VITE_WHATSAPP_NUMBER);
+const rawEmail = cleanString(import.meta.env.VITE_EMAIL || import.meta.env.VITE_CLINIC_EMAIL);
+const rawAddress = cleanString(import.meta.env.VITE_ADDRESS);
+const rawMapsUrl = cleanString(import.meta.env.VITE_GOOGLE_MAPS_URL || import.meta.env.VITE_CLINIC_MAPS_URL);
+const rawName = cleanString(import.meta.env.VITE_NAME) || 'Dr. Soumya Sengupta';
+const rawSiteUrl = cleanString(import.meta.env.VITE_SITE_URL) || 'https://drsoumyasengupta.com';
+const rawTelemedicine = cleanString(import.meta.env.VITE_TELEMEDICINE_ENABLED);
+
+export const ENV: AppEnvConfig = {
   clinicPhone: rawPhone,
   hasPhone: rawPhone.length > 0,
   whatsappNumber: rawWhatsapp,
   hasWhatsapp: rawWhatsapp.length > 0,
   clinicEmail: rawEmail,
   hasEmail: rawEmail.length > 0,
-  googleMapsUrl: rawMaps,
-  hasGoogleMaps: rawMaps.length > 0,
-  telemedicineEnabled: rawTelemedicine === 'true' || rawTelemedicine === '1',
-  appTitle: (import.meta.env.VITE_APP_TITLE ?? 'Dr. Soumya Sengupta — Diabetologist').trim(),
+  clinicAddress: rawAddress,
+  hasAddress: rawAddress.length > 0,
+  googleMapsUrl: rawMapsUrl,
+  hasGoogleMaps: rawMapsUrl.length > 0,
+  doctorName: rawName,
+  siteUrl: rawSiteUrl,
+  telemedicineEnabled: rawTelemedicine === 'false' ? false : true,
 };
 
-/**
- * Returns formatted tel: URI or undefined if phone is unavailable
- */
 export function getSafePhoneHref(): string | undefined {
   if (!ENV.hasPhone) return undefined;
-  const sanitized = ENV.clinicPhone.replace(/[^+\d]/g, '');
-  return sanitized ? `tel:${sanitized}` : undefined;
+  const digits = sanitizePhone(ENV.clinicPhone);
+  return digits ? `tel:${digits}` : undefined;
 }
 
-/**
- * Returns formatted WhatsApp web URI or undefined if WhatsApp is unavailable
- */
 export function getSafeWhatsAppHref(defaultMessage?: string): string | undefined {
   if (!ENV.hasWhatsapp) return undefined;
-  const sanitized = ENV.whatsappNumber.replace(/[^\d]/g, '');
-  if (!sanitized) return undefined;
+  const digits = sanitizePhone(ENV.whatsappNumber);
+  if (!digits) return undefined;
   const msgParam = defaultMessage ? `?text=${encodeURIComponent(defaultMessage)}` : '';
-  return `https://wa.me/${sanitized}${msgParam}`;
+  return `https://wa.me/${digits.replace(/^\+/, '')}${msgParam}`;
+}
+
+export function getSafeEmailHref(): string | undefined {
+  if (!ENV.hasEmail) return undefined;
+  return `mailto:${ENV.clinicEmail}`;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
-import { CONTENT_TO_BE_VERIFIED_MARKER } from '../../data/_placeholders';
+import { CONTENT_TO_BE_VERIFIED_MARKER } from '../../config/constants';
 
 interface VerificationBadgeProps {
   note?: string;
