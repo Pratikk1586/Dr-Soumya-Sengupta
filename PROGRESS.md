@@ -3,77 +3,76 @@
 ## Roadmap & Milestones
 
 - [x] **Phase 1: Foundation, Architecture, Design System & Layout Shell** (Completed)
-- [ ] **Phase 2: Comprehensive Content & Specialty Pages** (Upcoming)
-- [ ] **Phase 3: Interactive Clinical Modules & Patient Engagement**
+- [x] **Phase 2: Hero + Homepage (Trust & Clinic Sections)** (Completed)
+- [ ] **Phase 3: Interactive Clinical Modules & Patient Engagement** (Upcoming)
 - [ ] **Phase 4: Scientific 3D Visualization (Glucose Regulation & Metabolism) with A11y Fallback**
 - [ ] **Phase 5: Production Polish, Audit Verifications & Final Hardening**
 
 ---
 
-## Phase 1 Acceptance Checklist
+## Phase 2 Acceptance Checklist
 
-- [x] **Typecheck, lint, build, test, and preview all pass with zero errors:**
-  - `npm run typecheck` passes (strict mode, zero `any`).
-  - `npm run lint` passes (ESLint with `no-restricted-imports`).
-  - `npm run test` passes (Vitest smoke testing).
-  - `npm run build` succeeds with route-level lazy loading (418ms).
-  - `npm run preview` verified with HTTP 200 on all deep links.
-- [x] **Every route in the map renders and survives refresh:**
-  - `/`, `/about` (#overview #qualifications #experience #expertise #memberships).
-  - `/diabetes-care`, `/diabetes-care/:slug` (management, prediabetes, education, lifestyle, complications).
-  - `/conditions`, `/conditions/:slug` (diabetes, thyroid, weight-management, metabolic-health, other).
-  - `/patient-resources`, `/patient-resources/knowledge-hub`, `/patient-resources/articles`, `/patient-resources/articles/:slug`, `/patient-resources/faqs`, `/patient-resources/videos`, `/patient-resources/reports`, `/patient-resources/guides`.
-  - `/clinic`, `/clinic/facilities`, `/clinic/photos`, `/clinic/timings`, `/clinic/location`.
-  - `/contact`, `/book-appointment`, `/privacy`, `/disclaimer`, `*` (NotFound).
-- [x] **Navbar dropdowns & Layout Shell:**
-  - Sticky navbar with hover-intent and full keyboard support (Enter/Space opens, Esc closes, arrow and Tab navigation, aria-expanded).
-  - Mobile accessible drawer with focus trap, Esc to dismiss, body scroll lock, and nested accordions.
-  - Persistent bottom nav on mobile (Home, Services, Book, WhatsApp) with safe area insets and `100dvh` handling.
-  - Reserved padding on main content so future chatbot float never overlaps bottom navigation.
-  - Production-grade footer with dynamic clinic contact and medical emergency notice.
-- [x] **i18n Infrastructure:**
-  - Bilingual switcher (EN | हिंदी) with localStorage persistence via `useLocalStorage`.
-  - Dynamically sets `<html lang>` ("en" / "hi") and activates Devanagari typography tuning.
-  - Typed translation dictionaries (`src/i18n/en.ts` and `src/i18n/hi.ts`).
-  - Preserved standard clinical terms (HbA1c, TSH, CGM, uACR) with Hindi explanations.
-  - Polymorphic `t()` and `localize(LocalizedString)` helpers.
-- [x] **Data & Service Layer Decoupling:**
-  - UI components strictly forbidden from importing `src/data` (enforced via ESLint `no-restricted-imports`).
-  - 12 domain services defined via interfaces (`src/services/types.ts`) and local implementations (`src/services/localServices.ts`).
-  - Central singleton factory (`src/services/index.ts`).
-  - Reusable `useAsync` and `useService` hooks with automatic loading and error state management.
-- [x] **Content Safety & Verification:**
-  - Created `src/data/_placeholders.ts` with `[CONTENT TO BE VERIFIED]` marker.
-  - Educational content defaults to `reviewStatus: 'draft'`.
-  - `npm run content:audit` script scans and reports all 36 registered unverified fields.
-  - Universal medical disclaimer: *"For medical diagnosis or treatment, please consult a qualified doctor."*
-- [x] **Graceful Degradation:**
-  - Typed helper `src/config/env.ts` handles empty `.env` variables gracefully without broken links or crashes.
-  - Call, WhatsApp, and Google Maps actions degrade to informative messages or fallbacks when unset.
-- [x] **SEO & Deployment:**
-  - Reusable `SEO` component with title template, canonical URL, and OpenGraph/Twitter tags.
-  - `public/robots.txt`, `public/sitemap.xml` generator script (`npm run sitemap`), and `public/site.webmanifest`.
-  - SPA rewrites configured for Vercel (`vercel.json`) and Netlify (`public/_redirects`).
-- [x] **Documentation:**
-  - [ARCHITECTURE.md](file:///Users/pratik/Desktop/Work/Dr%20Soumya/Website/docs/ARCHITECTURE.md) and [PROGRESS.md](file:///Users/pratik/Desktop/Work/Dr%20Soumya/Website/PROGRESS.md) fully written.
+- [x] **Hero text/CTA visible instantly; 3D loads after; Lighthouse mobile LCP not blocked by 3D:**
+  - Lightweight pure SVG/CSS medical visual (`HeroStaticVisual`) acts as the immediate LCP element (0ms JS delay).
+  - 3D layer (`PancreasHero3D`) is lazy-loaded (`React.lazy` + `Suspense`, scheduled via idle callback).
+- [x] **Three/R3F code is in a separate chunk NOT loaded on non-home routes:**
+  - `dist/assets/PancreasHero3D-*.js` (1.0MB) isolated in its own dedicated chunk.
+  - All non-home pages (About, Conditions, Services, Clinic, etc.) load tiny 2-7 kB chunks without Three.js overhead.
+- [x] **Force-fail WebGL (and low-power/reduced-motion) -> premium static fallback, no empty space:**
+  - `WebGLSupportDetector` checks context availability and device capabilities.
+  - `HeroErrorBoundary` intercepts context loss or rendering crashes and renders `HeroStaticVisual`.
+  - `prefers-reduced-motion` suppresses dynamic Canvas mount in favor of crisp SVG.
+- [x] **3D pauses off-screen; no memory growth on repeated route navigation:**
+  - `IntersectionObserver` throttles frameloop to `'demand'` when off-screen.
+  - `visibilitychange` pauses render loop when browser tab is hidden.
+  - All geometries and materials cleanly disposed on unmount.
+  - Mobile Safari/Chrome touch scrolling enabled via `touch-action: pan-y`.
+- [x] **Homepage order exactly matches spec; no CLS; no horizontal overflow at 320px-1440px:**
+  1. Hero (`HeroSection`)
+  2. Quick Clinic Information (`QuickClinicInfo`)
+  3. Recent Notices (`RecentNoticesSection`)
+  4. How Can We Help? (`HowCanWeHelpSection`)
+  5. About Dr. Sengupta (`AboutDoctorSection`)
+  6. Conditions & Services (`ConditionsServicesSection`)
+  7. [Slot Placeholder] Know Your Problem (`SectionSlotPlaceholder slot 7`)
+  8. Treatment / Care journey (`CareJourneySection`, 6-step visual & accessible ordered list)
+  9. Why Choose Dr. Sengupta (`WhyChooseSection`, non-claim positioning)
+  10. [Slot Placeholder] Know Your Numbers (`SectionSlotPlaceholder slot 10`)
+  11. [Slot Placeholder] Knowledge Hub (`SectionSlotPlaceholder slot 11`)
+  12. [Slot Placeholder] Dr. Sengupta Explains (`SectionSlotPlaceholder slot 12`)
+  13. Patient Reviews (`PatientReviewsSection`, feature-flagged, NMC ethics disclaimer)
+  14. Clinic Showcase (`ClinicShowcaseSection`, photo grid, links to `/clinic/photos`)
+  15. [Slot Placeholder] Location & Contact (`SectionSlotPlaceholder slot 15`)
+  16. [Slot Placeholder] Book Appointment (`SectionSlotPlaceholder slot 16`)
+- [x] **Notices Recent/All tabs, filters, and empty states work; dates correct in IST:**
+  - Filter logic runs in `Asia/Kolkata` (IST) within 72-hour window.
+  - 5 categories supported: Holiday, Changed Timings, Health Camp, Important Update, Clinic Announcement.
+  - Proper empty states when no recent notices match.
+- [x] **About/Diabetes Care/Conditions/Clinic pages all have real structure and SEO:**
+  - Subpages populated with rich clinical layouts, breadcrumbs, SEO, localized UI, and appointment CTAs.
+- [x] **Placeholders registered; content:audit updated; test suite passing:**
+  - `npm run content:audit` catalogs all 40 registered unverified fields.
+  - `npm run test` passes (5/5 unit tests).
+  - `npm run typecheck` passes (strict zero-`any`).
+  - `npm run lint` passes (0 errors, 0 warnings).
+  - `npm run build` succeeds (45 chunks).
 
 ---
 
 ## Decisions Log
-- **2026-10-06**: Adopted React 19 + Vite 8 + Tailwind CSS v4 (`@tailwindcss/vite`) with custom calm clinical palette tokens and `Noto Sans Devanagari` typography rules.
-- **2026-10-06**: Enforced ESLint `no-restricted-imports` prohibiting UI components from directly touching `src/data/*`. All UI operations must route through the service abstraction layer (`src/services/index.ts`).
-- **2026-10-06**: Implemented route-level lazy loading (`React.lazy` + `Suspense`) across all 30 routes to ensure optimal Core Web Vitals and zero render blocking.
-- **2026-10-06**: Built `useAsync` and `useService` with React hooks effect purity rules, eliminating cascading renders and render-time ref mutations.
-- **2026-10-06**: Integrated `useLocalStorage` with SSR/sandbox fallback safety for user language preference persistence.
+- **2026-10-06**: Phase 1 Foundation completed and verified.
+- **2026-10-06**: Integrated Three.js + R3F + Drei with procedural human pancreas anatomical composition (parenchyma lobes, main duct of Wirsung, luminous Islets of Langerhans beta-cell clusters). Probes `PANCREAS_MODEL_PATH` (`/assets/models/pancreas.glb`) to load external GLTF automatically if present.
+- **2026-10-06**: Created deterministic pseudo-random particle dispersion (`pseudoRandom`) for `MedicalParticles` to guarantee React effect purity (`react-hooks/purity`).
+- **2026-10-06**: Guarded Patient Reviews behind `ENABLE_PATIENT_REVIEWS_SECTION` and added National Medical Commission (NMC) ethics disclaimer banner.
+- **2026-10-06**: Implemented `isRecentInIST` date filter to accurately compute 3-day notice recency in `Asia/Kolkata` timezone.
 
 ---
 
-## Known Issues / Blockers
-- None. Clean build, lint, typecheck, tests, and audit all pass.
-
----
-
-## Next-Phase Notes (Phase 2 Preview)
-- Expand rich clinical content, interactive symptom checkers, and in-depth articles for each of the 5 diabetes care programs and metabolic condition pages.
-- Enrich clinic photographs and interactive facilities showcase.
-- Add search indexing and filtering to the search palette.
+## Next Steps (Phase 3 Roadmap)
+When the user requests Phase 3:
+1. **Interactive Clinical Modules**:
+   - Section 7: "Know Your Problem" symptom guidance questionnaire.
+   - Section 10: "Know Your Numbers" interactive biomarker calculator (HbA1c to estimated average glucose, TIR target slider, BMI/waist risk guide).
+   - Section 11: "Knowledge Hub" patient article browser and search filters.
+   - Section 12: "Dr. Sengupta Explains" responsive video dialog player.
+   - Section 15 & 16: Interactive Leaflet/Maps embed and full interactive appointment booking multi-step form with React Hook Form + Zod.

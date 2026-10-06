@@ -42,6 +42,7 @@ import { CLINICS_DATA } from '../data/clinic';
 import { REPORTS_DATA } from '../data/reports';
 import { GUIDES_DATA } from '../data/guides';
 import { PROBLEMS_DATA, type ProblemTopic } from '../data/problems';
+import { isRecentInIST } from '../utils/date';
 
 export class LocalDoctorService implements DoctorService {
   async getProfile(): Promise<Doctor> {
@@ -74,8 +75,18 @@ export class LocalConditionService implements ConditionService {
 }
 
 export class LocalNoticeService implements NoticeService {
-  async getNotices(): Promise<Notice[]> {
-    return Promise.resolve(NOTICES_DATA);
+  async getNotices(category?: string): Promise<Notice[]> {
+    if (!category || category === 'all') {
+      return Promise.resolve(NOTICES_DATA);
+    }
+    return Promise.resolve(NOTICES_DATA.filter((n) => n.category === category));
+  }
+  async getRecentNotices(): Promise<Notice[]> {
+    const recent = NOTICES_DATA.filter((n) => {
+      const dateToCheck = n.publishedAt || n.effectiveDate;
+      return isRecentInIST(dateToCheck, 3);
+    });
+    return Promise.resolve(recent);
   }
   async getActiveNotice(): Promise<Notice | undefined> {
     return Promise.resolve(NOTICES_DATA.find((n) => n.isImportant) || NOTICES_DATA[0]);

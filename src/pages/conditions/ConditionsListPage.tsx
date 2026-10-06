@@ -71,6 +71,23 @@ export const ConditionsListPage: React.FC = () => {
             </Card>
           ))}
         </div>
+
+        {/* Clinical Consultation CTA */}
+        <div className="p-8 rounded-2xl bg-gradient-to-r from-[#0f3d4a] to-[#08222a] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-white">
+              Schedule an Endocrine Consultation
+            </h3>
+            <p className="text-xs sm:text-sm text-teal-100 max-w-xl leading-relaxed">
+              If you are managing diabetes, thyroid fluctuations, or metabolic resistance, consult with Dr. Sengupta for a structured, evidence-based review.
+            </p>
+          </div>
+          <Link to="/book-appointment" className="shrink-0">
+            <button className="px-6 py-3 rounded-xl bg-white text-[#0f3d4a] font-bold text-sm shadow-md hover:bg-slate-50 transition-colors">
+              {t('cta.bookAppointment')}
+            </button>
+          </Link>
+        </div>
       </Container>
     </>
   );

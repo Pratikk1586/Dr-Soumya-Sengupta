@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { SEO } from '../components/common/SEO';
 import { Container } from '../components/common/Container';
 import { Breadcrumb } from '../components/common/Breadcrumb';
 import { Card } from '../components/common/Card';
+import { Button } from '../components/common/Button';
 import { VerificationBadge } from '../components/common/VerificationBadge';
 import { MedicalDisclaimerBanner } from '../components/common/MedicalDisclaimerBanner';
-import { GraduationCap, Briefcase, Award, CheckCircle, Shield } from 'lucide-react';
+import { GraduationCap, Briefcase, Award, CheckCircle, Shield, Calendar } from 'lucide-react';
 import { useLanguage } from '../context/useLanguage';
 import { useService } from '../hooks/useService';
 import { doctorService } from '../services';
@@ -184,6 +186,24 @@ export const AboutPage: React.FC = () => {
             ))}
           </div>
         </section>
+
+        {/* Clinical Consultation CTA */}
+        <div className="p-8 rounded-2xl bg-gradient-to-r from-[#0f3d4a] to-[#08222a] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-white">
+              Consult with Dr. Soumya Sengupta
+            </h3>
+            <p className="text-xs sm:text-sm text-teal-100 max-w-xl leading-relaxed">
+              Prior appointment booking is recommended for comprehensive first evaluations and personalized glycemic plan formulation.
+            </p>
+          </div>
+          <Link to="/book-appointment" className="shrink-0">
+            <Button variant="secondary" size="lg" className="w-full sm:w-auto shadow-md">
+              <Calendar className="w-4 h-4 mr-2" />
+              <span>{t('cta.bookAppointment')}</span>
+            </Button>
+          </Link>
+        </div>
       </Container>
     </>
   );

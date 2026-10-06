@@ -66,10 +66,14 @@ export interface Condition {
 }
 
 export type NoticeCategory =
-  | 'general'
+  | 'holiday'
+  | 'changed_timings'
+  | 'health_camp'
+  | 'important_update'
+  | 'clinic_announcement'
   | 'clinic_schedule'
-  | 'emergency_advisory'
-  | 'health_camp';
+  | 'general'
+  | 'emergency_advisory';
 
 export interface Notice {
   id: string;
@@ -77,6 +81,7 @@ export interface Notice {
   content: LocalizedString;
   category: NoticeCategory;
   effectiveDate: string;
+  publishedAt?: string;
   expiryDate?: string;
   isImportant: boolean;
   status: ContentStatus;

@@ -85,6 +85,23 @@ export const DiabetesCarePage: React.FC = () => {
             </Card>
           ))}
         </div>
+
+        {/* Clinical Consultation CTA */}
+        <div className="p-8 rounded-2xl bg-gradient-to-r from-[#0f3d4a] to-[#08222a] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-white">
+              Enroll in a Structured Diabetes Program
+            </h3>
+            <p className="text-xs sm:text-sm text-teal-100 max-w-xl leading-relaxed">
+              Start with a detailed clinical assessment and continuous sensor profiling to take control of your glycemic health.
+            </p>
+          </div>
+          <Link to="/book-appointment" className="shrink-0">
+            <Button variant="secondary" size="lg" className="w-full sm:w-auto shadow-md">
+              <span>{t('cta.bookAppointment')}</span>
+            </Button>
+          </Link>
+        </div>
       </Container>
     </>
   );

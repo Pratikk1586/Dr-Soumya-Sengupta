@@ -34,7 +34,8 @@ export interface ConditionService {
 }
 
 export interface NoticeService {
-  getNotices(): Promise<Notice[]>;
+  getNotices(category?: string): Promise<Notice[]>;
+  getRecentNotices(): Promise<Notice[]>;
   getActiveNotice(): Promise<Notice | undefined>;
 }
 
