@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { BottomNav } from './BottomNav';
+import { ClinicAssistant } from '../assistant/ClinicAssistant';
 import { SkipLink } from '../common/SkipLink';
 import { ScrollRestoration } from './ScrollRestoration';
 
@@ -24,6 +25,7 @@ export const AppLayout: React.FC = () => {
 
       <Footer />
       <BottomNav />
+      <ClinicAssistant />
     </div>
   );
 };

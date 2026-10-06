@@ -226,11 +226,13 @@ export interface AppointmentRequest {
   phone: string;
   email?: string;
   age?: number;
+  patientType?: 'new' | 'followup';
   consultationType: 'in_clinic' | 'telemedicine';
   preferredClinicId: string;
   preferredDate: string;
   preferredSlot: 'morning' | 'afternoon' | 'evening';
   reasonForVisit?: string;
+  consent?: boolean;
 }
 
 export interface ChatMessage {

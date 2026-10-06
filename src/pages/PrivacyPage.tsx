@@ -51,10 +51,24 @@ export const PrivacyPage: React.FC = () => {
           </section>
 
           <section className="space-y-2">
-            <h3 className="font-bold text-slate-900 text-sm">2. Appointment Inquiries</h3>
+            <h3 className="font-bold text-slate-900 text-sm">2. Appointment Request Form & Data Minimization</h3>
             <p>
-              Contact information provided via the appointment inquiry form (name, phone number) is utilized strictly by authorized chamber reception staff to coordinate consultation schedules. Details are never shared with third-party advertisers.
+              The multi-step consultation scheduling form on this website operates under strict data minimization principles:
             </p>
+            <ul className="list-disc pl-5 space-y-1 text-slate-600">
+              <li>
+                <strong>Client-Side Only Preparation:</strong> The form prepares your scheduling request entirely within your browser to facilitate direct communication with our chamber desk via telephone or WhatsApp.
+              </li>
+              <li>
+                <strong>Zero Server Persistence:</strong> No sensitive medical histories, diagnostic scans, or payment credentials are submitted to or stored on external web servers or public cloud databases.
+              </li>
+              <li>
+                <strong>Confidentiality Notice:</strong> Patients are explicitly instructed not to enter confidential clinical narratives or lab reports into the form. Detailed medical discussions occur strictly during the confidential, one-on-one consultation with Dr. Sengupta.
+              </li>
+              <li>
+                <strong>No Commercial Tracking:</strong> Your contact details are never shared with third-party advertisers, data brokers, or marketing networks.
+              </li>
+            </ul>
           </section>
 
           <section className="space-y-2">

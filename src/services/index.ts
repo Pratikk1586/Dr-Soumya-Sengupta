@@ -12,8 +12,10 @@ import {
   LocalGuideService,
   LocalProblemService,
   LocalAppointmentService,
+  LocalGalleryService,
 } from './localServices';
 import { LocalSearchService } from './searchService';
+import { LocalChatbotService } from './chatbotService';
 import type {
   DoctorService,
   ServiceCatalogService,
@@ -29,6 +31,8 @@ import type {
   ProblemService,
   AppointmentService,
   SearchService,
+  ChatbotService,
+  GalleryService,
 } from './types';
 
 // Central Service Registry / IoC Container
@@ -47,6 +51,8 @@ export const guideService: GuideService = new LocalGuideService();
 export const problemService: ProblemService = new LocalProblemService();
 export const appointmentService: AppointmentService = new LocalAppointmentService();
 export const searchService: SearchService = new LocalSearchService();
+export const chatbotService: ChatbotService = new LocalChatbotService();
+export const galleryService: GalleryService = new LocalGalleryService();
 
 export * from './types';
-export { LocalSearchService };
+export { LocalSearchService, LocalChatbotService, LocalGalleryService };

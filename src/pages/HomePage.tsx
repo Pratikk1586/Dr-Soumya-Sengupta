@@ -6,7 +6,6 @@ import { RecentNoticesSection } from '../components/home/RecentNoticesSection';
 import { HowCanWeHelpSection } from '../components/home/HowCanWeHelpSection';
 import { AboutDoctorSection } from '../components/home/AboutDoctorSection';
 import { ConditionsServicesSection } from '../components/home/ConditionsServicesSection';
-import { SectionSlotPlaceholder } from '../components/home/SectionSlotPlaceholder';
 import { KnowYourProblemSection } from '../components/home/KnowYourProblemSection';
 import { CareJourneySection } from '../components/home/CareJourneySection';
 import { WhyChooseSection } from '../components/home/WhyChooseSection';
@@ -15,6 +14,8 @@ import { KnowledgeHubSection } from '../components/home/KnowledgeHubSection';
 import { DoctorVideosSection } from '../components/home/DoctorVideosSection';
 import { PatientReviewsSection } from '../components/home/PatientReviewsSection';
 import { ClinicShowcaseSection } from '../components/home/ClinicShowcaseSection';
+import { LocationContactSection } from '../components/home/LocationContactSection';
+import { AppointmentTeaserSection } from '../components/home/AppointmentTeaserSection';
 
 export const HomePage: React.FC = () => {
   return (
@@ -67,25 +68,11 @@ export const HomePage: React.FC = () => {
       {/* 14. Clinic Showcase (Chamber environment, waiting lounge, and photo gallery) */}
       <ClinicShowcaseSection />
 
-      {/* 15. [Slot Placeholder] Location & Contact (Interactive map & chamber directions) */}
-      <SectionSlotPlaceholder
-        slotNumber={15}
-        moduleName="Location & Chamber Access"
-        tagline="Physical Consultation Access"
-        description="Interactive Google Maps integration, prominent landmarks, parking accessibility, and public transit navigation to the Salt Lake and Kolkata consultation chambers."
-        targetLink="/clinic/location"
-        targetLinkText="Get Directions & Location"
-      />
+      {/* 15. Location & Contact (Interactive map & chamber directions) */}
+      <LocationContactSection />
 
-      {/* 16. [Slot Placeholder] Book Appointment (Dedicated interactive reservation module) */}
-      <SectionSlotPlaceholder
-        slotNumber={16}
-        moduleName="Consultation Scheduling & Slot Reservation"
-        tagline="Online OPD Appointment Desk"
-        description="Select your preferred chamber slot, submit past clinical records, and receive timely WhatsApp or SMS appointment confirmations."
-        targetLink="/book-appointment"
-        targetLinkText="Book Clinical Slot"
-      />
+      {/* 16. Book Appointment (Dedicated interactive reservation module) */}
+      <AppointmentTeaserSection />
     </>
   );
 };

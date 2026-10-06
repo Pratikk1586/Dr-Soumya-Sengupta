@@ -5,82 +5,78 @@
 - [x] **Phase 1: Foundation, Architecture, Design System & Layout Shell** (Completed)
 - [x] **Phase 2: Hero + Homepage (Trust & Clinic Sections)** (Completed)
 - [x] **Phase 3: Patient Education, Search & Hindi/English Content** (Completed)
-- [ ] **Phase 4: Scientific 3D Visualization (Glucose Regulation & Metabolism) with A11y Fallback** (Upcoming)
+- [x] **Phase 4: Action Layer (Assistant, Appointment, WhatsApp, Maps, Contact, Gallery)** (Completed)
 - [ ] **Phase 5: Production Polish, Audit Verifications & Final Hardening**
 
 ---
 
-## Phase 3 Acceptance Checklist
+## Phase 4 Acceptance Checklist
 
-- [x] **Know Your Problem (Homepage Section 7 + data/problems.ts):**
-  - Interactive selector across 6 clinical topics (High Blood Sugar, High HbA1c, Weight Gain, Thyroid Report, Frequent Thirst, Diabetes Management).
-  - Accessible tablist / radio pattern with keyboard navigation (`ArrowLeft`/`ArrowRight`/`Home`/`End`) and animated transitions respecting `prefers-reduced-motion`.
-  - Visible prominent non-diagnostic notice: *"This guide provides general educational information and is NOT a medical diagnosis. For personal advice, please consult Dr. Sengupta."*
-  - Direct links to related clinic pages, patient guides, and appointment booking CTA.
+- [x] **Lib Helpers (`src/lib`):**
+  - `whatsapp.ts`: E.164 normalization, validation, and dynamic message formatting for appointments, enquiries, and location links; returns `null` when env variable is missing.
+  - `maps.ts`: Safe Google Maps URL and Directions generator; strict embed URL validator rejecting non-standard/untrusted domains.
+  - `contact.ts`: Standardized `tel:` and `mailto:` link generators with graceful `null` handling for missing configurations.
+  - Unit tests in `src/tests/libHelpers.test.ts` (12 tests) covering all edge cases.
 
-- [x] **Reports (Single source: data/reports.ts) — Two presentations:**
-  - Single source of truth in `src/data/reports.ts` powering both:
-    1. Homepage Section 10 ("Know Your Numbers"): Glycemic & metabolic biomarker cards (Glucose, HbA1c, BP, Cholesterol, BMI).
-    2. Subpage `/patient-resources/reports` ("Understand Your Reports"): 7 clinical biomarkers (including uACR and TSH) with structured 3-panel breakdown (What it is, Why it is measured, General educational meaning).
-  - No diagnostic calculator or personal interpretation inputs.
-  - Sourced guidelines with citation (`ADA 2026 Standards of Care`, `KDIGO 2024`, `ATA 2024`, `ACC/AHA 2024`, `WHO Asia-Pacific`). Unverified targets marked `[CONTENT TO BE VERIFIED] ranges to be confirmed by Dr. Sengupta`.
-  - Standing notice on all presentations: *"Normal ranges vary by lab and individual. Consult Dr. Sengupta for personal clinical interpretation."*
+- [x] **Action Components (`src/components/common`):**
+  - `WhatsAppButton`: Supports `appointment`, `enquiry`, and `location` variants; hides or disables gracefully when env config is absent.
+  - `MapSection`: Safely renders verified embed iframe or an interactive static map card with one-click directions.
+  - `DirectionsButton`, `CallButton`, `EmailButton`: Hide/disable gracefully with fallback feedback.
 
-- [x] **Articles & Knowledge Hub (Homepage Section 11 + /patient-resources/knowledge-hub):**
-  - Curated clinical articles across required categories (Type 2 Diabetes, CGM & Tech, Prediabetes & Remission, Hypoglycemia, Diabetic Foot Care, Diet & Nutrition, Thyroid Health, Complications).
-  - Homepage Knowledge Hub features the highlighted guide plus recent articles list.
-  - `/patient-resources/knowledge-hub` includes URL query param category filtering (`?category=...`), reading time estimates, and friendly empty states.
-  - Article detail page (`/patient-resources/knowledge-hub/:slug`) includes `MedicalWebPage` JSON-LD schema, copyable share link, related articles, breadcrumbs, and medical disclaimer banner.
+- [x] **Rule-Based Clinic Assistant (`src/components/assistant/ClinicAssistant.tsx`):**
+  - Floating trigger button positioned above mobile bottom navigation bar (`bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-4 md:right-6`) to prevent overlap.
+  - Desktop floating panel with clean animations; mobile full bottom sheet with focus trap, `Escape` key dismiss, and body scroll lock.
+  - Dynamic initial greeting and quick actions in English and Hindi drawn from clinic services (never hardcoded).
+  - Intent matching for quick actions, clinic timings, fees, appointments, doctor credentials, and common FAQs.
+  - Strict Medical Safety refusal: triggers on diagnostic, medication/dosage, or report clearance prompts with guidance to consult a qualified physician.
+  - Strict Emergency Safety response: triggers on chest pain, severe hypoglycemia, or breathing distress with immediate emergency service instructions.
+  - Session-only state with zero server persistence or third-party API dependencies.
 
-- [x] **FAQs (/patient-resources/faqs + data/faqs.ts):**
-  - 10 comprehensive FAQs across 6 categories (Diabetes, Thyroid, Weight Management, Clinic Logistics, Appointments, Reports).
-  - Fully accessible accordion with `aria-expanded` and `aria-controls`.
-  - Instant live filter search by question keyword + category filter pills.
-  - Direct URL hash deep-linking (`#slug` opens the target accordion item smoothly).
-  - Valid `FAQPage` JSON-LD structured data embedded.
+- [x] **Multi-Step Appointment Request (`/book-appointment` & Homepage Section 16):**
+  - Step 1 (Visit Type: New / Follow-up), Step 2 (Preferred Date & Time Window), Step 3 (Patient Contact & Reason), Step 4 (Review/Edit Summary), Step 5 (Submission Result).
+  - React Hook Form + Zod schema with Indian mobile validation (+91 standard) and tolerant international format.
+  - Reason field includes visible patient notice: *"Do not include detailed medical history or reports."*
+  - Data minimisation with explicit patient consent checkbox; zero server persistence.
+  - Submission output displays **EXACTLY**: *"Your appointment request has been prepared. Please contact the clinic to confirm availability."* (never claims booked/confirmed).
+  - Post-submission actions: Prefilled WhatsApp message generation, direct phone call, and copy-to-clipboard summary.
+  - Homepage Section 16 upgraded to `AppointmentTeaserSection`.
 
-- [x] **Patient Self-Care Guides (/patient-resources/guides + data/guides.ts):**
-  - 4 actionable guides (Lifestyle & Meals, Blood Sugar Monitoring, Appointment Prep, Diabetic Foot Care).
-  - Interactive step-by-step checklists with emergency safety callout warnings.
-  - PDF download handler with graceful "PDF coming soon" toast when local assets are pending.
+- [x] **Contact & Location Pages (`/contact`, `/clinic/location`, & Homepage Section 15):**
+  - Homepage Section 15 upgraded to `LocationContactSection` with live consultation hours and direct transit guidance.
+  - `/contact` and `/clinic/location` provide complete clinic details with phone, WhatsApp, email, directions, and consulting hours.
+  - Structured data: Injected `MedicalClinic` Schema.org JSON-LD with verified fields only.
 
-- [x] **Doctor Explains Videos (Homepage Section 12 + /patient-resources/videos):**
-  - Lightweight `VideoFacade` component: zero YouTube scripts or iframes loaded until patient clicks play (`youtube-nocookie.com`).
-  - Full transcripts in both English and Hindi with collapsible transcript toggle.
-  - Category filtering, duration badges, and direct links between homepage and library.
-
-- [x] **Global Smart Search (Cmd/Ctrl+K, '/', navbar trigger):**
-  - Accessible modal dialog (`SearchModal`) with focus trap, Esc/backdrop dismiss, and keyboard shortcuts (`↑`/`↓` navigate, `Enter` select).
-  - Real-time client-side search across 9 categories (Conditions, Services, Articles, FAQs, Videos, Reports, Guides, Notices, Clinic pages).
-  - Weighted ranking: exact title match (150) > prefix title (100) > keyword/tag (30-40) > body/transcript (10-20).
-  - Bilingual indexing: searches against active language content with Hindi and English queries.
-  - Category grouping with hit counts and query match highlighting (`<mark>`).
-  - Recent searches persisted in `localStorage` under `sg_recent_searches` (max 5, clearable, re-runnable).
-  - Empty state with popular suggested searches; zero-results state with suggestions.
-  - Screen reader `aria-live="polite"` result count announcements.
+- [x] **Media Gallery (`/clinic/photos`):**
+  - Responsive media grid with fixed aspect ratios (`aspect-4/3`, `aspect-16/9`) preventing layout shifts (CLS).
+  - Category filters: Clinic Photos, Doctor Photos, Events, Videos, Health Camps, Clinic Activities.
+  - Full accessible Lightbox: focus trap, `Escape` key dismiss, `ArrowLeft`/`ArrowRight` keyboard navigation, mobile touch swipe gestures, alt text, and captions.
+  - Native lazy loading with blur/skeleton placeholders; video integration via lightweight `VideoFacade`.
+  - Empty category state handling.
 
 - [x] **Verification & Architectural Integrity:**
-  - Zero direct data imports in UI components (`no-restricted-imports` enforced via `src/services/`).
-  - Zero TypeScript errors (`tsc -b`), zero ESLint warnings, 16/16 Vitest unit tests passing.
+  - Zero TypeScript errors (`tsc -b`), zero ESLint warnings, 38/38 Vitest unit tests passing across 5 suites.
   - `content:audit` confirms 49 tracked placeholder/unverified items.
-  - Vite production build generates 46 clean code-split chunks in <1s.
+  - Clean production build: Vite bundle compiles in <800ms with code-splitting intact.
 
 ---
 
 ## Decisions Log
 - **2026-10-06**: Phase 1 Foundation completed and verified.
 - **2026-10-06**: Phase 2 Hero + 16-section homepage architecture completed and verified.
-- **2026-10-07**: Phase 3 Patient Education & Search completed:
-  - Single-sourced biomarker definitions into `src/data/reports.ts` to power both Homepage Section 10 and `/patient-resources/reports`.
-  - Implemented YouTube nocookie facade with transcript support to maintain 0ms third-party script penalty.
-  - Built pure TypeScript weighted fuzzy search service (`LocalSearchService`) indexing 9 clinical domains with active language weighting.
-  - Maintained strict non-diagnostic positioning across all symptom guidance tools and report explainers.
+- **2026-10-07**: Phase 3 Patient Education & Search completed.
+- **2026-10-07**: Phase 4 Action Layer completed:
+  - Validated E.164 phone normalization and secure Google Maps embed URL checking.
+  - Built pure client-side rule-based Clinic Assistant with medical advice refusal and emergency detection.
+  - Positioned mobile assistant floating trigger above bottom navigation safe areas to guarantee zero overlap.
+  - Implemented 5-step client-only appointment request flow with exact non-confirmation wording and WhatsApp/Call actions.
+  - Upgraded media gallery with touch-swipe accessible lightbox and zero-CLS image aspect ratios.
 
 ---
 
-## Next Steps (Phase 4 Roadmap)
-When instructed to proceed with Phase 4:
-1. **Scientific 3D Visualization: Glucose Regulation & Metabolism**:
-   - Interactive 3D visual demonstrating insulin receptor docking, glucose cellular uptake, and pancreatic beta-cell insulin secretion.
-   - Accessible 2D fallback with step-by-step diagrammatic text for low-power devices and screen readers.
-   - Integration into the educational sections with smooth camera movements and interactive speed controls.
+## Next Steps (Phase 5 Roadmap)
+When instructed to proceed with Phase 5:
+1. **Production Polish, Audit Verifications & Final Hardening**:
+   - Comprehensive cross-browser and mobile viewport testing (iOS Safari, Android Chrome, desktop).
+   - Core Web Vitals optimization (LCP, CLS, INP) across all pages.
+   - Accessibility audit (WCAG 2.1 AA compliance, full screen-reader walkthrough, color contrast validation).
+   - Final review of all 49 `[CONTENT TO BE VERIFIED]` tokens before deployment.

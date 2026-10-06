@@ -191,3 +191,15 @@ export class LocalAppointmentService implements AppointmentService {
     };
   }
 }
+
+import { GALLERY_ITEMS } from '../data/gallery';
+import type { GalleryService, GalleryItem, GalleryCategory } from './types';
+
+export class LocalGalleryService implements GalleryService {
+  async getGalleryItems(category?: GalleryCategory): Promise<GalleryItem[]> {
+    if (!category || category === 'all') {
+      return Promise.resolve(GALLERY_ITEMS);
+    }
+    return Promise.resolve(GALLERY_ITEMS.filter((item) => item.category === category));
+  }
+}

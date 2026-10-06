@@ -110,3 +110,51 @@ export interface SearchService {
   search(query: string, language: 'en' | 'hi'): Promise<SearchResultItem[]>;
   getPopularSuggestions(language: 'en' | 'hi'): string[];
 }
+
+export interface ChatActionOption {
+  label: string;
+  url?: string;
+  action?: string;
+  isExternal?: boolean;
+}
+
+export interface ChatbotMessage {
+  id: string;
+  sender: 'assistant' | 'user' | 'system';
+  text: string;
+  timestamp: string;
+  actions?: ChatActionOption[];
+  isWarning?: boolean;
+}
+
+export interface ChatbotService {
+  getInitialMessage(language: 'en' | 'hi'): ChatbotMessage;
+  getQuickActions(language: 'en' | 'hi'): ChatActionOption[];
+  respond(userInput: string, language: 'en' | 'hi'): Promise<ChatbotMessage>;
+}
+
+export type GalleryCategory =
+  | 'all'
+  | 'clinic_photos'
+  | 'doctor_photos'
+  | 'events'
+  | 'videos'
+  | 'health_camps'
+  | 'activities';
+
+export interface GalleryItem {
+  id: string;
+  title: LocalizedString;
+  caption: LocalizedString;
+  altText: LocalizedString;
+  category: Exclude<GalleryCategory, 'all'>;
+  thumbnailUrl: string;
+  fullUrl: string;
+  aspectRatio: '4/3' | '16/9' | '1/1';
+  youtubeId?: string;
+  date?: string;
+}
+
+export interface GalleryService {
+  getGalleryItems(category?: GalleryCategory): Promise<GalleryItem[]>;
+}

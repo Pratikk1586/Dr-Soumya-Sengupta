@@ -8,6 +8,7 @@ export interface SEOProps {
   description?: string;
   canonicalPath?: string;
   ogType?: 'website' | 'article';
+  structuredData?: Record<string, unknown> | object;
 }
 
 export const SEO: React.FC<SEOProps> = ({
@@ -15,6 +16,7 @@ export const SEO: React.FC<SEOProps> = ({
   description,
   canonicalPath = '',
   ogType = 'website',
+  structuredData,
 }) => {
   const { language } = useLanguage();
 
@@ -45,6 +47,13 @@ export const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={metaDescription} />
+
+      {/* Structured Data (Schema.org) */}
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
     </Helmet>
   );
 };

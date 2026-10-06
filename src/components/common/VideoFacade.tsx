@@ -4,7 +4,7 @@ import { Play, Video, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 interface VideoFacadeProps {
   youtubeId?: string;
   title: string;
-  description: string;
+  description?: string;
   transcript?: string;
   durationMinutes?: number;
   className?: string;
