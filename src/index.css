@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-950: #06181f;
+  --color-primary-900: #0a252f;
+  --color-primary-800: #0c3644;
+  --color-primary-700: #0e4c60;
+  --color-primary-600: #126b86;
+  --color-primary-500: #1a89ab;
+  --color-primary-200: #c2e6f1;
+  --color-primary-100: #e2f3f7;
+  --color-primary-50: #f0f8fb;
+
+  --color-sage-900: #182e21;
+  --color-sage-700: #2d563e;
+  --color-sage-600: #3b7152;
+  --color-sage-500: #4c8f69;
+  --color-sage-100: #e4f2ea;
+  --color-sage-50: #f2f8f5;
+
+  --color-clinical-bg: #faf9f6;
+  --color-clinical-surface: #ffffff;
+  --color-clinical-border: #e2e8ec;
+  --color-clinical-border-subtle: #edf2f5;
+
+  --color-clinical-text-main: #112229;
+  --color-clinical-text-muted: #4e6570;
+  --color-clinical-text-subtle: #7e95a0;
+
+  --color-notice-border: #f59e0b;
+  --color-notice-bg: #fffbeb;
+  --color-notice-text: #b45309;
+
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Newsreader', 'Georgia', Cambria, serif;
+  --font-devanagari: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  font-family: var(--font-sans);
+  background-color: var(--color-clinical-bg);
+  color: var(--color-clinical-text-main);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Devanagari Typography Priority */
+html[lang="hi"],
+.font-devanagari {
+  font-family: var(--font-devanagari);
+  line-height: 1.65;
+}
+
+/* WCAG Accessible Focus Indicator */
+:focus-visible {
+  outline: 2px solid var(--color-primary-700);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduced Motion Preference Respect */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Scrollbar for Clinical Cleanliness */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5dc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
