@@ -25,11 +25,20 @@ export const Navbar: React.FC = () => {
     setActiveDropdown(null);
   }
 
-  // Handle global Escape key to close open dropdown
+  // Handle global Escape key and search shortcuts (Cmd/Ctrl+K or /)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setActiveDropdown(null);
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      } else if (
+        e.key === '/' &&
+        !['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)
+      ) {
+        e.preventDefault();
+        setIsSearchOpen(true);
       }
     };
     window.addEventListener('keydown', handleKeyDown);

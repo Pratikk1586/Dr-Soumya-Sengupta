@@ -7,8 +7,12 @@ import { HowCanWeHelpSection } from '../components/home/HowCanWeHelpSection';
 import { AboutDoctorSection } from '../components/home/AboutDoctorSection';
 import { ConditionsServicesSection } from '../components/home/ConditionsServicesSection';
 import { SectionSlotPlaceholder } from '../components/home/SectionSlotPlaceholder';
+import { KnowYourProblemSection } from '../components/home/KnowYourProblemSection';
 import { CareJourneySection } from '../components/home/CareJourneySection';
 import { WhyChooseSection } from '../components/home/WhyChooseSection';
+import { KnowYourNumbersSection } from '../components/home/KnowYourNumbersSection';
+import { KnowledgeHubSection } from '../components/home/KnowledgeHubSection';
+import { DoctorVideosSection } from '../components/home/DoctorVideosSection';
 import { PatientReviewsSection } from '../components/home/PatientReviewsSection';
 import { ClinicShowcaseSection } from '../components/home/ClinicShowcaseSection';
 
@@ -39,15 +43,8 @@ export const HomePage: React.FC = () => {
       {/* 6. Conditions & Services (5 verified conditions linking to /conditions/:slug) */}
       <ConditionsServicesSection />
 
-      {/* 7. [Slot Placeholder] Know Your Problem (Interactive clinical guidance navigator) */}
-      <SectionSlotPlaceholder
-        slotNumber={7}
-        moduleName="Know Your Problem — Symptom & Concern Navigator"
-        tagline="Interactive Clinical Self-Assessment"
-        description="An upcoming interactive decision tree allowing patients experiencing unexplained thirst, fatigue, weight changes, or fluctuating blood sugar to map their symptoms to appropriate clinical guidance."
-        targetLink="/patient-resources/guides"
-        targetLinkText="Explore Patient Guides"
-      />
+      {/* 7. Know Your Problem (Interactive clinical guidance navigator with disclaimer) */}
+      <KnowYourProblemSection />
 
       {/* 8. Treatment / Care Journey (6-step visual & accessible ordered list) */}
       <CareJourneySection />
@@ -55,35 +52,14 @@ export const HomePage: React.FC = () => {
       {/* 9. Why Choose Dr. Sengupta (Evidence-based, patient-centered, non-claim positioning) */}
       <WhyChooseSection />
 
-      {/* 10. [Slot Placeholder] Know Your Numbers (Biomarkers & lab report interpretation) */}
-      <SectionSlotPlaceholder
-        slotNumber={10}
-        moduleName="Know Your Numbers — Glycemic & Metabolic Biomarkers"
-        tagline="Diagnostic Literacy Hub"
-        description="Comprehensive explanations for key diabetic biomarkers including HbA1c targets, Time in Range (TIR), urinary Albumin-to-Creatinine Ratio (uACR), and lipid ratios."
-        targetLink="/patient-resources/reports"
-        targetLinkText="Review Lab Report Guides"
-      />
+      {/* 10. Know Your Numbers (Glycemic & Metabolic Biomarkers cards from reportService) */}
+      <KnowYourNumbersSection />
 
-      {/* 11. [Slot Placeholder] Knowledge Hub (Curated evidence-based articles & FAQs) */}
-      <SectionSlotPlaceholder
-        slotNumber={11}
-        moduleName="Knowledge Hub — Patient Education & Articles"
-        tagline="Scientific Literacy Library"
-        description="In-depth, peer-reviewed clinical articles on insulin injection techniques, hypoglycemia management, continuous glucose monitoring, and meal planning."
-        targetLink="/patient-resources/knowledge-hub"
-        targetLinkText="Visit Knowledge Hub"
-      />
+      {/* 11. Knowledge Hub (Featured and recent peer-reviewed clinical articles) */}
+      <KnowledgeHubSection />
 
-      {/* 12. [Slot Placeholder] Dr. Sengupta Explains (Video masterclasses & patient FAQs) */}
-      <SectionSlotPlaceholder
-        slotNumber={12}
-        moduleName="Dr. Sengupta Explains — Video Education Series"
-        tagline="Clinical Video Explanations"
-        description="High-definition educational video guides addressing common patient questions on diabetic retinopathy prevention, carb counting, and morning glucose spikes (Dawn Phenomenon)."
-        targetLink="/patient-resources/videos"
-        targetLinkText="Watch Video Library"
-      />
+      {/* 12. Dr. Sengupta Explains (Video masterclasses with facade and transcripts) */}
+      <DoctorVideosSection />
 
       {/* 13. Patient Reviews (Genuine observations, feature-flagged, NMC ethics disclaimer) */}
       <PatientReviewsSection />

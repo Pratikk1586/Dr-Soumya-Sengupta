@@ -1,10 +1,12 @@
 import React from 'react';
-import { Video as VideoIcon, Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Calendar } from 'lucide-react';
 import { SEO } from '../../components/common/SEO';
 import { Container } from '../../components/common/Container';
 import { Breadcrumb } from '../../components/common/Breadcrumb';
-import { Card } from '../../components/common/Card';
 import { Badge } from '../../components/common/Badge';
+import { Button } from '../../components/common/Button';
+import { VideoFacade } from '../../components/common/VideoFacade';
 import { MedicalDisclaimerBanner } from '../../components/common/MedicalDisclaimerBanner';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
@@ -12,13 +14,13 @@ import { videoService } from '../../services';
 
 export const VideosPage: React.FC = () => {
   const { localize, t } = useLanguage();
-  const { data: videos } = useService(() => videoService.getVideos(), []);
+  const { data: videos, isLoading } = useService(() => videoService.getVideos(), []);
 
   return (
     <>
       <SEO
-        title="Educational Videos — Dr. Soumya Sengupta"
-        description="Video guides demonstrating Continuous Glucose Monitoring (CGM) analytics and daily diabetic foot inspection routines."
+        title="Educational Videos & Masterclasses — Dr. Soumya Sengupta"
+        description="Clinical video guides by Dr. Soumya Sengupta on understanding HbA1c, diabetes and lifestyle, glycemic spikes, and organ health awareness."
         canonicalPath="/patient-resources/videos"
       />
 
@@ -33,10 +35,10 @@ export const VideosPage: React.FC = () => {
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
             <Badge variant="primary">Visual Education</Badge>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#06181f] tracking-tight">
-              Educational Videos & Demonstrations
+              Dr. Sengupta Explains — Video Masterclasses
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-              Practical video walkthroughs explaining diabetes self-care technologies, sensor care, and daily preventive routines.
+              Practical video walkthroughs breaking down clinical endocrinology, sensor care, and lifestyle habits into clear, accessible patient lessons.
             </p>
           </div>
         </Container>
@@ -45,34 +47,41 @@ export const VideosPage: React.FC = () => {
       <Container size="xl" className="py-12 space-y-12">
         <MedicalDisclaimerBanner />
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {videos?.map((vid) => (
-            <Card key={vid.id} padding="lg" className="space-y-4">
-              <div className="relative aspect-video bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center text-white">
-                <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center border border-white/40">
-                  <Play className="w-6 h-6 text-white ml-0.5" />
-                </div>
-                <span className="absolute bottom-2 right-2 text-[10px] font-mono bg-black/70 px-2 py-0.5 rounded text-white">
-                  {vid.durationMinutes} min
-                </span>
-              </div>
+        {isLoading ? (
+          <div className="py-16 text-center text-sm text-slate-500">
+            Loading educational videos...
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-8">
+            {videos?.map((vid) => (
+              <VideoFacade
+                key={vid.id}
+                youtubeId={vid.youtubeId}
+                title={localize(vid.title)}
+                description={localize(vid.description)}
+                transcript={vid.transcript ? localize(vid.transcript) : undefined}
+                durationMinutes={vid.durationMinutes}
+              />
+            ))}
+          </div>
+        )}
 
-              <div>
-                <Badge variant="neutral" size="sm" className="mb-2">
-                  {localize(vid.category)}
-                </Badge>
-                <h2 className="text-base font-bold text-slate-900">{localize(vid.title)}</h2>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                  {localize(vid.description)}
-                </p>
-              </div>
-
-              <div className="pt-2 text-[11px] text-slate-400 flex items-center gap-1.5">
-                <VideoIcon className="w-3.5 h-3.5" />
-                <span>Video demo placeholder — full playback enabled in Phase 3</span>
-              </div>
-            </Card>
-          ))}
+        {/* Clinical Consultation CTA */}
+        <div className="p-8 rounded-2xl bg-gradient-to-r from-[#0f3d4a] to-[#08222a] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-white">
+              Have Questions After Watching?
+            </h3>
+            <p className="text-xs sm:text-sm text-teal-100 max-w-xl leading-relaxed">
+              Video lessons provide general background education. To discuss how these insights apply to your personal lab reports and medication, book a consultation.
+            </p>
+          </div>
+          <Link to="/book-appointment" className="shrink-0">
+            <Button variant="secondary" size="lg" className="w-full sm:w-auto shadow-md">
+              <Calendar className="w-4 h-4 mr-2" />
+              <span>{t('cta.bookAppointment')}</span>
+            </Button>
+          </Link>
         </div>
       </Container>
     </>

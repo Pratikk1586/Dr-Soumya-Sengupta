@@ -12,10 +12,10 @@ import type {
   Clinic,
   ReportTopic,
   PatientGuide,
+  ProblemTopic,
   AppointmentRequest,
   LocalizedString,
 } from '../types';
-import type { ProblemTopic } from '../data/problems';
 
 export interface DoctorService {
   getProfile(): Promise<Doctor>;
@@ -63,6 +63,7 @@ export interface ClinicService {
 
 export interface ReportService {
   getReportTopics(): Promise<ReportTopic[]>;
+  getReports(): Promise<ReportTopic[]>;
 }
 
 export interface GuideService {
@@ -80,5 +81,32 @@ export interface AppointmentService {
 
 export interface ProblemService {
   getProblems(): Promise<ProblemTopic[]>;
+  getProblemTopics(): Promise<ProblemTopic[]>;
   getProblemBySlug(slug: string): Promise<ProblemTopic | undefined>;
+}
+
+export type SearchResultCategory =
+  | 'condition'
+  | 'service'
+  | 'article'
+  | 'faq'
+  | 'video'
+  | 'report'
+  | 'guide'
+  | 'notice'
+  | 'clinic';
+
+export interface SearchResultItem {
+  id: string;
+  title: string;
+  category: SearchResultCategory;
+  categoryLabel: string;
+  snippet: string;
+  url: string;
+  score: number;
+}
+
+export interface SearchService {
+  search(query: string, language: 'en' | 'hi'): Promise<SearchResultItem[]>;
+  getPopularSuggestions(language: 'en' | 'hi'): string[];
 }

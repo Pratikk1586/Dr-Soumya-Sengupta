@@ -1,10 +1,19 @@
-import React from 'react';
-import { BookOpen, CheckCircle, AlertTriangle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  FileText,
+  Download,
+  CheckCircle2,
+  AlertTriangle,
+  Calendar,
+  Info,
+} from 'lucide-react';
 import { SEO } from '../../components/common/SEO';
 import { Container } from '../../components/common/Container';
 import { Breadcrumb } from '../../components/common/Breadcrumb';
 import { Card } from '../../components/common/Card';
 import { Badge } from '../../components/common/Badge';
+import { Button } from '../../components/common/Button';
 import { MedicalDisclaimerBanner } from '../../components/common/MedicalDisclaimerBanner';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
@@ -12,13 +21,39 @@ import { guideService } from '../../services';
 
 export const GuidesPage: React.FC = () => {
   const { localize, t } = useLanguage();
-  const { data: guides } = useService(() => guideService.getGuides(), []);
+  const { data: guides, isLoading } = useService(() => guideService.getGuides(), []);
+  const [downloadNotice, setDownloadNotice] = useState<string | null>(null);
+
+  const handleDownload = (guideTitle: string, url?: string) => {
+    // If the file exists in /public, it downloads. Otherwise, show graceful placeholder notice
+    if (url) {
+      fetch(url, { method: 'HEAD' })
+        .then((res) => {
+          if (res.ok && res.headers.get('content-type')?.includes('pdf')) {
+            window.open(url, '_blank');
+          } else {
+            setDownloadNotice(
+              `"${guideTitle}": Printable PDF is currently being formatted for clinical distribution. You can review the full guide steps directly on this page.`
+            );
+          }
+        })
+        .catch(() => {
+          setDownloadNotice(
+            `"${guideTitle}": Printable PDF is currently being formatted for clinical distribution. You can review the full guide steps directly on this page.`
+          );
+        });
+    } else {
+      setDownloadNotice(
+        `"${guideTitle}": Printable PDF coming soon. Please consult the full steps below.`
+      );
+    }
+  };
 
   return (
     <>
       <SEO
         title="Patient Self-Care Guides — Dr. Soumya Sengupta"
-        description="Step-by-step patient self-care instructions for fasting lab preparations and daily diabetic foot inspections."
+        description="Downloadable patient guides for diabetes lifestyle, blood sugar monitoring, appointment preparation, and daily foot care."
         canonicalPath="/patient-resources/guides"
       />
 
@@ -33,10 +68,10 @@ export const GuidesPage: React.FC = () => {
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
             <Badge variant="primary">Self-Care Protocols</Badge>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#06181f] tracking-tight">
-              Actionable Patient Self-Care Guides
+              Patient Self-Care & Preparation Guides
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-              Structured protocols for daily routines, pre-test preparation, and preventive self-checks.
+              Structured step-by-step checklists to assist with daily blood glucose monitoring, appointment readiness, and foot safety.
             </p>
           </div>
         </Container>
@@ -45,51 +80,109 @@ export const GuidesPage: React.FC = () => {
       <Container size="xl" className="py-12 space-y-12">
         <MedicalDisclaimerBanner />
 
-        <div className="space-y-8 max-w-4xl">
-          {guides?.map((guide) => (
-            <Card key={guide.id} padding="lg" className="space-y-5">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#dff0f4] text-[#0a252f] flex items-center justify-center">
-                    <BookOpen className="w-5 h-5 text-[#0f3d4a]" />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-bold text-slate-900">{localize(guide.title)}</h2>
-                    <p className="text-xs text-slate-500 mt-0.5">{localize(guide.summary)}</p>
-                  </div>
-                </div>
-                <Badge variant="neutral" size="sm">
-                  {guide.reviewStatus}
-                </Badge>
-              </div>
+        {downloadNotice && (
+          <div className="p-4 rounded-xl bg-teal-50 border border-teal-200/80 text-[#0f3d4a] text-xs sm:text-sm flex items-start justify-between gap-3 shadow-xs">
+            <div className="flex items-start gap-2.5">
+              <Info className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+              <span>{downloadNotice}</span>
+            </div>
+            <button
+              onClick={() => setDownloadNotice(null)}
+              className="text-xs font-bold text-teal-800 hover:underline shrink-0"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
-              <div className="space-y-2 pt-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Step-by-Step Instructions:
-                </h4>
-                <div className="space-y-2">
-                  {guide.steps.map((step, idx) => (
-                    <div
-                      key={idx}
-                      className="p-3.5 rounded-lg bg-slate-50 border border-slate-200/80 flex items-start gap-3 text-xs sm:text-sm text-slate-700"
-                    >
-                      <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{localize(step)}</span>
+        {isLoading ? (
+          <div className="py-16 text-center text-sm text-slate-500">
+            Loading patient guides...
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-8">
+            {guides?.map((guide) => (
+              <Card
+                key={guide.id}
+                padding="lg"
+                className="flex flex-col justify-between border-slate-200/90 shadow-sm bg-white space-y-6"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0f3d4a] flex items-center justify-center shrink-0">
+                      <FileText className="w-5 h-5 text-[#0f3d4a]" />
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <Badge variant="neutral" size="sm">
+                      Clinical Guide
+                    </Badge>
+                  </div>
 
-              {guide.emergencyWarning && (
-                <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-amber-950 flex items-start gap-2.5">
-                  <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-                  <p>
-                    <strong>Safety Notice:</strong> {localize(guide.emergencyWarning)}
-                  </p>
+                  <div>
+                    <h2 className="text-lg font-bold text-slate-900 leading-snug">
+                      {localize(guide.title)}
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                      {localize(guide.summary)}
+                    </p>
+                  </div>
+
+                  {/* Steps Checklist */}
+                  <div className="space-y-2 pt-2">
+                    <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider block">
+                      Recommended Steps:
+                    </span>
+                    <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
+                      {guide.steps.map((st, sIdx) => (
+                        <li key={sIdx} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{localize(st)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Emergency Warning */}
+                  {guide.emergencyWarning && (
+                    <div className="p-3 rounded-lg bg-amber-50 border border-amber-200/80 text-xs text-amber-900 flex items-start gap-2">
+                      <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                      <span>{localize(guide.emergencyWarning)}</span>
+                    </div>
+                  )}
                 </div>
-              )}
-            </Card>
-          ))}
+
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[11px] text-slate-400">PDF printable format</span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDownload(localize(guide.title), guide.downloadUrl)}
+                    className="gap-1.5"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download Guide (PDF)</span>
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Clinical Appointment CTA */}
+        <div className="p-8 rounded-2xl bg-gradient-to-r from-[#0f3d4a] to-[#08222a] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-white">
+              Need Personal Self-Care Guidance?
+            </h3>
+            <p className="text-xs sm:text-sm text-teal-100 max-w-xl leading-relaxed">
+              Dr. Soumya Sengupta provides personalized education on insulin injection technique, sensor reading, and emergency hypoglycemia protocols during consultations.
+            </p>
+          </div>
+          <Link to="/book-appointment" className="shrink-0">
+            <Button variant="secondary" size="lg" className="w-full sm:w-auto shadow-md">
+              <Calendar className="w-4 h-4 mr-2" />
+              <span>{t('cta.bookAppointment')}</span>
+            </Button>
+          </Link>
         </div>
       </Container>
     </>

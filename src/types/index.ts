@@ -101,9 +101,20 @@ export interface Article {
   status: ContentStatus;
 }
 
+export type FAQCategory =
+  | 'diabetes'
+  | 'thyroid'
+  | 'weight_management'
+  | 'clinic'
+  | 'appointments'
+  | 'reports'
+  | 'general'
+  | 'treatment';
+
 export interface FAQ {
   id: string;
-  category: 'general' | 'treatment' | 'diet_lifestyle' | 'emergency';
+  slug?: string;
+  category: FAQCategory;
   question: LocalizedString;
   answer: LocalizedString;
   reviewStatus: ReviewStatus;
@@ -114,6 +125,7 @@ export interface Video {
   id: string;
   title: LocalizedString;
   description: LocalizedString;
+  transcript?: LocalizedString;
   durationMinutes: number;
   youtubeId?: string;
   category: LocalizedString;
@@ -163,12 +175,22 @@ export interface Clinic {
   status: ContentStatus;
 }
 
+export interface ReportRangeGuideline {
+  standardRange: string;
+  source: string;
+  guidelineNote: LocalizedString;
+  reviewStatus: ReviewStatus;
+}
+
 export interface ReportTopic {
   id: string;
+  key: 'glucose' | 'hba1c' | 'blood_pressure' | 'cholesterol' | 'bmi' | 'kidney_uacr' | 'thyroid_tsh';
   title: LocalizedString;
-  testName: LocalizedString; // e.g. "HbA1c", "Lipid Profile", "uACR"
-  whatItMeasures: LocalizedString;
-  clinicalSignificance: LocalizedString;
+  testName: LocalizedString;
+  whatItIs: LocalizedString;
+  whyItIsMeasured: LocalizedString;
+  generalEducationalMeaning: LocalizedString;
+  referenceRangeGuideline?: ReportRangeGuideline;
   reviewStatus: ReviewStatus;
   status: ContentStatus;
 }
@@ -180,7 +202,22 @@ export interface PatientGuide {
   summary: LocalizedString;
   steps: LocalizedString[];
   emergencyWarning?: LocalizedString;
+  downloadUrl?: string;
   reviewStatus: ReviewStatus;
+  status: ContentStatus;
+}
+
+export interface ProblemTopic {
+  id: string;
+  slug: string;
+  title: LocalizedString;
+  shortDesc: LocalizedString;
+  generalInfo: LocalizedString;
+  keyConsiderations: LocalizedString[];
+  relatedPageLink: string;
+  relatedPageLabel: LocalizedString;
+  relatedResourceLink: string;
+  relatedResourceLabel: LocalizedString;
   status: ContentStatus;
 }
 

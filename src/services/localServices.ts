@@ -27,6 +27,7 @@ import type {
   Clinic,
   ReportTopic,
   PatientGuide,
+  ProblemTopic,
   AppointmentRequest,
   LocalizedString,
 } from '../types';
@@ -41,7 +42,7 @@ import { REVIEWS_DATA } from '../data/reviews';
 import { CLINICS_DATA } from '../data/clinic';
 import { REPORTS_DATA } from '../data/reports';
 import { GUIDES_DATA } from '../data/guides';
-import { PROBLEMS_DATA, type ProblemTopic } from '../data/problems';
+import { PROBLEMS_DATA } from '../data/problems';
 import { isRecentInIST } from '../utils/date';
 
 export class LocalDoctorService implements DoctorService {
@@ -134,6 +135,9 @@ export class LocalReportService implements ReportService {
   async getReportTopics(): Promise<ReportTopic[]> {
     return Promise.resolve(REPORTS_DATA);
   }
+  async getReports(): Promise<ReportTopic[]> {
+    return Promise.resolve(REPORTS_DATA);
+  }
 }
 
 export class LocalGuideService implements GuideService {
@@ -147,6 +151,9 @@ export class LocalGuideService implements GuideService {
 
 export class LocalProblemService implements ProblemService {
   async getProblems(): Promise<ProblemTopic[]> {
+    return Promise.resolve(PROBLEMS_DATA);
+  }
+  async getProblemTopics(): Promise<ProblemTopic[]> {
     return Promise.resolve(PROBLEMS_DATA);
   }
   async getProblemBySlug(slug: string): Promise<ProblemTopic | undefined> {
