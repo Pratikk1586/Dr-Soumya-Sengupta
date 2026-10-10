@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  MessageSquareHeart,
   X,
   Send,
   RotateCcw,
@@ -10,10 +9,12 @@ import {
   Bot,
   User,
   Languages,
+  Sparkles,
 } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
 import type { Language } from '../../types';
 import { chatbotService, type ChatbotMessage, type ChatActionOption } from '../../services';
+import { cn } from '../../utils/cn';
 
 let messageCounter = 0;
 function nextMessageId(prefix: string): string {
@@ -33,6 +34,17 @@ export const ClinicAssistant: React.FC = () => {
   // Duo-lingo / bilingual capability: independent chat language toggle initialized from site language
   const [chatLanguage, setChatLanguage] = useState<Language>(language);
   const isChatHindi = chatLanguage === 'hi';
+
+  // Speech bubble cycle: displays for 10 seconds, disappears for 10 seconds, then repeats
+  const [isTeaserVisible, setIsTeaserVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsTeaserVisible((prev) => !prev);
+    }, 10000); // 10s visible, 10s invisible cycle
+
+    return () => clearInterval(interval);
+  }, []);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -158,22 +170,67 @@ export const ClinicAssistant: React.FC = () => {
         {liveAnnouncement}
       </div>
 
-      {/* Floating Trigger Button (Sleek FAB on mobile, pill on tablet/desktop, positioned safely above bottom nav) */}
+      {/* Floating Trigger & Highlight Beacon */}
       {!isOpen && (
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-3.5 sm:right-4 md:right-6 z-40 flex items-center justify-center gap-2 p-3 sm:px-4 sm:py-3 bg-[#0f3d4a] hover:bg-[#082229] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f3d4a] max-w-fit"
-          aria-label={isHindi ? 'क्लिनिक सहायक खोलें' : 'Open Clinic Assistant chat'}
-        >
-          <div className="relative shrink-0">
-            <MessageSquareHeart className="w-5 h-5 text-[#dff0f4]" aria-hidden="true" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#0f3d4a]" />
+        <div className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-3 sm:right-4 md:right-6 z-40 flex flex-col items-end gap-2 pointer-events-none">
+          {/* Speech bubble: displays for 10 seconds, disappears for 10 seconds, smoothly cycling */}
+          <div
+            onClick={() => setIsOpen(true)}
+            className={cn(
+              'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-slate-800 text-[11px] sm:text-xs font-semibold shadow-md border border-teal-200/90 hover:border-teal-400 hover:shadow-lg transition-all duration-500 ease-in-out cursor-pointer group max-w-[270px] sm:max-w-none',
+              isTeaserVisible
+                ? 'opacity-100 translate-y-0 pointer-events-auto'
+                : 'opacity-0 translate-y-1 pointer-events-none'
+            )}
+            role="button"
+            tabIndex={isTeaserVisible ? 0 : -1}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsOpen(true);
+              }
+            }}
+            aria-label={isHindi ? 'क्लिनिक सहायक से पूछें' : 'Ask Clinic Assistant'}
+            aria-hidden={!isTeaserVisible}
+          >
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="truncate text-slate-800 group-hover:text-[#0f3d4a]">
+              {isHindi ? 'सहायता चाहिए? यहाँ पूछें' : 'Need Help? Ask AI Assistant'}
+            </span>
+            <Sparkles className="w-3 h-3 text-amber-500 shrink-0" />
           </div>
-          <span className="hidden sm:inline text-xs sm:text-sm font-semibold tracking-tight whitespace-nowrap">
-            {isHindi ? 'क्लिनिक सहायक' : 'Clinic Assistant'}
-          </span>
-        </button>
+
+          {/* Tastefully highlighted Launcher Button (soft glow ring, subtle gradient, live beacon) */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            className="pointer-events-auto relative flex items-center justify-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-gradient-to-r from-[#0c3642] to-[#135465] hover:from-[#08262f] hover:to-[#0f4452] text-white rounded-full shadow-[0_4px_18px_rgba(15,61,74,0.3)] hover:shadow-[0_6px_22px_rgba(15,61,74,0.45)] ring-2 ring-teal-400/40 hover:ring-teal-400/70 ring-offset-2 ring-offset-white hover:scale-105 active:scale-95 transition-all duration-300 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f3d4a] max-w-fit cursor-pointer"
+            aria-label={isHindi ? 'क्लिनिक सहायक खोलें' : 'Open Clinic Assistant chat'}
+          >
+            <div className="relative shrink-0 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-white/25 transition-colors">
+                <Bot className="w-4 h-4 text-teal-200 group-hover:scale-110 transition-transform" aria-hidden="true" />
+              </div>
+              {/* Subtle pulsing live indicator */}
+              <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 border border-[#0c3642]" />
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs sm:text-sm font-bold tracking-tight whitespace-nowrap">
+                {isHindi ? 'क्लिनिक सहायक' : 'AI Assistant'}
+              </span>
+              <span className="hidden sm:inline-block px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-teal-300/20 text-teal-200 border border-teal-300/30">
+                24/7
+              </span>
+            </div>
+          </button>
+        </div>
       )}
 
       {/* Chatbot Interface (Bottom Sheet on Mobile, Floating Card on Desktop) */}

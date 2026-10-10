@@ -32,7 +32,7 @@ export const HeroSection: React.FC = () => {
   );
 
   return (
-    <section className="relative overflow-hidden bg-white lg:bg-gradient-to-b lg:from-[#f0f9fa]/40 lg:via-white lg:to-[#f8fafc]/50 pt-6 pb-12 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-24 border-b border-slate-200/80">
+    <section className="relative overflow-hidden bg-white lg:bg-gradient-to-b lg:from-[#f0f9fa]/40 lg:via-white lg:to-[#f8fafc]/50 pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-12 border-b border-slate-200/80">
       {/* Background ambient medical glow (Web/Desktop view only) */}
       <div className="hidden lg:block absolute top-0 right-1/4 w-80 sm:w-96 h-80 sm:h-96 bg-teal-100/25 rounded-full blur-3xl pointer-events-none" />
       <div className="hidden lg:block absolute -top-10 -left-10 w-60 h-60 bg-sky-50/30 rounded-full blur-3xl pointer-events-none" />
@@ -40,7 +40,7 @@ export const HeroSection: React.FC = () => {
       <Container size="xl">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Instant-render text & clinical authority */}
-          <div className="lg:col-span-7 space-y-5 sm:space-y-6">
+          <div className="lg:col-span-7 space-y-3.5 sm:space-y-4">
             {/* Top credentials pill & practicing tenure */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-300 text-teal-950 text-xs font-bold shadow-2xs">
