@@ -6,7 +6,8 @@ import { useAsync, type UseAsyncResult } from './useAsync';
  */
 export function useService<T>(
   serviceMethod: () => Promise<T>,
-  _deps?: unknown[]
+  deps: unknown[] = []
 ): UseAsyncResult<T> {
-  return useAsync(serviceMethod);
+  return useAsync(serviceMethod, deps);
 }
+

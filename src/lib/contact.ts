@@ -8,10 +8,12 @@
  * Retains leading plus and digits only.
  */
 export function getTelHref(rawPhone?: string | null): string | null {
+  if (rawPhone === null) return null;
+
   const phone =
-    rawPhone ||
-    import.meta.env.VITE_CLINIC_PHONE ||
-    '';
+    rawPhone !== undefined
+      ? rawPhone
+      : (import.meta.env.VITE_CLINIC_PHONE || '');
 
   if (!phone || typeof phone !== 'string') return null;
 
@@ -35,11 +37,12 @@ export function getMailtoHref(
   subject?: string,
   body?: string
 ): string | null {
+  if (email === null) return null;
+
   const targetEmail =
-    email ||
-    import.meta.env.VITE_EMAIL ||
-    import.meta.env.VITE_CLINIC_EMAIL ||
-    '';
+    email !== undefined
+      ? email
+      : (import.meta.env.VITE_EMAIL || import.meta.env.VITE_CLINIC_EMAIL || '');
 
   if (!targetEmail || typeof targetEmail !== 'string') return null;
 

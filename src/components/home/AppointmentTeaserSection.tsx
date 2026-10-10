@@ -50,8 +50,8 @@ export const AppointmentTeaserSection: React.FC = () => {
             </h3>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
               {isHindi
-                ? 'हमारे आसान 3-चरणीय फॉर्म के माध्यम से अपना पसंदीदा दिन और समय चुनें। हमारी टीम आपके समय की पुष्टि हेतु संपर्क करेगी।'
-                : 'Use our guided multi-step scheduling desk to submit your preferred date, time window, and visit mode. Our chamber desk confirms each slot directly.'}
+                ? 'हमारे आसान अपॉइंटमेंट फॉर्म के माध्यम से अपना पसंदीदा दिन और समय चुनें। हमारी टीम आपके समय की पुष्टि हेतु संपर्क करेगी।'
+                : 'Use our simple appointment request form to submit your preferred date, time, and details. Our chamber desk confirms each slot directly via phone or WhatsApp.'}
             </p>
           </div>
 
@@ -93,7 +93,7 @@ export const AppointmentTeaserSection: React.FC = () => {
                 </h4>
               </div>
               <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                {isHindi ? 'सक्रिय' : 'Salt Lake Chamber'}
+                {isHindi ? 'चाईबासा क्लिनिक' : 'Cardio Diabetic Clinic'}
               </span>
             </div>
 
@@ -102,14 +102,14 @@ export const AppointmentTeaserSection: React.FC = () => {
                 <span className="font-medium text-slate-600">
                   {isHindi ? 'सोमवार – शनिवार' : 'Monday – Saturday'}
                 </span>
-                <span className="font-bold text-slate-900">5:00 PM – 8:00 PM</span>
+                <span className="font-bold text-slate-900">10 AM – 2 PM & 5 PM – 8 PM</span>
               </div>
               <div className="flex justify-between items-center py-1.5 border-b border-slate-100">
                 <span className="font-medium text-slate-600">
                   {isHindi ? 'रविवार' : 'Sunday'}
                 </span>
                 <span className="font-semibold text-amber-700">
-                  {isHindi ? 'अग्रिम अनुरोध पर' : 'By Prior Arrangement'}
+                  {isHindi ? 'जांच शिविर / पूर्व अनुमति' : 'Screening Camps / Prior Booking'}
                 </span>
               </div>
               <div className="flex justify-between items-center py-1.5">

@@ -83,10 +83,30 @@ export class LocalSearchService implements SearchService {
     this.guideService = guideService || new LocalGuideService();
     this.noticeService = noticeService || new LocalNoticeService();
     this.clinicService = clinicService || new LocalClinicService();
+    this.warmupIndex();
+  }
+
+  private cachedDocs: IndexableDoc[] | null = null;
+  private compilingPromise: Promise<IndexableDoc[]> | null = null;
+
+  public warmupIndex(): void {
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => {
+        void this.compileIndex();
+      });
+    } else if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        void this.compileIndex();
+      }, 500);
+    }
   }
 
   private async compileIndex(): Promise<IndexableDoc[]> {
-    const docs: IndexableDoc[] = [];
+    if (this.cachedDocs) return this.cachedDocs;
+    if (this.compilingPromise) return this.compilingPromise;
+
+    this.compilingPromise = (async () => {
+      const docs: IndexableDoc[] = [];
 
     // 1. Conditions
     const conditions = await this.conditionService.getConditions();
@@ -138,7 +158,7 @@ export class LocalSearchService implements SearchService {
         bodyHi: `${a.contentParagraphs.map((p) => p.hi || '').join(' ')} ${a.keyTakeaways.map((k) => k.hi || '').join(' ')}`,
         tagsEn: [a.category.en],
         tagsHi: [a.category.hi || ''],
-        url: `/patient-resources/knowledge-hub/${a.slug}`,
+        url: `/patient-resources/articles/${a.slug}`,
       });
     }
 
@@ -190,7 +210,7 @@ export class LocalSearchService implements SearchService {
         bodyHi: `${r.whyItIsMeasured.hi || ''} ${r.generalEducationalMeaning.hi || ''}`,
         tagsEn: [r.key, 'blood test', 'lab report'],
         tagsHi: ['जांच', 'रिपोर्ट'],
-        url: `/patient-resources/reports#${r.key}`,
+        url: `/patient-resources/understand-your-reports#${r.key}`,
       });
     }
 
@@ -238,8 +258,8 @@ export class LocalSearchService implements SearchService {
         titleHi: cl.name.hi,
         descriptionEn: `${cl.address.line1.en}, ${cl.address.city.en} - ${cl.address.pincode} (${cl.facilityType.en})`,
         descriptionHi: `${cl.address.line1.hi || cl.address.line1.en}, ${cl.address.city.hi || cl.address.city.en} - ${cl.address.pincode}`,
-        tagsEn: ['clinic', 'chamber', 'address', 'kolkata'],
-        tagsHi: ['क्लिनिक', 'चेंबर', 'कोलकाता'],
+        tagsEn: ['clinic', 'chamber', 'address', 'chaibasa', 'jharkhand'],
+        tagsHi: ['क्लिनिक', 'चेंबर', 'चाईबासा', 'झारखंड'],
         url: `/clinic/location`,
       });
     }
@@ -251,8 +271,8 @@ export class LocalSearchService implements SearchService {
         category: 'clinic',
         titleEn: 'OPD Chamber Timings & Consulting Hours',
         titleHi: 'ओपीडी परामर्श समय एवं चेंबर सारणी',
-        descriptionEn: 'Weekly consulting schedule for Salt Lake and Kolkata chambers.',
-        descriptionHi: 'सॉल्ट लेक और कोलकाता चेंबर के लिए साप्ताहिक परामर्श समय।',
+        descriptionEn: 'Weekly consulting schedule for Cardio Diabetic Clinic in Chaibasa.',
+        descriptionHi: 'कार्डियो डायबिटिक क्लिनिक चाईबासा के लिए साप्ताहिक परामर्श समय।',
         tagsEn: ['timings', 'schedule', 'opd', 'appointment'],
         tagsHi: ['समय', 'शेड्यूल', 'ओपीडी'],
         url: '/clinic/timings',
@@ -278,10 +298,56 @@ export class LocalSearchService implements SearchService {
         tagsEn: ['photos', 'gallery', 'ambience'],
         tagsHi: ['फोटो', 'गैलरी'],
         url: '/clinic/photos',
+      },
+      // 10. Diabetes Knowledge Hub
+      {
+        id: 'res-diabetes-knowledge-hub',
+        category: 'guide',
+        titleEn: 'Diabetes Knowledge Hub',
+        titleHi: 'डायबिटीज नॉलेज हब',
+        descriptionEn: 'Organized patient learning cards covering blood sugar, HbA1c, food, lifestyle, and complications.',
+        descriptionHi: 'डायबिटीज, ब्लड शुगर, खान-पान और जीवनशैली पर सरल और स्पष्ट शिक्षा केंद्र।',
+        bodyEn: 'understanding diabetes blood sugar hba1c food lifestyle care complications common questions',
+        bodyHi: 'डायबिटीज ब्लड शुगर एचबीए1सी खानपान जीवनशैली जटिलताएं सवाल',
+        tagsEn: ['knowledge hub', 'diabetes', 'education', 'hba1c', 'lifestyle', 'complications'],
+        tagsHi: ['नॉलेज हब', 'शिक्षा', 'डायबिटीज'],
+        url: '/patient-resources/diabetes-knowledge-hub',
+      },
+      // 11. Know Your Problem
+      {
+        id: 'res-know-your-problem',
+        category: 'guide',
+        titleEn: 'Know Your Problem (Symptom & Concern Guide)',
+        titleHi: 'अपनी समस्या समझें (लक्षण मार्गदर्शिका)',
+        descriptionEn: 'Educational guidance for common symptoms: frequent thirst, frequent urination, fatigue, weight changes, and high blood sugar.',
+        descriptionHi: 'प्यास, बार-बार पेशाब, थकान, वजन में बदलाव और बढ़ी हुई शुगर जैसे आम लक्षणों की सरल समझ।',
+        bodyEn: 'thirst urination fatigue weight high blood sugar hba1c thyroid symptoms concerns',
+        bodyHi: 'प्यास पेशाब थकान वजन शुगर थायरॉयड लक्षण',
+        tagsEn: ['symptoms', 'concerns', 'thirst', 'fatigue', 'weight', 'sugar'],
+        tagsHi: ['लक्षण', 'प्यास', 'थकान'],
+        url: '/patient-resources/know-your-problem',
+      },
+      // 12. Media Hub & Events
+      {
+        id: 'media-events-camps',
+        category: 'clinic',
+        titleEn: 'Media Events, Health Camps & Conferences',
+        titleHi: 'आयोजन, स्वास्थ्य शिविर एवं सम्मेलन',
+        descriptionEn: 'Community diabetes screenings in Chaibasa, RSSDI academic medical conferences, and foot care workshops.',
+        descriptionHi: 'चाईबासा में निःशुल्क जांच शिविर, डायबिटोलॉजी सम्मेलन एवं मरीज कार्यशालाएं।',
+        bodyEn: 'health camps screening workshops conferences rssdi chaibasa events',
+        bodyHi: 'शिविर कार्यशाला सम्मेलन कार्यक्रम',
+        tagsEn: ['events', 'camps', 'health camp', 'conferences', 'media'],
+        tagsHi: ['शिविर', 'कार्यक्रम', 'मीडिया'],
+        url: '/media/events',
       }
     );
 
-    return docs;
+      this.cachedDocs = docs;
+      return docs;
+    })();
+
+    return this.compilingPromise;
   }
 
   async search(query: string, language: Language): Promise<SearchResultItem[]> {

@@ -5,32 +5,32 @@ export const NOTICES_DATA: Notice[] = [
   {
     id: 'notice-puja-holiday',
     title: {
-      en: `${CONTENT_TO_BE_VERIFIED_MARKER} Durga Puja Chamber Schedule Notice`,
-      hi: `${CONTENT_TO_BE_VERIFIED_MARKER} दुर्गा पूजा क्लिनिक समय सारणी सूचना`,
+      en: 'Durga Puja Chamber Schedule Notice',
+      hi: 'दुर्गा पूजा क्लिनिक समय सारणी सूचना',
     },
     content: {
       en: 'OPD chamber will remain closed from Saptami to Dashami. For urgent glycemic concerns, please visit the emergency wing or message on clinic WhatsApp.',
       hi: 'सप्तमी से दशमी तक ओपीडी क्लिनिक बंद रहेगा। गंभीर रक्त शर्करा समस्याओं के लिए आपातकालीन विभाग जाएं या क्लिनिक व्हाट्सएप पर संदेश भेजें।',
     },
     category: 'holiday',
-    effectiveDate: '2026-10-08',
-    publishedAt: '2026-10-05T09:00:00+05:30', // Recent in IST (within 3 days of 2026-10-06)
+    effectiveDate: '2026-10-09',
+    publishedAt: '2026-10-09T09:00:00+05:30', // Updated within 3 days
     isImportant: true,
-    status: 'placeholder',
+    status: 'verified',
   },
   {
     id: 'notice-changed-timings',
     title: {
-      en: `${CONTENT_TO_BE_VERIFIED_MARKER} Revised Evening OPD Consultation Slot`,
-      hi: `${CONTENT_TO_BE_VERIFIED_MARKER} संशोधित संध्या ओपीडी परामर्श समय`,
+      en: 'Revised Evening OPD Consultation Slot',
+      hi: 'संशोधित संध्या ओपीडी परामर्श समय',
     },
     content: {
       en: 'Evening consultations will commence from 5:30 PM instead of 5:00 PM on Wednesdays to accommodate specialized diabetic foot assessments.',
       hi: 'विशिष्ट डायबिटिक फुट परीक्षणों के चलते बुधवार को संध्या परामर्श शाम 5:00 के स्थान पर 5:30 बजे से शुरू होगा।',
     },
     category: 'changed_timings',
-    effectiveDate: '2026-10-06',
-    publishedAt: '2026-10-06T08:30:00+05:30', // Recent in IST
+    effectiveDate: '2026-10-08',
+    publishedAt: '2026-10-08T17:30:00+05:30', // Updated within 3 days
     isImportant: false,
     status: 'placeholder',
   },

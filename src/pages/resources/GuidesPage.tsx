@@ -151,7 +151,7 @@ export const GuidesPage: React.FC = () => {
                 </div>
 
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400">PDF printable format</span>
+                  <span className="text-[11px] text-slate-600 font-medium">PDF printable format</span>
                   <Button
                     variant="outline"
                     size="sm"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X, ChevronDown, Stethoscope, Phone, MessageCircle } from 'lucide-react';
+import { X, ChevronDown, Stethoscope, Phone, MessageCircle, Bell } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
 import { NAVIGATION_ITEMS } from '../../config/navigation';
 import { LanguageSwitcher } from '../common/LanguageSwitcher';
@@ -10,10 +10,11 @@ import { ENV, getSafePhoneHref, getSafeWhatsAppHref } from '../../config/env';
 interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenNotices?: () => void;
 }
 
-export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) => {
-  const { localize, t } = useLanguage();
+export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onOpenNotices }) => {
+  const { localize, t, isHindi } = useLanguage();
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
   const toggleSection = (id: string) => {
@@ -41,7 +42,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
 
   return (
     <div
-      className="fixed inset-0 z-100 flex justify-end bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex justify-end bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       aria-label="Mobile Navigation"
@@ -72,6 +73,27 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
           </button>
         </div>
 
+        {/* Clinic Notices Quick Action */}
+        <div className="p-3 bg-teal-50/70 border-b border-teal-100/80">
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              onOpenNotices?.();
+            }}
+            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white border border-teal-200/80 text-xs font-bold text-[#0f3d4a] shadow-2xs hover:bg-teal-50 transition-colors cursor-pointer"
+          >
+            <span className="flex items-center gap-2">
+              <Bell className="w-3.5 h-3.5 text-teal-600" />
+              <span>{isHindi ? 'क्लिनिक सूचनाएं एवं समाचार' : 'Clinic Announcements & Notices'}</span>
+            </span>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+          </button>
+        </div>
+
         {/* Navigation Accordion List */}
         <nav className="flex-1 p-4 overflow-y-auto divide-y divide-slate-100">
           {NAVIGATION_ITEMS.map((item) => {
@@ -94,19 +116,28 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
 
             return (
               <div key={item.id} className="py-2.5">
-                <button
-                  type="button"
-                  onClick={() => toggleSection(item.id)}
-                  className="w-full flex items-center justify-between text-sm font-semibold text-slate-800 hover:text-[#0f3d4a] transition-colors py-1 cursor-pointer"
-                  aria-expanded={isExpanded}
-                >
-                  <span>{localize(item.name)}</span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
-                      isExpanded ? 'rotate-180 text-[#0f3d4a]' : ''
-                    }`}
-                  />
-                </button>
+                <div className="w-full flex items-center justify-between py-1">
+                  <Link
+                    to={item.href}
+                    onClick={onClose}
+                    className="text-sm font-semibold text-slate-800 hover:text-[#0f3d4a] transition-colors flex-1"
+                  >
+                    {localize(item.name)}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection(item.id)}
+                    className="p-1.5 text-slate-400 hover:text-[#0f3d4a] transition-colors cursor-pointer"
+                    aria-label={`Toggle ${localize(item.name)} menu`}
+                    aria-expanded={isExpanded}
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isExpanded ? 'rotate-180 text-[#0f3d4a]' : ''
+                      }`}
+                    />
+                  </button>
+                </div>
 
                 {isExpanded && (
                   <div className="mt-2 pl-3 border-l-2 border-[#0f3d4a]/20 space-y-2 animate-in fade-in duration-150">

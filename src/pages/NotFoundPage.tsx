@@ -11,6 +11,7 @@ export const NotFoundPage: React.FC = () => {
       <SEO
         title="Page Not Found (404) — Dr. Soumya Sengupta"
         description="The requested page could not be found."
+        noIndex={true}
       />
 
       <Container size="md" className="py-24 text-center space-y-6">

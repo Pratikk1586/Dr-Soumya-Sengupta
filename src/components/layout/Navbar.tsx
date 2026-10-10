@@ -1,20 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Stethoscope, ChevronDown, Search, Menu } from 'lucide-react';
+import { Stethoscope, ChevronDown, Search, Menu, Bell } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
 import { NAVIGATION_ITEMS } from '../../config/navigation';
 import { LanguageSwitcher } from '../common/LanguageSwitcher';
 import { Button } from '../common/Button';
 import { SearchModal } from './SearchModal';
 import { MobileDrawer } from './MobileDrawer';
+import { ClinicNoticesModal } from '../notices/ClinicNoticesModal';
 import { cn } from '../../utils/cn';
 
 export const Navbar: React.FC = () => {
-  const { localize, t } = useLanguage();
+  const { localize, isHindi, t } = useLanguage();
   const location = useLocation();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [isNoticesModalOpen, setIsNoticesModalOpen] = useState(false);
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navRef = useRef<HTMLElement>(null);
 
@@ -69,30 +71,29 @@ export const Navbar: React.FC = () => {
     <>
       <header
         ref={navRef}
-        className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-2xs transition-shadow"
+        className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/70 shadow-2xs transition-shadow"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="max-w-[1440px] w-full mx-auto px-3 sm:px-4 lg:px-5 xl:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 lg:gap-3">
           {/* Logo & Clinical Identity */}
           <Link
             to="/"
-            className="flex items-center gap-3 shrink-0 group focus-visible:outline-2 focus-visible:outline-[#0f3d4a] rounded-lg p-1"
-            aria-label="Dr. Soumya Sengupta Diabetology Home"
+            className="flex items-center gap-2 sm:gap-3 shrink-0 group focus-visible:outline-2 focus-visible:outline-[#0f3d4a] rounded-lg p-0.5 sm:p-1"
           >
-            <div className="w-11 h-11 rounded-xl bg-[#0f3d4a] text-white flex items-center justify-center shadow-xs group-hover:bg-[#0a252f] transition-colors">
-              <Stethoscope className="w-6 h-6 text-[#dff0f4]" aria-hidden="true" />
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-[#0f3d4a] shrink-0 text-white flex items-center justify-center shadow-xs group-hover:bg-[#0a252f] transition-colors">
+              <Stethoscope className="w-4 h-4 sm:w-6 sm:h-6 text-[#dff0f4]" aria-hidden="true" />
             </div>
-            <div>
-              <span className="block text-base sm:text-lg font-bold text-[#06181f] tracking-tight leading-snug">
+            <div className="shrink-0 min-w-0">
+              <span className="block text-xs sm:text-sm md:text-base font-bold text-[#06181f] tracking-tight leading-snug">
                 Dr. Soumya Sengupta
               </span>
-              <span className="block text-xs font-medium text-slate-500">
+              <span className="hidden sm:block text-[11px] sm:text-xs font-medium text-slate-500">
                 Consultant Diabetologist
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Main Navigation">
+          <nav className="hidden xl:flex items-center gap-0.5 2xl:gap-1.5 shrink min-w-0" aria-label="Main Navigation">
             {NAVIGATION_ITEMS.map((item) => {
               const hasChildren = item.children && item.children.length > 0;
               const isCurrentSection =
@@ -106,9 +107,14 @@ export const Navbar: React.FC = () => {
                   <NavLink
                     key={item.id}
                     to={item.href}
+                    onClick={() => {
+                      if (location.pathname === item.href) {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
                     className={({ isActive }) =>
                       cn(
-                        'px-3 py-2 rounded-lg text-sm font-semibold transition-colors',
+                        'px-2 py-1.5 xl:px-2.5 xl:py-2 rounded-lg text-xs xl:text-[13px] 2xl:text-sm font-semibold transition-colors whitespace-nowrap',
                         isActive
                           ? 'text-[#0f3d4a] bg-[#dff0f4]/50'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
@@ -123,16 +129,21 @@ export const Navbar: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className="relative"
+                  className="relative flex items-center"
                   onMouseEnter={() => handleMouseEnter(item.id)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setActiveDropdown(isOpen ? null : item.id)}
+                  <Link
+                    to={item.href}
+                    onClick={() => {
+                      setActiveDropdown(null);
+                      if (location.pathname === item.href) {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
                     onKeyDown={(e) => handleDropdownKeyDown(e, item.id)}
                     className={cn(
-                      'inline-flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer select-none',
+                      'inline-flex items-center gap-1 px-2 py-1.5 xl:px-2.5 xl:py-2 rounded-lg text-xs xl:text-[13px] 2xl:text-sm font-semibold transition-colors cursor-pointer select-none whitespace-nowrap',
                       isCurrentSection || isOpen
                         ? 'text-[#0f3d4a] bg-[#dff0f4]/50'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
@@ -143,12 +154,12 @@ export const Navbar: React.FC = () => {
                     <span>{localize(item.name)}</span>
                     <ChevronDown
                       className={cn(
-                        'w-4 h-4 text-slate-400 transition-transform duration-150',
+                        'w-3.5 h-3.5 text-slate-400 transition-transform duration-150',
                         isOpen && 'rotate-180 text-[#0f3d4a]'
                       )}
                       aria-hidden="true"
                     />
-                  </button>
+                  </Link>
 
                   {/* Dropdown Panel */}
                   {isOpen && (
@@ -164,7 +175,13 @@ export const Navbar: React.FC = () => {
                           className="text-xs font-bold text-[#0f3d4a] hover:underline"
                           role="menuitem"
                         >
-                          {localize(item.name)} — Overview
+                          {item.id === 'nav-about'
+                            ? (isHindi ? 'डॉक्टर परिचय — संपूर्ण विवरण' : 'Know Your Doctor — Overview')
+                            : item.id === 'nav-patient-resources'
+                            ? (isHindi ? 'रोगी संसाधन — संपूर्ण विवरण' : 'Patient Resources — Overview')
+                            : item.id === 'nav-clinic'
+                            ? (isHindi ? 'क्लिनिक व चेंबर — संपूर्ण विवरण' : 'Our Clinic — Overview')
+                            : `${localize(item.name)} — Overview`}
                         </Link>
                       </div>
 
@@ -195,36 +212,58 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Right Action Bar (Search, Language Switcher, CTA) */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Right Action Bar (Notices Bell, Search, Language Switcher, CTA, Hamburger) */}
+          <div className="flex items-center gap-1 sm:gap-2 xl:gap-2.5 shrink-0">
+            {/* Single Clinic News & Notices Indicator Button (Visible on sm+ screens, mobile has it in drawer & hero) */}
+            <button
+              type="button"
+              onClick={() => setIsNoticesModalOpen(true)}
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[#0f3d4a] hover:bg-teal-50 border border-teal-200/60 bg-white shadow-2xs transition-all cursor-pointer group shrink-0"
+              title={isHindi ? 'क्लिनिक सूचनाएं' : 'Clinic Notices & Updates'}
+              aria-label="Open clinic notices"
+            >
+              <Bell className="w-3.5 h-3.5 text-teal-600 group-hover:rotate-12 transition-transform" />
+              <span className="hidden 2xl:inline font-semibold">
+                {isHindi ? 'सूचनाएं' : 'Notices'}
+              </span>
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+              </span>
+            </button>
+
             {/* Search Trigger */}
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
               aria-label="Open search"
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
-            {/* Language Switcher */}
-            <LanguageSwitcher className="hidden sm:inline-flex" />
+            {/* Language Switcher - compact variant for clean navbar footprint */}
+            <LanguageSwitcher variant="compact" className="shrink-0" />
 
-            {/* Desktop Booking CTA */}
-            <Link to="/book-appointment" className="hidden sm:inline-block">
-              <Button variant="primary" size="sm" className="font-semibold shadow-xs">
+            {/* Booking CTA Button (Visible on tablet & desktop) */}
+            <Link to="/book-appointment" className="hidden sm:inline-block shrink-0">
+              <Button
+                variant="primary"
+                size="sm"
+                className="font-semibold shadow-xs whitespace-nowrap text-xs xl:text-sm px-3 py-1.5 xl:px-3.5 xl:py-2 shrink-0"
+              >
                 {t('cta.bookAppointment')}
               </Button>
             </Link>
 
-            {/* Mobile Hamburger Menu */}
+            {/* Mobile & Tablet Hamburger Menu */}
             <button
               type="button"
               onClick={() => setIsMobileDrawerOpen(true)}
-              className="p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors lg:hidden cursor-pointer"
-              aria-label="Open mobile menu"
+              className="p-1.5 sm:p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors xl:hidden cursor-pointer shrink-0"
+              aria-label="Open navigation menu"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
         </div>
@@ -232,7 +271,12 @@ export const Navbar: React.FC = () => {
 
       {/* Modals & Overlays */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-      <MobileDrawer isOpen={isMobileDrawerOpen} onClose={() => setIsMobileDrawerOpen(false)} />
+      <ClinicNoticesModal isOpen={isNoticesModalOpen} onClose={() => setIsNoticesModalOpen(false)} />
+      <MobileDrawer
+        isOpen={isMobileDrawerOpen}
+        onClose={() => setIsMobileDrawerOpen(false)}
+        onOpenNotices={() => setIsNoticesModalOpen(true)}
+      />
     </>
   );
 };

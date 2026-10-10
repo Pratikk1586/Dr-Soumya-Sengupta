@@ -5,12 +5,13 @@ import { Section } from '../common/Section';
 import { Button } from '../common/Button';
 import { SmartImage } from '../common/SmartImage';
 import { VerificationBadge } from '../common/VerificationBadge';
+import { DoctorSocialLinks } from '../doctor/DoctorSocialLinks';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
 import { doctorService } from '../../services';
 
 export const AboutDoctorSection: React.FC = () => {
-  const { localize, t } = useLanguage();
+  const { localize, isHindi, t } = useLanguage();
   const { data: doctor } = useService(() => doctorService.getProfile(), []);
 
   return (
@@ -64,22 +65,20 @@ export const AboutDoctorSection: React.FC = () => {
             <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs space-y-1.5">
               <div className="flex items-center gap-2 text-[#0f3d4a] font-bold text-xs uppercase tracking-wider">
                 <Award className="w-4 h-4 text-teal-600" />
-                <span>Qualifications</span>
+                <span>Clinical Tenure</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-800 font-medium">
-                {doctor?.qualifications?.[0]
-                  ? `${localize(doctor.qualifications[0].degree)} — ${localize(doctor.qualifications[0].institution)}`
-                  : 'MBBS, MD / Post-Graduate Clinical Diabetology'}
+                Practicing since 2007 (19+ Years in Diabetes Care) • Cardio Diabetic Clinic
               </p>
             </div>
 
             <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs space-y-1.5">
               <div className="flex items-center gap-2 text-[#0f3d4a] font-bold text-xs uppercase tracking-wider">
                 <Stethoscope className="w-4 h-4 text-teal-600" />
-                <span>Clinical Focus</span>
+                <span>Specialisations</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-800 font-medium">
-                Type 1 & Type 2 Diabetes, CGM Sensor Analytics, Renal/Cardiovascular Organ Protection
+                Diabetes, Hypertension, Dyslipidemia, Hypothyroidism & Organ Protection
               </p>
             </div>
           </div>
@@ -97,6 +96,14 @@ export const AboutDoctorSection: React.FC = () => {
                 <span>{t('cta.bookAppointment')}</span>
               </Button>
             </Link>
+          </div>
+
+          {/* Social Media Links */}
+          <div className="pt-3 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center gap-3">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              {isHindi ? 'सोशल मीडिया पर जुड़ें:' : 'Connect with Doctor:'}
+            </span>
+            <DoctorSocialLinks variant="icons" />
           </div>
         </div>
       </div>

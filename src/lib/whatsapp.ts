@@ -6,9 +6,12 @@
 
 export interface AppointmentWhatsAppDetails {
   patientName?: string;
+  phone?: string;
   patientType?: 'new' | 'followup';
   preferredDate?: string;
   preferredSlot?: string;
+  preferredTime?: string;
+  age?: number | string;
   reason?: string;
   referenceId?: string;
 }
@@ -48,7 +51,7 @@ export function getClinicWhatsAppNumber(): string | null {
   const envNumber =
     import.meta.env.VITE_CLINIC_WHATSAPP_NUMBER ||
     import.meta.env.VITE_WHATSAPP_NUMBER ||
-    '';
+    '919431114510';
 
   return normalizeE164Phone(envNumber);
 }
@@ -64,34 +67,42 @@ export function formatWhatsAppMessage(
     case 'appointment': {
       const parts: string[] = [
         'Hello Dr. Sengupta Clinic,',
-        'I would like to inquire about booking a consultation slot.',
+        'I would like to book an appointment slot:',
       ];
 
       if (details?.referenceId) {
-        parts.push(`Reference ID: ${details.referenceId}`);
+        parts.push(`• Reference ID: ${details.referenceId}`);
       }
       if (details?.patientName) {
-        parts.push(`Patient Name: ${details.patientName}`);
+        parts.push(`• Patient Name: ${details.patientName}`);
+      }
+      if (details?.phone) {
+        parts.push(`• Contact Phone: ${details.phone}`);
+      }
+      if (details?.age) {
+        parts.push(`• Age: ${details.age}`);
       }
       if (details?.patientType) {
         parts.push(
-          `Consultation Type: ${
+          `• Consultation Type: ${
             details.patientType === 'followup' ? 'Follow-up Visit' : 'First Consultation'
           }`
         );
       }
       if (details?.preferredDate) {
-        parts.push(`Preferred Date: ${details.preferredDate}`);
+        parts.push(`• Preferred Date: ${details.preferredDate}`);
       }
-      if (details?.preferredSlot) {
-        parts.push(`Preferred Slot: ${details.preferredSlot}`);
+      if (details?.preferredTime) {
+        parts.push(`• Preferred Time: ${details.preferredTime}`);
+      } else if (details?.preferredSlot) {
+        parts.push(`• Preferred Slot: ${details.preferredSlot}`);
       }
       if (details?.reason) {
-        parts.push(`Brief Note: ${details.reason}`);
+        parts.push(`• Reason for Visit: ${details.reason}`);
       }
 
       parts.push(
-        '\nPlease let me know the available time slots and confirmation details. Thank you.'
+        '\nPlease confirm the appointment slot availability. I look forward to your confirmation call/message. Thank you!'
       );
       return parts.join('\n');
     }

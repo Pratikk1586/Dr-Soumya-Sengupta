@@ -23,32 +23,33 @@ export const ContactPage: React.FC = () => {
 
   const addressText = clinic
     ? `${localize(clinic.address.line1)}, ${localize(clinic.address.city)} ${clinic.address.pincode}`
-    : 'Salt Lake Sector 1, Kolkata 700064';
+    : 'Amlatola, Post Box No. 20, Chaibasa – 833201, West Singhbhum, Jharkhand';
 
   const clinicJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MedicalClinic',
-    name: 'Dr. Soumya Sengupta Diabetology Practice',
+    name: 'Cardio Diabetic Clinic',
     medicalSpecialty: 'Endocrinology',
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Kolkata',
-      addressRegion: 'West Bengal',
-      postalCode: '700064',
+      streetAddress: 'Amlatola, Post Box No. 20',
+      addressLocality: 'Chaibasa',
+      addressRegion: 'Jharkhand',
+      postalCode: '833201',
       addressCountry: 'IN',
     },
     physician: {
       '@type': 'Physician',
       name: 'Dr. Soumya Sengupta',
-      jobTitle: 'Consultant Diabetologist',
+      jobTitle: 'Consultant Diabetologist & Metabolic Physician',
     },
   };
 
   return (
     <>
       <SEO
-        title="Contact Consultation Chamber — Dr. Soumya Sengupta"
-        description="Official contact details, phone numbers, WhatsApp inquiry line, and clinic email for Dr. Soumya Sengupta's diabetology practice in Kolkata."
+        title="Contact Cardio Diabetic Clinic — Dr. Soumya Sengupta"
+        description="Official contact details, phone numbers, WhatsApp inquiry line, and clinic email for Dr. Soumya Sengupta at Cardio Diabetic Clinic, Chaibasa, West Singhbhum, Jharkhand."
         canonicalPath="/contact"
         structuredData={clinicJsonLd}
       />
@@ -175,7 +176,7 @@ export const ContactPage: React.FC = () => {
                   </strong>
                   <p className="leading-relaxed text-slate-600">{addressText}</p>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    {isHindi ? 'लैंडमार्क: बीडी मार्केट के पास' : 'Landmark: Near BD Market, Salt Lake'}
+                    {isHindi ? 'लैंडमार्क: पोस्ट ऑफिस के समीप, अमलाटोला' : 'Landmark: Near Post Office, Amlatola, Chaibasa'}
                   </p>
                 </div>
 
@@ -185,7 +186,7 @@ export const ContactPage: React.FC = () => {
                   </strong>
                   <div className="flex items-start gap-2 text-slate-600">
                     <Clock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                    <p>Monday – Saturday: 5:00 PM – 8:00 PM</p>
+                    <p>Monday – Saturday: 10:00 AM – 2:00 PM & 5:00 PM – 8:00 PM</p>
                   </div>
                 </div>
 
@@ -204,7 +205,7 @@ export const ContactPage: React.FC = () => {
           <div className="lg:col-span-7">
             <MapSection
               address={addressText}
-              landmark={clinic?.address.landmark ? localize(clinic.address.landmark) : 'Near BD Market, Salt Lake'}
+              landmark={clinic?.address.landmark ? localize(clinic.address.landmark) : 'Near Post Office, Amlatola, Chaibasa'}
               mapsUrl={clinic?.mapsUrl}
             />
           </div>

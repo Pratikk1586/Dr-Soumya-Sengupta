@@ -34,7 +34,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
               : 'text-slate-600 hover:text-slate-900'
           )}
           aria-pressed={language === 'en'}
-          aria-label="Switch to English"
+          aria-label="English"
+          title="Switch to English"
         >
           EN
         </button>
@@ -48,7 +49,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
               : 'text-slate-600 hover:text-slate-900'
           )}
           aria-pressed={language === 'hi'}
-          aria-label="हिन्दी में बदलें"
+          aria-label="हिंदी (Hindi)"
+          title="हिन्दी में बदलें"
         >
           हिंदी
         </button>
@@ -76,6 +78,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             : 'text-slate-500 hover:text-slate-800'
         )}
         aria-pressed={language === 'en'}
+        aria-label="English"
+        title="Switch to English"
       >
         EN
       </button>
@@ -92,6 +96,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             : 'text-slate-500 hover:text-slate-800'
         )}
         aria-pressed={language === 'hi'}
+        aria-label="हिंदी (Hindi)"
+        title="हिन्दी में बदलें"
       >
         हिंदी
       </button>

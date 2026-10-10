@@ -51,7 +51,7 @@ export const ClinicShowcaseSection: React.FC = () => {
               <div className="relative aspect-4/3 bg-slate-100 flex flex-col items-center justify-center p-6 text-center border-b border-slate-200 select-none group">
                 <Camera className="w-8 h-8 text-slate-400 mb-2 group-hover:scale-105 transition-transform" />
                 <span className="text-xs font-semibold text-slate-700">{item.title}</span>
-                <span className="text-[11px] text-slate-400 mt-1">High-res photography under clinic audit</span>
+                <span className="text-[11px] text-slate-600 font-medium mt-1">High-res photography under clinic audit</span>
                 <div className="absolute top-3 right-3">
                   <VerificationBadge note="Facility photograph placeholder" />
                 </div>

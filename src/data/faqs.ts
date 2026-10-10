@@ -2,6 +2,98 @@ import type { FAQ } from '../types';
 import { CONTENT_TO_BE_VERIFIED_MARKER } from './_placeholders';
 
 export const FAQS_DATA: FAQ[] = [
+  // Core Educational Questions
+  {
+    id: 'faq-what-is-diabetes',
+    slug: 'what-is-diabetes',
+    category: 'diabetes',
+    question: {
+      en: 'What is diabetes?',
+      hi: 'डायबिटीज (मधुमेह) क्या है?',
+    },
+    answer: {
+      en: 'Diabetes is a condition where the body either does not make enough insulin or cannot use insulin effectively. This causes blood sugar (glucose) levels to rise above normal.',
+      hi: 'डायबिटीज एक ऐसी स्थिति है जिसमें शरीर पर्याप्त इंसुलिन नहीं बना पाता या उसका सही उपयोग नहीं कर पाता, जिससे रक्त में शुगर (ग्लूकोज) का स्तर बढ़ जाता है।',
+    },
+    reviewStatus: 'draft',
+    status: 'verified',
+  },
+  {
+    id: 'faq-what-is-prediabetes',
+    slug: 'what-is-prediabetes',
+    category: 'diabetes',
+    question: {
+      en: 'What is prediabetes?',
+      hi: 'प्रीडायबिटीज क्या होता है?',
+    },
+    answer: {
+      en: 'Prediabetes means your blood sugar levels are higher than normal, but not yet high enough to be diagnosed as type 2 diabetes. It is an early signal that gives you an opportunity to make positive lifestyle changes.',
+      hi: 'प्रीडायबिटीज का मतलब है कि ब्लड शुगर सामान्य से अधिक है, लेकिन अभी टाइप 2 डायबिटीज के स्तर तक नहीं पहुंची है। यह शुरुआती संकेत जीवनशैली सुधारने का एक महत्वपूर्ण अवसर देता है।',
+    },
+    reviewStatus: 'draft',
+    status: 'verified',
+  },
+  {
+    id: 'faq-what-does-blood-sugar-mean',
+    slug: 'what-does-blood-sugar-mean',
+    category: 'reports',
+    question: {
+      en: 'What does blood sugar mean?',
+      hi: 'ब्लड शुगर (रक्त शर्करा) का क्या मतलब है?',
+    },
+    answer: {
+      en: 'Blood sugar (glucose) is the main type of sugar in your blood and your body\'s primary source of energy. It comes from the food you eat and is guided into your cells with the help of insulin.',
+      hi: 'ब्लड शुगर (ग्लूकोज) आपके रक्त में पाई जाने वाली मुख्य शर्करा है और शरीर के लिए ऊर्जा का मुख्य स्रोत है। यह भोजन से मिलती है और इंसुलिन की मदद से कोशिकाओं तक पहुँचती है।',
+    },
+    reviewStatus: 'draft',
+    status: 'verified',
+  },
+  {
+    id: 'faq-what-is-hba1c',
+    slug: 'what-is-hba1c',
+    category: 'reports',
+    question: {
+      en: 'What is HbA1c?',
+      hi: 'HbA1c क्या है?',
+    },
+    answer: {
+      en: 'HbA1c is a simple blood test that measures your average blood sugar levels over the past 2 to 3 months. Unlike a daily finger-prick test that shows a single moment, HbA1c gives your doctor the broader picture.',
+      hi: 'HbA1c एक साधारण रक्त परीक्षण है जो पिछले 2 से 3 महीनों में आपके औसत ब्लड शुगर स्तर को दर्शाता है। यह एक समय की जांच के बजाय 3 महीने का समग्र चित्र प्रस्तुत करता है।',
+    },
+    reviewStatus: 'draft',
+    status: 'verified',
+  },
+  {
+    id: 'faq-why-is-regular-follow-up-important',
+    slug: 'why-is-regular-follow-up-important',
+    category: 'appointments',
+    question: {
+      en: 'Why is regular follow-up important?',
+      hi: 'डॉक्टर से नियमित फॉलो-अप क्यों जरूरी है?',
+    },
+    answer: {
+      en: 'Diabetes and metabolic conditions change over time. Regular follow-ups allow your doctor to review your lab reports, adjust your care plan safely, check for early signs of complications, and answer any questions you have.',
+      hi: 'डायबिटीज और मेटाबॉलिक स्वास्थ्य समय के साथ बदल सकते हैं। नियमित परामर्श से डॉक्टर आपकी रिपोर्ट की समीक्षा कर सकते हैं, देखभाल योजना में सुरक्षित बदलाव कर सकते हैं और जटिलताओं की शुरुआती जांच कर सकते हैं।',
+    },
+    reviewStatus: 'draft',
+    status: 'verified',
+  },
+  {
+    id: 'faq-what-should-i-discuss-during-consultation',
+    slug: 'what-should-i-discuss-during-my-consultation',
+    category: 'appointments',
+    question: {
+      en: 'What should I discuss during my consultation?',
+      hi: 'परामर्श के दौरान डॉक्टर से क्या चर्चा करनी चाहिए?',
+    },
+    answer: {
+      en: 'You can discuss any unusual symptoms, your daily food and activity routines, questions about your medications or side effects, your home blood sugar readings, and your personal health goals.',
+      hi: 'आप किसी भी नए लक्षण, अपने दैनिक खान-पान व व्यायाम, दवाओं से जुड़े सवाल, घर पर ली गई शुगर रीडिंग्स और अपने व्यक्तिगत स्वास्थ्य लक्ष्यों पर खुलकर चर्चा कर सकते हैं।',
+    },
+    reviewStatus: 'draft',
+    status: 'verified',
+  },
+
   // 1. Diabetes
   {
     id: 'faq-type2-remission',

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ShieldCheck,
@@ -9,124 +9,109 @@ import {
   HeartPulse,
   BookOpen,
   Sparkles,
+  Building2,
 } from 'lucide-react';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
-import { VerificationBadge } from '../common/VerificationBadge';
-import { MedicalDisclaimerBanner } from '../common/MedicalDisclaimerBanner';
+import { HeroNewsTicker } from './HeroNewsTicker';
 import { HeroStaticVisual } from './HeroStaticVisual';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
 import { doctorService } from '../../services';
 import { ENV, getSafeWhatsAppHref } from '../../config/env';
 
-// Lazy-load the 3D Canvas layer in its own dynamic chunk
-const PancreasHero3D = lazy(() => import('./PancreasHero3D'));
+// Lazy-load the 3D Interactive Pancreas layer in its own dynamic chunk
+const AnimatedPancreas = lazy(() => import('../pancreas/AnimatedPancreas'));
 
 export const HeroSection: React.FC = () => {
-  const { localize, t } = useLanguage();
+  const { localize, isHindi, t } = useLanguage();
   const { data: doctor } = useService(() => doctorService.getProfile(), []);
-  const [canLoad3D, setCanLoad3D] = useState(false);
-
-  // Progressive enhancement: Allow instant paint of HTML + SVG LCP, then mount 3D chunk
-  useEffect(() => {
-    // Check prefers-reduced-motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return; // Keep pure static visual for users preferring reduced motion
-    }
-
-    // Schedule 3D chunk loading after main thread idle or minimal delay
-    if ('requestIdleCallback' in window) {
-      const handle = (window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(
-        () => setCanLoad3D(true)
-      );
-      return () => {
-        if ('cancelIdleCallback' in window) {
-          (window as Window & { cancelIdleCallback: (h: number) => void }).cancelIdleCallback(handle);
-        }
-      };
-    } else {
-      const timer = setTimeout(() => setCanLoad3D(true), 200);
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   const whatsappHref = getSafeWhatsAppHref(
     'Hello Dr. Sengupta, I would like to inquire about consultation availability for diabetes care.'
   );
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#e3f2f5]/60 via-[#faf9f6] to-[#faf9f6] pt-10 pb-14 sm:pt-14 sm:pb-20 lg:pt-16 lg:pb-24 border-b border-slate-200/70">
-      {/* Background ambient medical glow */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-teal-100/40 rounded-full blur-3xl pointer-events-none" />
+    <section className="relative overflow-hidden bg-white lg:bg-gradient-to-b lg:from-[#f0f9fa]/40 lg:via-white lg:to-[#f8fafc]/50 pt-6 pb-12 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-24 border-b border-slate-200/80">
+      {/* Background ambient medical glow (Web/Desktop view only) */}
+      <div className="hidden lg:block absolute top-0 right-1/4 w-80 sm:w-96 h-80 sm:h-96 bg-teal-100/25 rounded-full blur-3xl pointer-events-none" />
+      <div className="hidden lg:block absolute -top-10 -left-10 w-60 h-60 bg-sky-50/30 rounded-full blur-3xl pointer-events-none" />
 
       <Container size="xl">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Instant-render text & clinical authority */}
           <div className="lg:col-span-7 space-y-5 sm:space-y-6">
-            {/* Top credentials pill & verification notice */}
+            {/* Top credentials pill & practicing tenure */}
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="primary" size="md">
-                <ShieldCheck className="w-4 h-4 mr-1 text-[#0f3d4a]" aria-hidden="true" />
-                <span>Consultant Diabetologist</span>
-              </Badge>
-              <VerificationBadge note="Tenure & Credentials under doctor review" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-300 text-teal-950 text-xs font-bold shadow-2xs">
+                <ShieldCheck className="w-3.5 h-3.5 text-teal-800 shrink-0" aria-hidden="true" />
+                <span>Practicing since 2007 (19+ Years in Diabetes Care)</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold shadow-2xs">
+                <span>Cardio Diabetic Clinic</span>
+              </span>
             </div>
 
             {/* Doctor Name & Designation */}
             <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-[-0.03em] leading-[1.15]">
                 {doctor ? localize(doctor.name) : 'Dr. Soumya Sengupta'}
               </h1>
-              <p className="text-lg sm:text-xl font-semibold text-[#0f3d4a] mt-1.5 leading-snug">
+              <p className="text-base sm:text-lg md:text-xl font-bold text-[#0a3542] mt-2 sm:mt-2.5 leading-snug tracking-[-0.01em]">
                 {doctor ? localize(doctor.title) : 'Consultant Diabetologist & Metabolic Physician'}
               </p>
             </div>
 
-            {/* Short Clinical Introduction (Clearly flagged where unverified) */}
-            <p className="text-sm sm:text-base text-slate-700 leading-relaxed max-w-2xl font-normal">
+            {/* Short Clinical Introduction */}
+            <p className="text-sm sm:text-base md:text-[17px] text-slate-800 leading-relaxed max-w-2xl font-medium">
               {doctor ? localize(doctor.shortBio) : (
                 <>
-                  Dedicated to evidence-based diabetes management, Continuous Glucose Monitoring (CGM) analytics,
-                  and cardiometabolic organ protection for sustainable, long-term health.
+                  Practicing physician since 2007 (19+ years in diabetes care) dedicated to early diabetes detection, hypertension control,
+                  and protecting vital organs—Kidneys, Eyes, Nerves, Heart, and Brain—so patients can lead a normal, healthy life.
                 </>
               )}
             </p>
 
-            {/* 4 Core Pillars Badges */}
-            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 pt-1 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-50 border border-teal-200/70 text-[#0f3d4a] font-medium">
-                <Activity className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+            {/* 4 Core Specialisation Badges */}
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 pt-1 text-xs">
+              <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-teal-50/90 border border-teal-300 text-teal-950 font-bold shadow-2xs">
+                <Activity className="w-3.5 h-3.5 text-teal-700 shrink-0" />
                 <span>Diabetes Care</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-50 border border-teal-200/70 text-[#0f3d4a] font-medium">
-                <HeartPulse className="w-3.5 h-3.5 text-teal-600 shrink-0" />
-                <span>Metabolic Health</span>
+              <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-rose-50/90 border border-rose-300 text-rose-950 font-bold shadow-2xs">
+                <HeartPulse className="w-3.5 h-3.5 text-rose-700 shrink-0" />
+                <span>Hypertension</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200/70 text-amber-900 font-medium">
-                <BookOpen className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                <span>Patient Education</span>
+              <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-50/90 border border-amber-300 text-amber-950 font-bold shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                <span>Dyslipidemia</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200/70 text-blue-900 font-medium">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                <span>Personalised Care</span>
+              <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-sky-50/90 border border-sky-300 text-sky-950 font-bold shadow-2xs">
+                <BookOpen className="w-3.5 h-3.5 text-sky-700 shrink-0" />
+                <span>Hypothyroidism</span>
               </span>
             </div>
 
             {/* CTAs */}
             <div className="flex flex-wrap items-center gap-3 pt-3">
-              <Link to="/book-appointment">
-                <Button variant="primary" size="lg" className="shadow-md">
+              <Link to="/book-appointment" className="w-full sm:w-auto">
+                <Button variant="primary" size="lg" className="w-full sm:w-auto shadow-md">
                   <Calendar className="w-4 h-4 mr-2" aria-hidden="true" />
                   <span>{t('cta.bookAppointment')}</span>
                 </Button>
               </Link>
 
-              <Link to="/about">
-                <Button variant="outline" size="lg">
+              <Link to="/about" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   <User className="w-4 h-4 mr-2" aria-hidden="true" />
-                  <span>About Dr. Sengupta</span>
+                  <span>{isHindi ? 'डॉक्टर परिचय' : 'Know Your Doctor'}</span>
+                </Button>
+              </Link>
+
+              <Link to="/clinic" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                  <Building2 className="w-4 h-4 mr-2 text-[#0f3d4a]" aria-hidden="true" />
+                  <span>Our Clinic</span>
                 </Button>
               </Link>
 
@@ -149,26 +134,25 @@ export const HeroSection: React.FC = () => {
               )}
             </div>
 
-            {/* Universal Medical Disclaimer Banner */}
+            {/* Live Clinic News & Notices Section */}
             <div className="pt-2">
-              <MedicalDisclaimerBanner />
+              <HeroNewsTicker />
             </div>
           </div>
 
-          {/* Right Column: Progressive 3D / Immediate LCP Container */}
+          {/* Right Column: Interactive 3D Pancreas Anatomy */}
           <div className="lg:col-span-5 relative flex items-center justify-center">
-            <div className="relative w-full aspect-square max-w-[480px] lg:max-w-[540px]">
-              {/* Immediate LCP Layer: Crisp SVG/CSS visual */}
-              <div className={canLoad3D ? 'hidden' : 'block'}>
-                <HeroStaticVisual />
-              </div>
-
-              {/* Lazy 3D Layer: Only mounted when idle / progressive */}
-              {canLoad3D && (
-                <Suspense fallback={<HeroStaticVisual />}>
-                  <PancreasHero3D />
-                </Suspense>
-              )}
+            <div className="relative w-full flex flex-col items-center justify-center max-w-[480px] lg:max-w-[540px]">
+              <Suspense fallback={<HeroStaticVisual />}>
+                <AnimatedPancreas
+                  className="w-full"
+                  showCategoryTabs={false}
+                  showDetailsCard={true}
+                  showHotspots={true}
+                  showMedicalBadges={false}
+                  enableParallax={false}
+                />
+              </Suspense>
             </div>
           </div>
         </div>

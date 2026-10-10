@@ -91,7 +91,7 @@ export interface TranslationDictionary {
 export const en: TranslationDictionary = {
   nav: {
     home: 'Home',
-    about: 'About Doctor',
+    about: 'Know Your Doctor',
     diabetesCare: 'Diabetes Care',
     conditions: 'Conditions',
     patientResources: 'Patient Resources',

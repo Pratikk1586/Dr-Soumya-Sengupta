@@ -186,7 +186,6 @@ export const PhotosPage: React.FC = () => {
                   onClick={() => setActiveLightboxIndex(index)}
                   tabIndex={0}
                   role="button"
-                  aria-label={`Open media: ${localize(item.title)}`}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
@@ -242,8 +241,8 @@ export const PhotosPage: React.FC = () => {
                   </div>
 
                   {item.date && (
-                    <div className="px-4 pb-3 pt-1 text-[11px] text-slate-400 flex items-center gap-1 border-t border-slate-50">
-                      <Calendar className="w-3 h-3" />
+                    <div className="px-4 pb-3 pt-1 text-[11px] text-slate-600 font-medium flex items-center gap-1 border-t border-slate-50">
+                      <Calendar className="w-3 h-3 text-slate-500" />
                       <span>{item.date}</span>
                     </div>
                   )}

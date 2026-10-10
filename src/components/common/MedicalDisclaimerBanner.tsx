@@ -1,29 +1,5 @@
 import React from 'react';
-import { ShieldAlert } from 'lucide-react';
-import { useLanguage } from '../../context/useLanguage';
-import { UNIVERSAL_DISCLAIMER_TEXT } from '../../config/constants';
 
-export const MedicalDisclaimerBanner: React.FC<{ className?: string }> = ({ className = '' }) => {
-  const { t } = useLanguage();
-
-  return (
-    <aside
-      className={`border-l-4 border-[#0f3d4a] bg-[#dff0f4]/40 px-4 py-3 rounded-r-md text-xs leading-relaxed text-slate-800 ${className}`}
-      aria-label="Medical consultation disclaimer"
-      role="note"
-    >
-      <div className="flex items-start gap-2.5">
-        <ShieldAlert className="w-4 h-4 text-[#0f3d4a] shrink-0 mt-0.5" aria-hidden="true" />
-        <div>
-          <strong className="font-semibold text-[#06181f] block mb-0.5">
-            {t({
-              en: 'Important Clinical Disclaimer',
-              hi: 'महत्वपूर्ण चिकित्सीय सूचना',
-            })}
-          </strong>
-          <p className="text-slate-700">{t(UNIVERSAL_DISCLAIMER_TEXT)}</p>
-        </div>
-      </div>
-    </aside>
-  );
+export const MedicalDisclaimerBanner: React.FC<{ className?: string }> = () => {
+  return null;
 };

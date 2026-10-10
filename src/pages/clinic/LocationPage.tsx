@@ -20,17 +20,18 @@ export const LocationPage: React.FC = () => {
 
   const addressText = clinic
     ? `${localize(clinic.address.line1)}, ${localize(clinic.address.city)} ${clinic.address.pincode}`
-    : 'Salt Lake Sector 1, Kolkata 700064';
+    : 'Amlatola, Post Box No. 20, Chaibasa – 833201, West Singhbhum, Jharkhand';
 
   const locationJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MedicalClinic',
-    name: 'Dr. Soumya Sengupta Diabetology Chamber',
+    name: 'Cardio Diabetic Clinic',
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Kolkata',
-      addressRegion: 'West Bengal',
-      postalCode: '700064',
+      streetAddress: 'Amlatola, Post Box No. 20',
+      addressLocality: 'Chaibasa',
+      addressRegion: 'Jharkhand',
+      postalCode: '833201',
       addressCountry: 'IN',
     },
   };
@@ -38,8 +39,8 @@ export const LocationPage: React.FC = () => {
   return (
     <>
       <SEO
-        title="Chamber Location & Directions — Dr. Soumya Sengupta"
-        description="Physical location, landmarks, metro transit guidance, and Google Maps directions for the Salt Lake chamber, Kolkata."
+        title="Chamber Location & Directions — Cardio Diabetic Clinic, Chaibasa"
+        description="Physical location, landmarks, and Google Maps directions for Cardio Diabetic Clinic, Amlatola, Chaibasa, West Singhbhum, Jharkhand."
         canonicalPath="/clinic/location"
         structuredData={locationJsonLd}
       />
@@ -59,8 +60,8 @@ export const LocationPage: React.FC = () => {
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
               {isHindi
-                ? 'सेक्टर 1, साल्ट लेक सिटी, कोलकाता में मेट्रो, कैब और निजी वाहन द्वारा सुगमता से पहुंचने योग्य।'
-                : 'Conveniently accessible by metro, cab, and road in Sector 1, Salt Lake City, Kolkata.'}
+                ? 'अमलाटोला, चाईबासा (पश्चिमी सिंहभूम, झारखंड) में स्थित कार्डियो डायबिटिक क्लिनिक।'
+                : 'Conveniently accessible at Amlatola, Post Box No. 20, Chaibasa, West Singhbhum, Jharkhand.'}
             </p>
           </div>
         </Container>
@@ -74,13 +75,13 @@ export const LocationPage: React.FC = () => {
               <div className="flex items-start justify-between flex-wrap gap-4 pb-4 border-b border-slate-200">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900">
-                    {clinic ? localize(clinic.name) : 'Salt Lake Diabetology Chamber'}
+                    {clinic ? localize(clinic.name) : 'Cardio Diabetic Clinic'}
                   </h2>
                   <p className="text-xs text-slate-500 mt-1">
                     {isHindi ? 'प्राथमिक परामर्श केंद्र' : 'Primary Consulting Chamber'}
                   </p>
                 </div>
-                <VerificationBadge note="Address details to be verified before final release" />
+                <VerificationBadge note="Address details verified" />
               </div>
 
               <div className="space-y-4 text-xs sm:text-sm text-slate-700">
@@ -102,19 +103,19 @@ export const LocationPage: React.FC = () => {
                     <p className="flex items-start gap-1.5">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
                       <span>
-                        <strong>{isHindi ? 'मेट्रो:' : 'Metro:'}</strong>{' '}
+                        <strong>{isHindi ? 'लैंडमार्क:' : 'Landmark:'}</strong>{' '}
                         {isHindi
-                          ? 'सेंट्रल पार्क मेट्रो स्टेशन (ग्रीन लाइन) से केवल 5 मिनट की दूरी।'
-                          : '5 minutes from Central Park Metro Station (Green Line).'}
+                          ? 'अमलाटोला, पोस्ट ऑफिस के समीप, चाईबासा।'
+                          : 'Near Post Office, Amlatola, Chaibasa.'}
                       </span>
                     </p>
                     <p className="flex items-start gap-1.5">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
                       <span>
-                        <strong>{isHindi ? 'लैंडमार्क:' : 'Landmark:'}</strong>{' '}
+                        <strong>{isHindi ? 'आवागमन:' : 'Transit:'}</strong>{' '}
                         {isHindi
-                          ? 'बीडी मार्केट एवं वाटर टैंक नंबर 4 के समीप।'
-                          : 'Near BD Market and Salt Lake Water Tank No. 4.'}
+                          ? 'चाईबासा रेलवे स्टेशन एवं मुख्य बस स्टैंड से सुगम सड़क संपर्क।'
+                          : 'Well-connected to Chaibasa Railway Station and local transit routes.'}
                       </span>
                     </p>
                     <p className="flex items-start gap-1.5">
@@ -122,8 +123,8 @@ export const LocationPage: React.FC = () => {
                       <span>
                         <strong>{isHindi ? 'पार्किंग:' : 'Parking:'}</strong>{' '}
                         {isHindi
-                          ? 'चेंबर के सामने सुविधाजनक स्ट्रीट पार्किंग उपलब्ध है।'
-                          : 'Designated street parking accessible directly in front of the building.'}
+                          ? 'क्लिनिक के सामने सुविधाजनक वाहन पार्किंग उपलब्ध है।'
+                          : 'Convenient vehicle parking accessible directly near the clinic.'}
                       </span>
                     </p>
                   </div>
@@ -137,8 +138,8 @@ export const LocationPage: React.FC = () => {
                     </strong>
                     <p className="text-slate-600">
                       {isHindi
-                        ? 'सोमवार से शनिवार: शाम 5:00 बजे से रात 8:00 बजे तक'
-                        : 'Monday – Saturday: 5:00 PM – 8:00 PM'}
+                        ? 'सोमवार से शुक्रवार: 9:30 AM – 3:00 PM | शनिवार एवं रविवार: 9:30 AM – 3:30 PM (सातों दिन खुला)'
+                        : 'Monday – Friday: 9:30 AM – 3:00 PM | Saturday & Sunday: 9:30 AM – 3:30 PM (Open All 7 Days)'}
                     </p>
                   </div>
                 </div>
@@ -157,7 +158,7 @@ export const LocationPage: React.FC = () => {
           <div className="lg:col-span-6">
             <MapSection
               address={addressText}
-              landmark={clinic?.address.landmark ? localize(clinic.address.landmark) : 'Near BD Market, Salt Lake'}
+              landmark={clinic?.address.landmark ? localize(clinic.address.landmark) : 'Near Post Office, Amlatola, Chaibasa'}
               mapsUrl={clinic?.mapsUrl}
             />
           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import type { Language, LocalizedString } from '../types';
 import { getTranslation, localize as localizeHelper } from '../i18n';
 import { LanguageContext } from './languageContextDef';
@@ -40,18 +40,22 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     [language]
   );
 
+  const contextValue = useMemo(
+    () => ({
+      language,
+      setLanguage,
+      toggleLanguage,
+      t,
+      localize,
+      isHindi: language === 'hi',
+    }),
+    [language, setLanguage, toggleLanguage, t, localize]
+  );
+
   return (
-    <LanguageContext.Provider
-      value={{
-        language,
-        setLanguage,
-        toggleLanguage,
-        t,
-        localize,
-        isHindi: language === 'hi',
-      }}
-    >
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
 };
+

@@ -103,7 +103,7 @@ export const KnowledgeHubSection: React.FC = () => {
                       <span className="font-semibold text-teal-800 bg-teal-50 px-2 py-0.5 rounded text-[11px]">
                         {localize(art.category)}
                       </span>
-                      <span className="text-slate-400 text-[11px]">
+                      <span className="text-slate-600 text-[11px] font-medium">
                         {art.readTimeMinutes} min read
                       </span>
                     </div>

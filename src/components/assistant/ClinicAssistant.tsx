@@ -9,8 +9,10 @@ import {
   ArrowRight,
   Bot,
   User,
+  Languages,
 } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
+import type { Language } from '../../types';
 import { chatbotService, type ChatbotMessage, type ChatActionOption } from '../../services';
 
 let messageCounter = 0;
@@ -28,18 +30,26 @@ export const ClinicAssistant: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [liveAnnouncement, setLiveAnnouncement] = useState('');
+  // Duo-lingo / bilingual capability: independent chat language toggle initialized from site language
+  const [chatLanguage, setChatLanguage] = useState<Language>(language);
+  const isChatHindi = chatLanguage === 'hi';
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Derive displayed messages: show initial greeting when conversation is empty
+  // Synchronize chatLanguage when outer site language changes
+  useEffect(() => {
+    setChatLanguage(language);
+  }, [language]);
+
+  // Derive displayed messages: show initial greeting in active chat language when conversation is empty
   const displayMessages = React.useMemo(() => {
     if (messages.length === 0) {
-      return [chatbotService.getInitialMessage(language)];
+      return [chatbotService.getInitialMessage(chatLanguage)];
     }
     return messages;
-  }, [messages, language]);
+  }, [messages, chatLanguage]);
 
   // Scroll to bottom on new message
   useEffect(() => {
@@ -85,22 +95,22 @@ export const ClinicAssistant: React.FC = () => {
     };
 
     setMessages((prev) => {
-      const base = prev.length === 0 ? [chatbotService.getInitialMessage(language)] : prev;
+      const base = prev.length === 0 ? [chatbotService.getInitialMessage(chatLanguage)] : prev;
       return [...base, userMsg];
     });
     setInputText('');
     setIsTyping(true);
-    setLiveAnnouncement(isHindi ? 'सहायक उत्तर तैयार कर रहा है...' : 'Assistant is typing...');
+    setLiveAnnouncement(isChatHindi ? 'सहायक उत्तर तैयार कर रहा है...' : 'Assistant is typing...');
 
     try {
-      const response = await chatbotService.respond(query, language);
+      const response = await chatbotService.respond(query, chatLanguage);
       setMessages((prev) => [...prev, response]);
       setLiveAnnouncement(response.text);
     } catch {
       const errorMsg: ChatbotMessage = {
         id: nextMessageId('err'),
         sender: 'assistant',
-        text: isHindi
+        text: isChatHindi
           ? 'माफ़ कीजिए, उत्तर लोड करने में समस्या हुई। कृपया क्लिनिक फोन पर संपर्क करें।'
           : 'Sorry, unable to load response right now. Please contact the clinic desk directly.',
         timestamp: new Date().toISOString(),
@@ -115,7 +125,17 @@ export const ClinicAssistant: React.FC = () => {
   const handleResetChat = () => {
     setMessages([]);
     setInputText('');
-    setLiveAnnouncement(isHindi ? 'चैट रीसेट हो गई है।' : 'Chat restarted.');
+    setLiveAnnouncement(isChatHindi ? 'चैट रीसेट हो गई है।' : 'Chat restarted.');
+  };
+
+  const handleToggleLanguage = () => {
+    const next = chatLanguage === 'en' ? 'hi' : 'en';
+    setChatLanguage(next);
+    setLiveAnnouncement(
+      next === 'hi'
+        ? 'सहायक की भाषा हिंदी में बदल दी गई है।'
+        : 'Chatbot language switched to English.'
+    );
   };
 
   const handleActionClick = (action: ChatActionOption) => {
@@ -138,19 +158,19 @@ export const ClinicAssistant: React.FC = () => {
         {liveAnnouncement}
       </div>
 
-      {/* Floating Trigger Button (Positioned safely above mobile bottom nav) */}
+      {/* Floating Trigger Button (Sleek FAB on mobile, pill on tablet/desktop, positioned safely above bottom nav) */}
       {!isOpen && (
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-4 md:right-6 z-40 flex items-center gap-2.5 px-4 py-3 bg-[#0f3d4a] hover:bg-[#082229] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f3d4a]"
+          className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-3.5 sm:right-4 md:right-6 z-40 flex items-center justify-center gap-2 p-3 sm:px-4 sm:py-3 bg-[#0f3d4a] hover:bg-[#082229] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f3d4a] max-w-fit"
           aria-label={isHindi ? 'क्लिनिक सहायक खोलें' : 'Open Clinic Assistant chat'}
         >
-          <div className="relative">
+          <div className="relative shrink-0">
             <MessageSquareHeart className="w-5 h-5 text-[#dff0f4]" aria-hidden="true" />
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#0f3d4a]" />
           </div>
-          <span className="text-xs sm:text-sm font-semibold tracking-tight">
+          <span className="hidden sm:inline text-xs sm:text-sm font-semibold tracking-tight whitespace-nowrap">
             {isHindi ? 'क्लिनिक सहायक' : 'Clinic Assistant'}
           </span>
         </button>
@@ -170,29 +190,43 @@ export const ClinicAssistant: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
             className="w-full md:w-96 md:fixed md:bottom-6 md:right-6 bg-white rounded-t-3xl md:rounded-2xl shadow-2xl border border-slate-200 flex flex-col h-[82dvh] md:h-[580px] max-h-[90dvh] overflow-hidden animate-in slide-in-from-bottom-4 duration-200"
           >
-            {/* Header */}
-            <div className="px-4 py-3.5 bg-gradient-to-r from-[#0f3d4a] to-[#1a5363] text-white flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#dff0f4]">
+            {/* Header with Duo-lingo Language Switcher */}
+            <div className="px-4 py-3 bg-gradient-to-r from-[#0f3d4a] to-[#1a5363] text-white flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#dff0f4] shrink-0">
                   <Bot className="w-5 h-5" />
                 </div>
-                <div>
-                  <h3 className="text-sm font-bold tracking-tight">
-                    {isHindi ? 'डॉ. सेनगुप्ता क्लिनिक सहायक' : 'Dr. Sengupta Clinic Assistant'}
+                <div className="truncate">
+                  <h3 className="text-sm font-bold tracking-tight truncate">
+                    {isChatHindi ? 'डॉ. सेनगुप्ता क्लिनिक सहायक' : 'Dr. Sengupta Clinic Assistant'}
                   </h3>
                   <div className="flex items-center gap-1.5 text-[11px] text-[#dff0f4]/80">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>{isHindi ? 'ऑनलाइन सहायता' : 'Online Practice Guide'}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                    <span className="truncate">
+                      {isChatHindi ? 'द्विभाषी सहायता (En / हिन्दी)' : 'Bilingual Guide (English & Hindi)'}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 shrink-0 ml-2">
+                {/* Duo-lingo / Bilingual toggle button */}
+                <button
+                  type="button"
+                  onClick={handleToggleLanguage}
+                  className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-white/15 hover:bg-white/25 active:scale-95 text-white transition-all cursor-pointer border border-white/20 shadow-xs"
+                  title={chatLanguage === 'en' ? 'हिंदी में बदलें (Switch to Hindi)' : 'Switch to English (अंग्रेज़ी)'}
+                  aria-label={chatLanguage === 'en' ? 'Switch chat language to Hindi' : 'Switch chat language to English'}
+                >
+                  <Languages className="w-3.5 h-3.5 text-[#dff0f4]" />
+                  <span>{chatLanguage === 'en' ? 'हि / En' : 'En / हि'}</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={handleResetChat}
                   className="p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
-                  title={isHindi ? 'चैट रीसेट करें' : 'Restart conversation'}
+                  title={isChatHindi ? 'चैट रीसेट करें' : 'Restart conversation'}
                   aria-label="Restart chat"
                 >
                   <RotateCcw className="w-4 h-4" />
@@ -237,7 +271,7 @@ export const ClinicAssistant: React.FC = () => {
                       {msg.isWarning && (
                         <div className="flex items-center gap-1.5 text-rose-700 font-bold text-xs mb-1.5">
                           <AlertTriangle className="w-4 h-4 shrink-0" />
-                          <span>{isHindi ? 'महत्वपूर्ण सूचना' : 'Safety Notice'}</span>
+                          <span>{isChatHindi ? 'महत्वपूर्ण सूचना' : 'Safety Notice'}</span>
                         </div>
                       )}
 
@@ -276,7 +310,7 @@ export const ClinicAssistant: React.FC = () => {
                   <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.2s]" />
                   <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.4s]" />
                   <span className="text-[11px] font-medium text-slate-500">
-                    {isHindi ? 'उत्तर आ रहा है...' : 'Thinking...'}
+                    {isChatHindi ? 'उत्तर आ रहा है...' : 'Thinking...'}
                   </span>
                 </div>
               )}
@@ -284,13 +318,18 @@ export const ClinicAssistant: React.FC = () => {
             </div>
 
             {/* Quick Action Suggestions Drawer (If initial state) */}
-            {messages.length === 1 && (
+            {displayMessages.length === 1 && (
               <div className="p-2.5 bg-white border-t border-slate-100 shrink-0">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 px-1">
-                  {isHindi ? 'त्वरित विकल्प' : 'Common Topics'}
-                </p>
+                <div className="flex items-center justify-between mb-1.5 px-1">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    {isChatHindi ? 'त्वरित विकल्प' : 'Common Topics & Actions'}
+                  </p>
+                  <span className="text-[10px] text-slate-400 font-medium">
+                    {isChatHindi ? 'टैप करें' : 'Tap to ask'}
+                  </span>
+                </div>
                 <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                  {chatbotService.getQuickActions(language).slice(0, 4).map((act) => (
+                  {chatbotService.getQuickActions(chatLanguage).slice(0, 6).map((act) => (
                     <button
                       key={act.label}
                       type="button"
@@ -318,9 +357,9 @@ export const ClinicAssistant: React.FC = () => {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder={
-                  isHindi
-                    ? 'अपॉइंटमेंट, चेंबर समय, फीस या सवाल पूछें...'
-                    : 'Ask about appointments, timings, fees...'
+                  isChatHindi
+                    ? 'अपॉइंटमेंट, समीक्षा, पता, सूचना या सवाल पूछें...'
+                    : 'Ask about appointments, reviews, address, or news...'
                 }
                 className="flex-1 px-3 py-2 text-xs sm:text-sm bg-slate-100 rounded-xl text-slate-800 placeholder-slate-400 outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 font-sans"
                 aria-label="Type message to clinic assistant"
@@ -338,9 +377,9 @@ export const ClinicAssistant: React.FC = () => {
             {/* Non-Diagnostic Standing Footer Disclaimer */}
             <div className="px-3 py-1.5 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-400 text-center shrink-0">
               <span>
-                {isHindi
-                  ? 'यह सहायक सामान्य जानकारी देता है, चिकित्सीय सलाह नहीं।'
-                  : 'Automated clinic orientation only. Not medical diagnosis.'}
+                {isChatHindi
+                  ? 'द्विभाषी सहायक • सामान्य क्लिनिक जानकारी, चिकित्सीय सलाह नहीं।'
+                  : 'Bilingual Assistant • Automated clinic orientation only. Not medical diagnosis.'}
               </span>
             </div>
           </div>

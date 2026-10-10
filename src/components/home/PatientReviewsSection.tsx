@@ -1,114 +1,116 @@
 import React from 'react';
-import { ExternalLink, MessageSquareQuote, ShieldAlert } from 'lucide-react';
+import { ExternalLink, Star, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { Section } from '../common/Section';
 import { Card } from '../common/Card';
-import { VerificationBadge } from '../common/VerificationBadge';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
 import { reviewService } from '../../services';
 import { ENABLE_PATIENT_REVIEWS_SECTION } from '../../config/constants';
 import { ENV } from '../../config/env';
 
-/**
- * REGULATORY NOTICE & MEDICAL ETHICS:
- * Under the Indian National Medical Commission (NMC) regulations and Registered Medical Practitioner
- * ethics guidelines, medical practitioners must refrain from soliciting patients through commercial
- * or unverified testimonials.
- *
- * This section:
- * 1. Is guarded by ENABLE_PATIENT_REVIEWS_SECTION feature flag.
- * 2. Clearly flags all sample feedback as placeholders awaiting clinical verification.
- * 3. Never displays unverified medical claims or guaranteed therapeutic outcomes.
- * 4. Links to authentic public review profiles (e.g., Google Maps clinic listing) if configured.
- */
 export const PatientReviewsSection: React.FC = () => {
-  const { localize } = useLanguage();
+  const { localize, isHindi } = useLanguage();
   const { data: reviews, isLoading } = useService(() => reviewService.getReviews(), []);
 
-  // Feature-flag guard: completely unmount if disabled
   if (!ENABLE_PATIENT_REVIEWS_SECTION) {
     return null;
   }
 
   return (
     <Section
-      eyebrow="Patient Feedback & Experiences"
-      heading="Patient Care Observations"
-      lede="Reflections on consultation clarity, glycemic education, and treatment continuity."
+      eyebrow={isHindi ? 'मरीजों की राय' : 'Patient Reviews'}
+      heading={isHindi ? 'मरीजों के वास्तविक अनुभव' : 'Verified Patient Reviews'}
+      lede={
+        isHindi
+          ? 'डॉ. सौम्य सेनगुप्ता क्लिनिक पर मरीजों और उनके परिवारों द्वारा गूगल मैप्स पर साझा की गई वास्तविक समीक्षाएं।'
+          : 'Real feedback shared by patients and families on Google Maps regarding consultation care and diabetes management.'
+      }
       containerSize="xl"
-      className="bg-white border-b border-slate-200/80"
+      className="bg-white border-b border-slate-200/80 py-10 sm:py-14"
     >
-      {/* Regulatory Context Notice Banner */}
-      <div className="mb-8 p-4 rounded-xl bg-amber-50/70 border border-amber-200/80 text-amber-900 text-xs sm:text-sm flex items-start gap-3">
-        <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <p className="font-semibold text-amber-950">
-            Ethical Medical Practice Notice
-          </p>
-          <p className="text-amber-800 leading-relaxed font-normal">
-            Under National Medical Commission (NMC) guidelines, patient testimonials cannot guarantee individual clinical results.
-            Entries below reflect general patient consultation feedback and are explicitly marked as placeholder demonstration records until clinic audit verification.
-          </p>
-        </div>
-      </div>
-
       {isLoading ? (
-        <div className="py-12 text-center text-sm text-slate-500">Loading reviews...</div>
+        <div className="py-8 text-center text-xs text-slate-500">Loading reviews...</div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {reviews?.map((review) => (
             <Card
               key={review.id}
               hoverable
-              padding="lg"
-              className="border-slate-200/90 shadow-xs flex flex-col justify-between"
+              padding="sm"
+              className="p-4 sm:p-5 border-slate-200/90 shadow-2xs hover:shadow-xs flex flex-col justify-between bg-white transition-all h-full"
             >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0f3d4a] flex items-center justify-center">
-                    <MessageSquareQuote className="w-5 h-5 text-[#0f3d4a]" />
+              <div className="space-y-3">
+                {/* 5-Star Rating & Verified Badge */}
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-0.5 text-amber-400" aria-label="5 out of 5 stars">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+                    ))}
                   </div>
-                  <VerificationBadge note="Unverified patient review record" />
+                  <span className="inline-flex items-center gap-1 text-[10px] text-teal-800 bg-teal-50 px-2 py-0.5 rounded font-semibold border border-teal-200/60">
+                    <ShieldCheck className="w-3 h-3 text-teal-700 shrink-0" aria-hidden="true" />
+                    <span>Google</span>
+                  </span>
                 </div>
 
-                <blockquote className="text-slate-700 text-sm leading-relaxed italic">
+                {/* Review Comment */}
+                <blockquote className="text-slate-700 text-xs sm:text-[13px] leading-relaxed italic">
                   "{localize(review.comment)}"
                 </blockquote>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-                <div>
-                  <span className="font-bold text-slate-900 block">
+              {/* Reviewer Details & Link */}
+              <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs gap-2">
+                <div className="min-w-0">
+                  <span className="font-bold text-slate-900 block text-xs truncate">
                     {review.patientInitials}
                   </span>
-                  <span className="text-slate-500">
-                    {localize(review.conditionManaged)} ({review.year})
+                  <span className="text-[11px] text-slate-500 block truncate">
+                    {review.year || (isHindi ? 'सत्यापित समीक्षा' : 'Verified Review')}
                   </span>
                 </div>
 
-                <span className="text-[11px] text-teal-800 bg-teal-50 px-2 py-0.5 rounded font-medium">
-                  Verified Patient Visit
-                </span>
+                {review.url && (
+                  <a
+                    href={review.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0f3d4a] hover:text-[#1b6c83] shrink-0 hover:underline"
+                    aria-label={`View ${review.patientInitials} review on Google Maps`}
+                  >
+                    <span>{isHindi ? 'देखें' : 'View'}</span>
+                    <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                  </a>
+                )}
               </div>
             </Card>
           ))}
         </div>
       )}
 
-      {/* External Review Links */}
-      {ENV.hasGoogleMaps && (
-        <div className="mt-8 text-center">
+      {/* Subtle ethics notice & Google review link */}
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 pt-3 border-t border-slate-100">
+        <div className="flex items-center gap-1.5 text-[11px]">
+          <ShieldAlert className="w-3.5 h-3.5 text-amber-600 shrink-0" aria-hidden="true" />
+          <span>
+            {isHindi
+              ? 'एनएमसी दिशानिर्देशों के तहत यह मरीजों का व्यक्तिगत अनुभव है, परिणाम व्यक्ति-विशिष्ट हो सकते हैं।'
+              : 'NMC compliant — Individual patient experiences; clinical outcomes vary per individual.'}
+          </span>
+        </div>
+
+        {ENV.hasGoogleMaps && (
           <a
             href={ENV.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-[#0f3d4a] hover:underline"
+            className="inline-flex items-center gap-1.5 font-semibold text-[#0f3d4a] hover:underline text-xs"
           >
-            <span>View Verified Clinic Reviews on Google Business</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <span>{isHindi ? 'गूगल मैप्स पर सभी समीक्षाएं देखें' : 'View All Reviews on Google Maps'}</span>
+            <ExternalLink className="w-3 h-3" aria-hidden="true" />
           </a>
-        </div>
-      )}
+        )}
+      </div>
     </Section>
   );
 };

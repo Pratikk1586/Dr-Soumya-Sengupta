@@ -232,49 +232,53 @@ export const FaqsPage: React.FC = () => {
                   }`}
                 >
                   {/* Accessible Accordion Header */}
-                  <button
-                    id={buttonId}
-                    type="button"
-                    aria-expanded={isExpanded}
-                    aria-controls={panelId}
-                    onClick={() => toggleAccordion(faq.id)}
-                    className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f3d4a]"
-                  >
-                    <div className="space-y-1 pr-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold text-teal-800 uppercase bg-teal-50 px-2 py-0.5 rounded">
-                          {faq.category.replace('_', ' ')}
-                        </span>
-                        {faq.status === 'placeholder' && (
-                          <VerificationBadge note="Unverified logistics FAQ" />
-                        )}
+                  <div className="flex items-stretch justify-between">
+                    <button
+                      id={buttonId}
+                      type="button"
+                      aria-expanded={isExpanded}
+                      aria-controls={panelId}
+                      onClick={() => toggleAccordion(faq.id)}
+                      className="flex-1 text-left p-4 sm:p-5 flex items-start justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f3d4a]"
+                    >
+                      <div className="space-y-1 pr-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold text-teal-800 uppercase bg-teal-50 px-2 py-0.5 rounded">
+                            {faq.category.replace('_', ' ')}
+                          </span>
+                          {faq.status === 'placeholder' && (
+                            <VerificationBadge note="Unverified logistics FAQ" />
+                          )}
+                        </div>
+                        <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
+                          {localize(faq.question)}
+                        </h3>
                       </div>
-                      <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
-                        {localize(faq.question)}
-                      </h3>
-                    </div>
 
-                    <div className="flex items-center gap-2 shrink-0 pt-1">
+                      <ChevronDown
+                        className={`w-5 h-5 text-slate-400 shrink-0 mt-1 transition-transform duration-200 ${
+                          isExpanded ? 'rotate-180 text-[#0f3d4a]' : ''
+                        }`}
+                        aria-hidden="true"
+                      />
+                    </button>
+
+                    <div className="p-4 sm:p-5 pl-0 flex items-center">
                       <button
+                        type="button"
                         title="Copy direct link to this question"
                         aria-label="Copy direct link to this question"
                         onClick={(e) => copyDeepLink(anchorSlug, e)}
-                        className="p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                        className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
                       >
                         {copiedSlug === anchorSlug ? (
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <Check className="w-4 h-4 text-emerald-600" />
                         ) : (
-                          <LinkIcon className="w-3.5 h-3.5" />
+                          <LinkIcon className="w-4 h-4" />
                         )}
                       </button>
-
-                      <ChevronDown
-                        className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-                          isExpanded ? 'rotate-180 text-[#0f3d4a]' : ''
-                        }`}
-                      />
                     </div>
-                  </button>
+                  </div>
 
                   {/* Accordion Content Panel */}
                   {isExpanded && (

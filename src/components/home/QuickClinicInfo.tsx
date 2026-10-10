@@ -34,7 +34,7 @@ export const QuickClinicInfo: React.FC = () => {
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 {clinic
                   ? `${localize(clinic.address.line1)}, ${localize(clinic.address.city)} - ${clinic.address.pincode}`
-                  : 'Kolkata, West Bengal'}
+                  : 'Chaibasa, Jharkhand'}
               </p>
             </div>
 

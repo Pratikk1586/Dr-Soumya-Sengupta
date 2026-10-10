@@ -25,6 +25,35 @@ export interface Experience {
   status: ContentStatus;
 }
 
+export interface DoctorAchievement {
+  id: string;
+  title: LocalizedString;
+  organization: LocalizedString;
+  year?: string;
+  description?: LocalizedString;
+  category?: 'screening' | 'clinical' | 'community' | 'academic';
+  image?: string;
+}
+
+export interface DoctorCertification {
+  id: string;
+  title: LocalizedString;
+  organization: LocalizedString;
+  year?: string;
+  description?: LocalizedString;
+  credentialId?: string;
+  image?: string;
+  isPlaceholder?: boolean;
+}
+
+export interface DoctorSocialLink {
+  platform: 'youtube' | 'facebook' | 'instagram' | 'linkedin' | 'whatsapp';
+  label: LocalizedString;
+  url: string;
+  handle?: string;
+  description?: LocalizedString;
+}
+
 export interface Doctor {
   id: string;
   name: LocalizedString;
@@ -40,6 +69,9 @@ export interface Doctor {
   languagesSpoken: LocalizedString[];
   registrationNumber: string;
   registrationStatus: ContentStatus;
+  achievements?: DoctorAchievement[];
+  certifications?: DoctorCertification[];
+  socialLinks?: DoctorSocialLink[];
 }
 
 export interface Service {
@@ -139,6 +171,9 @@ export interface Review {
   comment: LocalizedString;
   year: string;
   status: ContentStatus;
+  rating?: number;
+  url?: string;
+  source?: string;
 }
 
 export interface Facility {
@@ -152,6 +187,9 @@ export interface ClinicTiming {
   dayOfWeek: LocalizedString;
   timeSlot: LocalizedString;
   isAvailable: boolean;
+  day?: string;
+  openingTime?: string;
+  closingTime?: string;
 }
 
 export interface Clinic {
@@ -225,12 +263,13 @@ export interface AppointmentRequest {
   patientName: string;
   phone: string;
   email?: string;
-  age?: number;
+  age?: number | string;
   patientType?: 'new' | 'followup';
-  consultationType: 'in_clinic' | 'telemedicine';
-  preferredClinicId: string;
+  consultationType?: 'in_clinic' | 'telemedicine';
+  preferredClinicId?: string;
   preferredDate: string;
-  preferredSlot: 'morning' | 'afternoon' | 'evening';
+  preferredSlot?: 'morning' | 'afternoon' | 'evening';
+  preferredTime?: string;
   reasonForVisit?: string;
   consent?: boolean;
 }

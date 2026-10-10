@@ -42,7 +42,7 @@ describe('Phase 4 — Clinic Assistant (Chatbot Service)', () => {
 
   it('matches timings and location intent dynamically from clinic service', async () => {
     const response = await chatbotService.respond('What are the OPD timings and chamber address?', 'en');
-    expect(response.text).toContain('5:00 PM – 8:00 PM');
+    expect(response.text).toContain('9:30 AM – 3:00 PM');
     expect(response.actions?.some((a) => a.url === '/clinic/timings')).toBe(true);
     expect(response.actions?.some((a) => a.url === '/clinic/location')).toBe(true);
   });
@@ -89,6 +89,16 @@ describe('Phase 4 — Clinic Assistant (Chatbot Service)', () => {
     const res = await chatbotService.respond('random gibberish inquiry xyz', 'en');
     expect(res.isWarning).toBeFalsy();
     expect(res.actions?.length).toBeGreaterThanOrEqual(6);
+  });
+
+  it('provides verified doctor profile with 19 years practice tenure in English and Hindi', async () => {
+    const resEn = await chatbotService.respond('How much experience does Dr. Soumya Sengupta have?', 'en');
+    expect(resEn.text).toContain('19+ Years in Diabetes Care');
+    expect(resEn.actions?.some((a) => a.url === '/about')).toBe(true);
+
+    const resHi = await chatbotService.respond('डॉक्टर साहब का कितना अनुभव है?', 'hi');
+    expect(resHi.text).toContain('19+ वर्षों का अनुभव');
+    expect(resHi.actions?.some((a) => a.url === '/about')).toBe(true);
   });
 });
 

@@ -36,3 +36,4 @@ export type { SkipLinkProps } from './SkipLink';
 
 export { VerificationBadge } from './VerificationBadge';
 export { MedicalDisclaimerBanner } from './MedicalDisclaimerBanner';
+export { ErrorBoundary } from './ErrorBoundary';

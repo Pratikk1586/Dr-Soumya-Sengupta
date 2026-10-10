@@ -26,6 +26,12 @@ const ConditionDetailPage = lazy(() =>
 const ResourcesHubPage = lazy(() =>
   import('../pages/resources/ResourcesHubPage').then((m) => ({ default: m.ResourcesHubPage }))
 );
+const DiabetesKnowledgeHubPage = lazy(() =>
+  import('../pages/resources/DiabetesKnowledgeHubPage').then((m) => ({ default: m.DiabetesKnowledgeHubPage }))
+);
+const KnowYourProblemPage = lazy(() =>
+  import('../pages/resources/KnowYourProblemPage').then((m) => ({ default: m.KnowYourProblemPage }))
+);
 const ArticlesListPage = lazy(() =>
   import('../pages/resources/ArticlesListPage').then((m) => ({ default: m.ArticlesListPage }))
 );
@@ -43,6 +49,14 @@ const ReportsPage = lazy(() =>
 );
 const GuidesPage = lazy(() =>
   import('../pages/resources/GuidesPage').then((m) => ({ default: m.GuidesPage }))
+);
+
+// Media Routes
+const MediaHubPage = lazy(() =>
+  import('../pages/media/MediaHubPage').then((m) => ({ default: m.MediaHubPage }))
+);
+const MediaEventsPage = lazy(() =>
+  import('../pages/media/MediaEventsPage').then((m) => ({ default: m.MediaEventsPage }))
 );
 
 // Clinic Routes
@@ -110,17 +124,32 @@ export const AppRoutes: React.FC = () => {
 
           {/* Conditions */}
           <Route path="/conditions" element={<ConditionsListPage />} />
+          <Route path="/conditions/diabetes" element={<ConditionDetailPage />} />
+          <Route path="/conditions/thyroid" element={<ConditionDetailPage />} />
+          <Route path="/conditions/weight-management" element={<ConditionDetailPage />} />
+          <Route path="/conditions/metabolic-health" element={<ConditionDetailPage />} />
+          <Route path="/conditions/other" element={<ConditionDetailPage />} />
           <Route path="/conditions/:slug" element={<ConditionDetailPage />} />
 
           {/* Patient Resources */}
           <Route path="/patient-resources" element={<ResourcesHubPage />} />
-          <Route path="/patient-resources/knowledge-hub" element={<ResourcesHubPage />} />
-          <Route path="/patient-resources/articles" element={<ArticlesListPage />} />
-          <Route path="/patient-resources/articles/:slug" element={<ArticleDetailPage />} />
-          <Route path="/patient-resources/faqs" element={<FaqsPage />} />
-          <Route path="/patient-resources/videos" element={<VideosPage />} />
+          <Route path="/patient-resources/diabetes-knowledge-hub" element={<DiabetesKnowledgeHubPage />} />
+          <Route path="/patient-resources/knowledge-hub" element={<DiabetesKnowledgeHubPage />} />
+          <Route path="/patient-resources/know-your-problem" element={<KnowYourProblemPage />} />
+          <Route path="/patient-resources/understand-your-reports" element={<ReportsPage />} />
           <Route path="/patient-resources/reports" element={<ReportsPage />} />
+          <Route path="/patient-resources/faqs" element={<FaqsPage />} />
+          <Route path="/patient-resources/articles" element={<ArticlesListPage />} />
+          <Route path="/articles/:slug" element={<ArticleDetailPage />} />
+          <Route path="/patient-resources/articles/:slug" element={<ArticleDetailPage />} />
+          <Route path="/patient-resources/videos" element={<VideosPage />} />
           <Route path="/patient-resources/guides" element={<GuidesPage />} />
+
+          {/* Media */}
+          <Route path="/media" element={<MediaHubPage />} />
+          <Route path="/media/photos" element={<PhotosPage />} />
+          <Route path="/media/videos" element={<VideosPage />} />
+          <Route path="/media/events" element={<MediaEventsPage />} />
 
           {/* Clinic & Chamber */}
           <Route path="/clinic" element={<ClinicOverviewPage />} />

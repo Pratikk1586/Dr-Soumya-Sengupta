@@ -70,7 +70,7 @@ export const TimingsPage: React.FC = () => {
                   className={`font-mono px-3 py-1 rounded-md text-xs ${
                     tm.isAvailable
                       ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold'
-                      : 'bg-slate-100 text-slate-500'
+                      : 'bg-slate-100 text-slate-700 font-medium'
                   }`}
                 >
                   {localize(tm.timeSlot)}
@@ -79,7 +79,8 @@ export const TimingsPage: React.FC = () => {
             ))}
           </div>
 
-          <div className="pt-4 border-t border-slate-200 text-xs text-slate-500 space-y-1">
+          <div className="pt-4 border-t border-slate-200 text-xs text-slate-500 space-y-1.5">
+            <p className="font-semibold text-slate-700">• Please contact the clinic to confirm appointment availability before visiting.</p>
             <p>• Initial and follow-up consultations include a full review of glucose logs.</p>
             <p>• Emergency appointments outside routine hours require prior phone confirmation.</p>
           </div>

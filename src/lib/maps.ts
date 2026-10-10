@@ -28,17 +28,22 @@ export function isValidGoogleMapsEmbedUrl(url?: string | null): boolean {
   }
 }
 
+export const VERIFIED_GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/59pyGSNwQ8x2ruQ26';
+
 /**
  * Retrieves the configured Google Maps URL from environment or custom clinic data.
  */
-export function getGoogleMapsUrl(overrideUrl?: string): string | null {
-  const envUrl =
-    overrideUrl ||
-    import.meta.env.VITE_GOOGLE_MAPS_URL ||
-    import.meta.env.VITE_CLINIC_MAPS_URL ||
-    '';
+export function getGoogleMapsUrl(overrideUrl?: string | null): string | null {
+  if (overrideUrl === null) return null;
 
-  const trimmed = envUrl.trim();
+  const envUrl =
+    overrideUrl !== undefined
+      ? overrideUrl
+      : (import.meta.env.VITE_GOOGLE_MAPS_URL ||
+         import.meta.env.VITE_CLINIC_MAPS_URL ||
+         VERIFIED_GOOGLE_MAPS_URL);
+
+  const trimmed = envUrl?.trim() || '';
   if (!trimmed) return null;
 
   try {
@@ -51,13 +56,19 @@ export function getGoogleMapsUrl(overrideUrl?: string): string | null {
 
 /**
  * Synthesizes a Google Maps driving / walking directions URL.
- * Falls back to standard destination search if no current location is specified.
+ * If a custom destination string is provided, encodes it into the directions endpoint.
+ * Otherwise, defaults to the verified clinic location URL.
  */
-export function getDirectionsUrl(destination?: string): string | null {
-  const target = destination?.trim() || 'Dr Soumya Sengupta Diabetology Chamber Salt Lake Kolkata';
-  if (!target) return null;
+export function getDirectionsUrl(destination?: string): string {
+  const target = destination?.trim();
+  if (target) {
+    if (target.startsWith('http://') || target.startsWith('https://')) {
+      return target;
+    }
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(target)}`;
+  }
 
-  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(target)}`;
+  return getGoogleMapsUrl() || VERIFIED_GOOGLE_MAPS_URL;
 }
 
 /**

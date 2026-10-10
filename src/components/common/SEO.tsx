@@ -8,6 +8,8 @@ export interface SEOProps {
   description?: string;
   canonicalPath?: string;
   ogType?: 'website' | 'article';
+  ogImage?: string;
+  noIndex?: boolean;
   structuredData?: Record<string, unknown> | object;
 }
 
@@ -16,6 +18,8 @@ export const SEO: React.FC<SEOProps> = ({
   description,
   canonicalPath = '',
   ogType = 'website',
+  ogImage,
+  noIndex = false,
   structuredData,
 }) => {
   const { language } = useLanguage();
@@ -28,6 +32,7 @@ export const SEO: React.FC<SEOProps> = ({
 
   const siteUrl = ENV.siteUrl || 'https://drsoumyasengupta.com';
   const canonicalUrl = `${siteUrl.replace(/\/$/, '')}${canonicalPath ? `/${canonicalPath.replace(/^\//, '')}` : ''}`;
+  const metaImage = ogImage || `${siteUrl.replace(/\/$/, '')}/favicon.svg`;
 
   return (
     <Helmet>
@@ -36,17 +41,25 @@ export const SEO: React.FC<SEOProps> = ({
       <meta name="description" content={metaDescription} />
       <link rel="canonical" href={canonicalUrl} />
 
+      {noIndex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      )}
+
       {/* OpenGraph */}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={metaDescription} />
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:image" content={metaImage} />
       <meta property="og:locale" content={language === 'hi' ? 'hi_IN' : 'en_US'} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={metaDescription} />
+      <meta name="twitter:image" content={metaImage} />
 
       {/* Structured Data (Schema.org) */}
       {structuredData && (

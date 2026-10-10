@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Stethoscope, Phone, MessageCircle, MapPin, ShieldAlert, ArrowUpRight } from 'lucide-react';
+import { Stethoscope, Phone, MessageCircle, MapPin, ShieldAlert, ArrowUpRight, Navigation } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
 import { clinicService } from '../../services';
 import { LanguageSwitcher } from '../common/LanguageSwitcher';
 import { Container } from '../common/Container';
 import { VerificationBadge } from '../common/VerificationBadge';
+import { DoctorSocialLinks } from '../doctor/DoctorSocialLinks';
+import { getDirectionsUrl } from '../../lib/maps';
 import { ENV, getSafePhoneHref, getSafeWhatsAppHref } from '../../config/env';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -51,9 +53,17 @@ export const Footer: React.FC = () => {
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-sm">
               {t('footer.tagline')}
             </p>
+
+            {/* Social Media Handles */}
+            <div className="pt-1 space-y-1.5">
+              <span className="text-xs font-semibold text-slate-200 block">
+                {t({ en: 'Connect on Social Media', hi: 'सोशल मीडिया हैंडल्स' })}
+              </span>
+              <DoctorSocialLinks variant="icons" theme="dark" />
+            </div>
 
             <div className="pt-2 flex items-center gap-3">
               <LanguageSwitcher variant="compact" />
@@ -136,16 +146,32 @@ export const Footer: React.FC = () => {
             </h4>
 
             {clinic ? (
-              <div className="space-y-2 text-xs text-slate-300">
-                <p className="font-semibold text-white">{localize(clinic.name)}</p>
-                <p className="flex items-start gap-1.5 text-slate-400">
-                  <MapPin className="w-3.5 h-3.5 text-[#238ba7] shrink-0 mt-0.5" />
-                  <span>
-                    {localize(clinic.address.line1)}, {localize(clinic.address.city)} {clinic.address.pincode}
-                  </span>
-                </p>
+              <div className="space-y-3 text-xs text-slate-300">
+                <div>
+                  <p className="font-semibold text-white">{localize(clinic.name)}</p>
+                  <p className="flex items-start gap-1.5 text-slate-300 mt-1">
+                    <MapPin className="w-3.5 h-3.5 text-[#238ba7] shrink-0 mt-0.5" />
+                    <span>
+                      {localize(clinic.address.line1)}, {localize(clinic.address.city)} {clinic.address.pincode}
+                    </span>
+                  </p>
+                </div>
 
-                <div className="pt-2 space-y-1.5">
+                {/* Direct Google Maps Navigation Button */}
+                <div className="pt-0.5">
+                  <a
+                    href={clinic.mapsUrl || getDirectionsUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#0f3d4a] hover:bg-[#155466] border border-[#1b6c83]/70 text-white font-semibold text-xs shadow-xs hover:shadow-md transition-all group active:scale-98"
+                  >
+                    <Navigation className="w-3.5 h-3.5 text-[#38bdf8] group-hover:rotate-12 transition-transform" />
+                    <span>{t({ en: 'Direct Map & Directions', hi: 'गूगल मैप्स पर रास्ता देखें' })}</span>
+                    <ArrowUpRight className="w-3 h-3 text-slate-400 group-hover:text-white transition-colors" />
+                  </a>
+                </div>
+
+                <div className="pt-1 space-y-1.5">
                   {ENV.hasPhone && phoneHref && (
                     <a
                       href={phoneHref}
@@ -170,23 +196,23 @@ export const Footer: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <p className="text-xs text-slate-500">Loading clinic logistics...</p>
+              <p className="text-xs text-slate-300">Loading clinic logistics...</p>
             )}
           </div>
         </div>
 
         {/* Bottom Legal & Ethics Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
           <p>© {CURRENT_YEAR} Dr. Soumya Sengupta. {t('footer.rights')}</p>
 
           <div className="flex items-center gap-6">
-            <Link to="/disclaimer" className="hover:text-slate-300 transition-colors">
+            <Link to="/disclaimer" className="text-slate-300 hover:text-white transition-colors">
               {t('footer.disclaimer')}
             </Link>
-            <Link to="/privacy" className="hover:text-slate-300 transition-colors">
+            <Link to="/privacy" className="text-slate-300 hover:text-white transition-colors">
               {t('footer.privacyPolicy')}
             </Link>
-            <Link to="/about" className="hover:text-slate-300 transition-colors">
+            <Link to="/about" className="text-slate-300 hover:text-white transition-colors">
               Doctor Profile
             </Link>
           </div>

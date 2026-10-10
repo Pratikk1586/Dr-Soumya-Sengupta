@@ -14,7 +14,8 @@ interface State<T> {
 }
 
 export function useAsync<T>(
-  asyncFn: () => Promise<T>
+  asyncFn: () => Promise<T>,
+  deps: unknown[] = []
 ): UseAsyncResult<T> {
   const [state, setState] = useState<State<T>>({
     data: null,
@@ -23,9 +24,7 @@ export function useAsync<T>(
   });
 
   const asyncFnRef = useRef(asyncFn);
-  useEffect(() => {
-    asyncFnRef.current = asyncFn;
-  }, [asyncFn]);
+  asyncFnRef.current = asyncFn;
 
   const reload = useCallback(async () => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
@@ -44,7 +43,7 @@ export function useAsync<T>(
   useEffect(() => {
     let isCancelled = false;
 
-    asyncFn()
+    asyncFnRef.current()
       .then((result) => {
         if (!isCancelled) {
           setState({ data: result, isLoading: false, error: null });
@@ -63,7 +62,8 @@ export function useAsync<T>(
     return () => {
       isCancelled = true;
     };
-  }, [asyncFn]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
 
   return {
     data: state.data,

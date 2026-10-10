@@ -18,7 +18,7 @@ export const LocationContactSection: React.FC = () => {
 
   const addressText = clinic
     ? `${localize(clinic.address.line1)}, ${localize(clinic.address.city)} ${clinic.address.pincode}`
-    : 'Salt Lake Sector 1, Kolkata 700064';
+    : 'Amlatola, Post Box No. 20, Chaibasa – 833201, West Singhbhum, Jharkhand';
 
   return (
     <Section
@@ -34,10 +34,10 @@ export const LocationContactSection: React.FC = () => {
             <div className="flex items-start justify-between flex-wrap gap-2 pb-4 border-b border-slate-100">
               <div>
                 <h3 className="text-lg font-bold text-slate-900">
-                  {clinic ? localize(clinic.name) : 'Salt Lake Diabetology Chamber'}
+                  {clinic ? localize(clinic.name) : 'Cardio Diabetic Clinic'}
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  {isHindi ? 'वरिष्ठ परामर्शदाता ओपीडी' : 'Consultant Diabetology OPD'}
+                  {isHindi ? 'वरिष्ठ परामर्शदाता ओपीडी' : 'Consultant Diabetology & Cardio OPD'}
                 </p>
               </div>
               <VerificationBadge />
@@ -51,8 +51,8 @@ export const LocationContactSection: React.FC = () => {
                     {isHindi ? 'चेंबर का पता:' : 'Chamber Postal Address:'}
                   </strong>
                   <p className="leading-relaxed text-slate-600">{addressText}</p>
-                  <p className="text-xs text-slate-400 mt-1">
-                    {isHindi ? 'निकटतम लैंडमार्क: बीडी मार्केट, साल्ट लेक' : 'Landmark: Near BD Market & Water Tank No. 4'}
+                  <p className="text-xs text-slate-600 mt-1">
+                    {isHindi ? 'निकटतम लैंडमार्क: पोस्ट ऑफिस के समीप, अमलाटोला' : 'Landmark: Near Post Office, Amlatola, Chaibasa'}
                   </p>
                 </div>
               </div>
@@ -64,10 +64,10 @@ export const LocationContactSection: React.FC = () => {
                     {isHindi ? 'परामर्श समय:' : 'Routine Consulting Hours:'}
                   </strong>
                   <p className="text-slate-600">
-                    {isHindi ? 'सोमवार से शनिवार: शाम 5:00 बजे से रात 8:00 बजे तक' : 'Monday – Saturday: 5:00 PM – 8:00 PM'}
+                    {isHindi ? 'सोमवार से शनिवार: सुबह 10:00 – 2:00 एवं शाम 5:00 – 8:00' : 'Monday – Saturday: 10:00 AM – 2:00 PM & 5:00 PM – 8:00 PM'}
                   </p>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    {isHindi ? 'रविवार: अग्रिम अनुरोध पर' : 'Sunday: Advance appointment request only'}
+                  <p className="text-xs text-slate-600 mt-0.5">
+                    {isHindi ? 'रविवार: मधुमेह जांच शिविर / अग्रिम बुकिंग' : 'Sunday: Diabetic Screening Camps / Prior Booking'}
                   </p>
                 </div>
               </div>
@@ -79,7 +79,7 @@ export const LocationContactSection: React.FC = () => {
                     {isHindi ? 'सीधा संपर्क:' : 'Direct Phone & Desk:'}
                   </strong>
                   <p className="font-mono text-slate-800 font-semibold">
-                    {clinic?.phone || '+91 98300 00000'}
+                    {clinic?.phone || '+91 6582 256446'}
                   </p>
                 </div>
               </div>
@@ -109,7 +109,7 @@ export const LocationContactSection: React.FC = () => {
         <div className="lg:col-span-6">
           <MapSection
             address={addressText}
-            landmark={clinic?.address.landmark ? localize(clinic.address.landmark) : 'Near BD Market, Salt Lake'}
+            landmark={clinic?.address.landmark ? localize(clinic.address.landmark) : 'Near Post Office, Amlatola, Chaibasa'}
             mapsUrl={clinic?.mapsUrl}
           />
         </div>

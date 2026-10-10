@@ -9,7 +9,7 @@ const publicDir = path.resolve(projectRoot, 'public');
 
 const SITE_URL = process.env.VITE_SITE_URL || 'https://drsoumyasengupta.com';
 
-const routes = [
+const baseRoutes = [
   '/',
   '/about',
   '/diabetes-care',
@@ -19,11 +19,6 @@ const routes = [
   '/diabetes-care/lifestyle',
   '/diabetes-care/complications',
   '/conditions',
-  '/conditions/diabetes',
-  '/conditions/thyroid',
-  '/conditions/weight-management',
-  '/conditions/metabolic-health',
-  '/conditions/other',
   '/patient-resources',
   '/patient-resources/knowledge-hub',
   '/patient-resources/articles',
@@ -42,14 +37,48 @@ const routes = [
   '/disclaimer',
 ];
 
+// Extract dynamic article slugs from src/data/articles.ts
+const articleSlugs = [];
+try {
+  const articlesFile = fs.readFileSync(path.resolve(projectRoot, 'src/data/articles.ts'), 'utf-8');
+  const matches = articlesFile.matchAll(/slug:\s*['"]([^'"]+)['"]/g);
+  for (const match of matches) {
+    if (match[1]) articleSlugs.push(match[1]);
+  }
+} catch (err) {
+  console.warn('Could not read articles file for sitemap generation:', err);
+}
+
+// Extract dynamic condition slugs from src/data/conditions.ts
+const conditionSlugs = [];
+try {
+  const conditionsFile = fs.readFileSync(path.resolve(projectRoot, 'src/data/conditions.ts'), 'utf-8');
+  const matches = conditionsFile.matchAll(/slug:\s*['"]([^'"]+)['"]/g);
+  for (const match of matches) {
+    if (match[1]) conditionSlugs.push(match[1]);
+  }
+} catch (err) {
+  console.warn('Could not read conditions file for sitemap generation:', err);
+}
+
+const allRoutes = [...baseRoutes];
+
+for (const slug of articleSlugs) {
+  allRoutes.push(`/patient-resources/articles/${slug}`);
+}
+
+for (const slug of conditionSlugs) {
+  allRoutes.push(`/conditions/${slug}`);
+}
+
 const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes
+${allRoutes
   .map(
     (route) => `  <url>
     <loc>${SITE_URL}${route}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>${route === '/' ? '1.0' : route.includes('book') ? '0.9' : '0.8'}</priority>
+    <changefreq>${route === '/' ? 'daily' : route.includes('articles') ? 'weekly' : 'monthly'}</changefreq>
+    <priority>${route === '/' ? '1.0' : route.includes('book') ? '0.9' : route.includes('articles') ? '0.8' : '0.7'}</priority>
   </url>`
   )
   .join('\n')}
@@ -61,4 +90,4 @@ if (!fs.existsSync(publicDir)) {
 }
 
 fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemapXml, 'utf-8');
-console.log(`✓ Generated sitemap with ${routes.length} routes at public/sitemap.xml`);
+console.log(`✓ Generated sitemap with ${allRoutes.length} real routes at public/sitemap.xml`);

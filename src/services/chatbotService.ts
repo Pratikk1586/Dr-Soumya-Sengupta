@@ -8,6 +8,8 @@ import type {
   ConditionService,
   ReportService,
   FaqService,
+  NoticeService,
+  ReviewService,
 } from './types';
 import type { Language } from '../types';
 import { getLocalizedText } from '../utils/localization';
@@ -18,13 +20,21 @@ import {
   LocalConditionService,
   LocalReportService,
   LocalFaqService,
+  LocalNoticeService,
+  LocalReviewService,
 } from './localServices';
+import { VERIFIED_GOOGLE_MAPS_URL } from '../lib/maps';
 
 const EMERGENCY_REGEX =
   /(chest\s*pain|heart\s*attack|unconscious|faint|loss\s*of\s*consciousness|difficulty\s*breathing|breathless|severe\s*hypoglycemia|seizure|coma|heavy\s*bleeding|dka|ketoacidosis|सीने\s*में\s*दर्द|बेहोश|बेहोशी|सांस\s*लेने\s*में\s*तकलीफ|दौरा|खून\s*बहना|अत्यधिक\s*कम\s*शुगर)/i;
 
 const MEDICAL_ADVICE_REGEX =
   /(diagnose|diagnosis|prescribe|prescription|dose|dosage|increase\s*medicine|stop\s*medicine|which\s*tablet|can\s*i\s*take|is\s*my\s*report\s*normal|calculate\s*dose|my\s*sugar\s*is\s*\d+|dawai|dawaii|tablet|khurak|दवा|खुराक|डोज़|दवाई|कौन\s*सी\s*दवा|गोली|रिपोर्ट\s*सामान्य\s*है|इंसुलिन\s*बढ़ाएं|दवा\s*बदलें)/i;
+
+// Checks if input is in Devanagari Hindi script
+function containsDevanagari(text: string): boolean {
+  return /[\u0900-\u097F]/.test(text);
+}
 
 export class LocalChatbotService implements ChatbotService {
   private clinicService: ClinicService;
@@ -33,6 +43,8 @@ export class LocalChatbotService implements ChatbotService {
   private conditionService: ConditionService;
   private reportService: ReportService;
   private faqService: FaqService;
+  private noticeService: NoticeService;
+  private reviewService: ReviewService;
 
   constructor(
     clinicService?: ClinicService,
@@ -40,7 +52,9 @@ export class LocalChatbotService implements ChatbotService {
     serviceCatalogService?: ServiceCatalogService,
     conditionService?: ConditionService,
     reportService?: ReportService,
-    faqService?: FaqService
+    faqService?: FaqService,
+    noticeService?: NoticeService,
+    reviewService?: ReviewService
   ) {
     this.clinicService = clinicService || new LocalClinicService();
     this.doctorService = doctorService || new LocalDoctorService();
@@ -48,6 +62,8 @@ export class LocalChatbotService implements ChatbotService {
     this.conditionService = conditionService || new LocalConditionService();
     this.reportService = reportService || new LocalReportService();
     this.faqService = faqService || new LocalFaqService();
+    this.noticeService = noticeService || new LocalNoticeService();
+    this.reviewService = reviewService || new LocalReviewService();
   }
 
   getInitialMessage(language: Language): ChatbotMessage {
@@ -56,8 +72,8 @@ export class LocalChatbotService implements ChatbotService {
       id: 'msg-initial',
       sender: 'assistant',
       text: isHi
-        ? 'नमस्ते! मैं डॉ. सौम्य सेनगुप्ता क्लिनिक सहायक हूँ। मैं आपकी क्या मदद कर सकता हूँ?'
-        : "Hi! I'm the Dr. Sengupta Clinic Assistant. How can I help?",
+        ? 'नमस्ते! मैं डॉ. सौम्य सेनगुप्ता क्लिनिक सहायक हूँ। मैं अपॉइंटमेंट, समय, पता, गूगल समीक्षाएं, सोशल मीडिया या ताज़ा समाचार में आपकी सहायता कर सकता हूँ।'
+        : "Hi! I'm the Dr. Sengupta Clinic Assistant. I can assist with appointments, clinic address, timings, verified Google reviews, social media channels, or latest news.",
       timestamp: new Date().toISOString(),
       actions: this.getQuickActions(language),
     };
@@ -71,35 +87,43 @@ export class LocalChatbotService implements ChatbotService {
         url: '/book-appointment',
       },
       {
-        label: isHi ? '👨‍⚕️ डॉक्टर परिचय' : '👨‍⚕️ About the Doctor',
-        url: '/about',
+        label: isHi ? '⭐ मरीजों की समीक्षाएं (Google)' : '⭐ Patient Reviews (Google)',
+        url: '/#reviews',
       },
       {
-        label: isHi ? '🩺 रोग एवं सेवाएं' : '🩺 Conditions & Services',
-        url: '/conditions',
+        label: isHi ? '🗺️ गूगल मैप्स पर रास्ता देखें' : '🗺️ Direct Map (Google)',
+        url: VERIFIED_GOOGLE_MAPS_URL,
+        isExternal: true,
       },
       {
-        label: isHi ? '🏥 क्लिनिक जानकारी' : '🏥 Clinic Information',
+        label: isHi ? '📢 क्लिनिक समाचार व सूचनाएं' : '📢 Latest Clinic Notices',
         url: '/clinic',
       },
       {
-        label: isHi ? '🕒 समय एवं स्थान' : '🕒 Timings & Location',
+        label: isHi ? '🌐 सोशल मीडिया हैंडल्स' : '🌐 Social Media Channels',
+        url: '/about#social-media',
+      },
+      {
+        label: isHi ? '👨‍⚕️ डॉक्टर परिचय' : '👨‍⚕️ Know Your Doctor',
+        url: '/about',
+      },
+      {
+        label: isHi ? '🕒 ओपीडी समय एवं पता' : '🕒 Timings & Address',
         url: '/clinic/timings',
       },
       {
-        label: isHi ? '❓ सामान्य प्रश्न (FAQs)' : '❓ Diabetes FAQs',
+        label: isHi ? '❓ डायबिटीज सामान्य प्रश्न' : '❓ Diabetes FAQs',
         url: '/patient-resources/faqs',
-      },
-      {
-        label: isHi ? '📞 क्लिनिक से संपर्क करें' : '📞 Contact Clinic',
-        url: '/contact',
       },
     ];
   }
 
   async respond(userInput: string, language: Language): Promise<ChatbotMessage> {
-    const isHi = language === 'hi';
-    const text = userInput.trim().toLowerCase();
+    const trimmedInput = userInput.trim();
+    // Bilingual / Duo-lingo awareness: auto-detect Devanagari Hindi or Hinglish query
+    const isDevanagari = containsDevanagari(trimmedInput);
+    const isHi = language === 'hi' || isDevanagari;
+    const text = trimmedInput.toLowerCase();
     const id = `msg-${Date.now()}`;
     const timestamp = new Date().toISOString();
 
@@ -109,7 +133,7 @@ export class LocalChatbotService implements ChatbotService {
         id,
         sender: 'assistant',
         text: isHi
-          ? '⚠️ आपातकालीन सूचना: यदि आपको या मरीज को सीने में तेज दर्द, बेहोशी, अत्यधिक कम शुगर या सांस लेने में गंभीर तकलीफ है, तो कृपया तुरंत नजदीकी अस्पताल के आपातकालीन विभाग में जाएं या स्थानीय आपातकालीन सेवाओं से संपर्क करें। यह स्वचालित सहायक आपातकालीन चिकित्सा सेवा नहीं दे सकता।'
+          ? '⚠️ EMERGENCY / आपातकालीन सूचना: यदि आपको या मरीज को सीने में तेज दर्द, बेहोशी, अत्यधिक कम शुगर या सांस लेने में गंभीर तकलीफ है, तो कृपया तुरंत नजदीकी अस्पताल के आपातकालीन विभाग में जाएं या स्थानीय आपातकालीन सेवाओं से संपर्क करें। यह स्वचालित सहायक आपातकालीन चिकित्सा सेवा नहीं दे सकता।'
           : '⚠️ EMERGENCY ADVISORY: If you or the patient are experiencing acute chest pain, loss of consciousness, severe hypoglycemia, or acute respiratory distress, please contact local emergency services immediately or visit the nearest hospital emergency department. This automated assistant cannot provide emergency medical care.',
         timestamp,
         isWarning: true,
@@ -149,9 +173,117 @@ export class LocalChatbotService implements ChatbotService {
       };
     }
 
-    // 3. INTENT MATCHING (Drawing dynamic facts from services)
+    // 3. INTENT MATCHING (Drawing live facts from service layers)
     const primaryClinic = await this.clinicService.getPrimaryClinic();
     const doctor = await this.doctorService.getProfile();
+
+    // Intent: Social Media Handles / YouTube / Facebook / Instagram / WhatsApp
+    if (
+      /(social|socials|media|youtube|facebook|instagram|channel|video|videos|handle|handles|links|यूट्यूब|फेसबुक|इंस्टाग्राम|सोशल\s*मीडिया|चैनल|वीडियो)/i.test(
+        text
+      )
+    ) {
+      return {
+        id,
+        sender: 'assistant',
+        text: isHi
+          ? `डॉ. सौम्य सेनगुप्ता के आधिकारिक सोशल मीडिया हैंडल्स:\n• यूट्यूब (YouTube): @DrSoumyaSengupta (रोगी शिक्षा एवं डायबिटीज मास्टरक्लास)\n• इंस्टाग्राम (Instagram): @drsoumyasengupta (दैनिक ब्लड शुगर टिप्स व पोषण)\n• फेसबुक (Facebook): DrSoumyaSenguptaClinic (स्वास्थ्य शिविर एवं क्लिनिक सूचनाएं)\n• व्हाट्सएप (WhatsApp): +91 94311 14510 (परामर्श सहायता)`
+          : `Dr. Soumya Sengupta's official social media channels:\n• YouTube: @DrSoumyaSengupta (Patient education masterclasses & videos)\n• Instagram: @drsoumyasengupta (Daily blood sugar tips & metabolic wellness)\n• Facebook: DrSoumyaSenguptaClinic (Community health drives & announcements)\n• WhatsApp: +91 94311 14510 (Consultation desk & inquiries)`,
+        timestamp,
+        actions: [
+          {
+            label: '▶️ YouTube Channel',
+            url: 'https://youtube.com/@drsoumyasengupta',
+            isExternal: true,
+          },
+          {
+            label: '📸 Instagram',
+            url: 'https://instagram.com/drsoumyasengupta',
+            isExternal: true,
+          },
+          {
+            label: '📘 Facebook',
+            url: 'https://facebook.com/drsoumyasengupta',
+            isExternal: true,
+          },
+          {
+            label: isHi ? '💬 व्हाट्सएप सहायता' : '💬 WhatsApp Helpdesk',
+            url: 'https://wa.me/919431114510?text=Hello%20Dr.%20Soumya%20Sengupta%20clinic%2C%20I%20would%20like%20to%20connect.',
+            isExternal: true,
+          },
+        ],
+      };
+    }
+
+    // Intent: Patient Reviews & Google Ratings
+    if (
+      /(review|reviews|rating|ratings|feedback|patient\s*review|google\s*review|patient\s*experience|patients\s*experience|kaisa\s*hai|kaisa\s*doctor|समीक्षा|रिव्यू|रेटिंग|मरीजों\s*का\s*अनुभव|मरीजों\s*की\s*राय)/i.test(
+        text
+      )
+    ) {
+      const reviews = await this.reviewService.getReviews();
+      const reviewSample = reviews
+        .slice(0, 3)
+        .map((r) => `"${getLocalizedText(r.comment, isHi ? 'hi' : 'en')}" — ${r.patientInitials}`)
+        .join('\n\n');
+
+      return {
+        id,
+        sender: 'assistant',
+        text: isHi
+          ? `गूगल मैप्स पर डॉ. सौम्य सेनगुप्ता क्लिनिक को मरीजों से 5.0 स्टार रेटिंग प्राप्त है। कुछ प्रमुख समीक्षाएं:\n\n${reviewSample}\n\n(एनएमसी दिशानिर्देशों के अनुसार यह मरीजों का व्यक्तिगत अनुभव है, परिणाम व्यक्ति-विशिष्ट हो सकते हैं।)`
+          : `Dr. Soumya Sengupta Diabetic Clinic holds a 5.0-Star rating on Google Maps based on verified patient feedback:\n\n${reviewSample}\n\n(NMC compliant — Individual patient experiences; clinical outcomes vary per individual.)`,
+        timestamp,
+        actions: [
+          {
+            label: isHi ? '⭐ गूगल मैप्स पर सभी समीक्षाएं देखें' : '⭐ Read Reviews on Google Maps',
+            url: VERIFIED_GOOGLE_MAPS_URL,
+            isExternal: true,
+          },
+          {
+            label: isHi ? '💬 रोगी अनुभव अनुभाग' : '💬 Patient Reviews Section',
+            url: '/#reviews',
+          },
+          {
+            label: isHi ? '📅 परामर्श बुक करें' : '📅 Book Consultation',
+            url: '/book-appointment',
+          },
+        ],
+      };
+    }
+
+    // Intent: Clinic Notices / News / Announcements (Latest news & All news)
+    if (
+      /(notice|notices|news|announcement|announcements|update|updates|latest\s*news|all\s*news|holiday|camp|सूचना|समाचार|खबर|नोटिस|ताज़ा|अपडेट)/i.test(
+        text
+      )
+    ) {
+      const allNotices = await this.noticeService.getNotices();
+      const recentNotices = await this.noticeService.getRecentNotices();
+      const countLatest = recentNotices.length > 0 ? recentNotices.length : 2;
+
+      return {
+        id,
+        sender: 'assistant',
+        text: isHi
+          ? `क्लिनिक सूचना अनुभाग में दो विकल्प उपलब्ध हैं:\n1. ताज़ा समाचार (Latest news): पिछले 3 दिनों में अद्यतन सूचनाएं (${countLatest} सक्रिय)\n2. सभी समाचार (All news): कुल ${allNotices.length} सूचनाएं।\n\nहालिया सूचना: ${getLocalizedText(
+              allNotices[0]?.title,
+              'hi'
+            )} - ${getLocalizedText(allNotices[0]?.content, 'hi')}`
+          : `Our Clinic Notice Board provides two straightforward options:\n1. Latest news: Notices updated within the last 3 days (${countLatest} active)\n2. All news: All ${allNotices.length} clinic announcements.\n\nLatest update: ${allNotices[0]?.title.en} - ${allNotices[0]?.content.en}`,
+        timestamp,
+        actions: [
+          {
+            label: isHi ? '📢 सभी क्लिनिक समाचार देखें' : '📢 View Clinic Notices',
+            url: '/clinic',
+          },
+          {
+            label: isHi ? '📅 अपॉइंटमेंट बुक करें' : '📅 Book Appointment',
+            url: '/book-appointment',
+          },
+        ],
+      };
+    }
 
     // Intent: Appointment / Booking / Slot
     if (
@@ -163,16 +295,18 @@ export class LocalChatbotService implements ChatbotService {
         id,
         sender: 'assistant',
         text: isHi
-          ? `डॉ. सौम्य सेनगुप्ता के साथ परामर्श के लिए आप हमारा ऑनलाइन अपॉइंटमेंट फॉर्म भर सकते हैं या व्हाट्सएप के माध्यम से समय आरक्षित कर सकते हैं। ओपीडी परामर्श ${getLocalizedText(
-              primaryClinic.address.city,
-              'hi'
-            )} चेंबर में उपलब्ध हैं।`
-          : `To schedule an OPD consultation with Dr. Soumya Sengupta, you can submit our 3-step appointment request form or request a slot via WhatsApp. In-person consultations take place at the ${primaryClinic.address.line1.en}, ${primaryClinic.address.city.en} chamber.`,
+          ? `डॉ. सौम्य सेनगुप्ता के साथ परामर्श के लिए आप वेबसाइट पर सीधा ऑनलाइन अपॉइंटमेंट अनुरोध फॉर्म भर सकते हैं या व्हाट्सएप (+91 94311 14510) के माध्यम से आसानी से स्लॉट बुक कर सकते हैं। इन-पर्सन परामर्श कार्डियो डायबिटिक क्लिनिक (सदर अस्पताल के निकट, अमलाटोला, चाईबासा, झारखंड - 833201) में उपलब्ध हैं।`
+          : `To schedule an OPD consultation with Dr. Soumya Sengupta, you can submit our quick online appointment request form or book directly via WhatsApp (+91 94311 14510). In-person consultations take place at Cardio Diabetic Clinic, Near Sadar Hospital, Amlatola, Chaibasa, West Singhbhum, Jharkhand - 833201.`,
         timestamp,
         actions: [
           {
             label: isHi ? '📅 ऑनलाइन अपॉइंटमेंट भरें' : '📅 Request Appointment Slot',
             url: '/book-appointment',
+          },
+          {
+            label: isHi ? '💬 व्हाट्सएप से बुक करें' : '💬 Book via WhatsApp',
+            url: 'https://wa.me/919431114510?text=Hello%20Dr.%20Soumya%20Sengupta%20clinic%2C%20I%20would%20like%20to%20book%20an%20appointment.',
+            isExternal: true,
           },
           {
             label: isHi ? '🕒 ओपीडी समय सारणी' : '🕒 Check Consulting Timings',
@@ -192,15 +326,8 @@ export class LocalChatbotService implements ChatbotService {
         id,
         sender: 'assistant',
         text: isHi
-          ? `डॉ. सेनगुप्ता के चेंबर में परामर्श समय: ${primaryClinic.timings
-              .map(
-                (t) =>
-                  `${getLocalizedText(t.dayOfWeek, 'hi')}: ${getLocalizedText(t.timeSlot, 'hi')}`
-              )
-              .join('; ')}। विस्तृत परामर्श के लिए पूर्व अपॉइंटमेंट लेना अनुशंसित है।`
-          : `Consultation hours at ${primaryClinic.name.en}: ${primaryClinic.timings
-              .map((t) => `${t.dayOfWeek.en}: ${t.timeSlot.en}`)
-              .join('; ')}. Prior appointment booking is strongly recommended.`,
+          ? `डॉ. सेनगुप्ता के चेंबर में परामर्श समय (सप्ताह के सातों दिन खुला):\n• सोमवार – शुक्रवार: सुबह 9:30 – दोपहर 3:00\n• शनिवार – रविवार: सुबह 9:30 – दोपहर 3:30\n\nस्थान: सदर अस्पताल के निकट, अमलाटोला, चाईबासा, झारखंड। विस्तृत परामर्श के लिए पूर्व अपॉइंटमेंट लेना अनुशंसित है।`
+          : `Consultation hours at Cardio Diabetic Clinic, Chaibasa (Open all 7 days):\n• Monday – Friday: 9:30 AM – 3:00 PM\n• Saturday – Sunday: 9:30 AM – 3:30 PM\n\nAddress: Near Sadar Hospital, Amlatola, Chaibasa, West Singhbhum, Jharkhand - 833201. Prior appointment booking is strongly recommended.`,
         timestamp,
         actions: [
           {
@@ -219,9 +346,9 @@ export class LocalChatbotService implements ChatbotService {
       };
     }
 
-    // Intent: Location / Address / Directions / Where
+    // Intent: Location / Address / Directions / Maps / Where / How to reach
     if (
-      /\b(location|address|where|directions|map|chamber)\b|(पता|कहाँ|स्थान|रास्ता|चेंबर|दिशा|kahan|jagah)/i.test(
+      /\b(location|address|where|directions|map|maps|chamber|reach|rasta|kahan|kaise\s*jaun|kaise\s*pahunche)\b|(पता|कहाँ|स्थान|रास्ता|चेंबर|दिशा|kahan|jagah|नक्शा|गूगल\s*मैप्स)/i.test(
         text
       )
     ) {
@@ -229,30 +356,30 @@ export class LocalChatbotService implements ChatbotService {
         id,
         sender: 'assistant',
         text: isHi
-          ? `चेंबर का पता: ${getLocalizedText(
-              primaryClinic.address.line1,
-              'hi'
-            )}, ${getLocalizedText(primaryClinic.address.city, 'hi')} - ${
-              primaryClinic.address.pincode
-            } (${getLocalizedText(primaryClinic.address.landmark, 'hi') || 'साल्ट लेक'})।`
-          : `The consultation chamber is located at: ${primaryClinic.address.line1.en}, ${primaryClinic.address.city.en} - ${primaryClinic.address.pincode} (${primaryClinic.address.landmark?.en || 'Salt Lake'}).`,
+          ? `कार्डियो डायबिटिक क्लिनिक का पता:\nसदर अस्पताल के निकट, अमलाटोला, चाईबासा, पश्चिमी सिंहभूम, झारखंड - 833201।\nआप सीधे गूगल मैप्स पर नेविगेट करके क्लिनिक तक पहुँच सकते हैं।`
+          : `Cardio Diabetic Clinic Location:\nNear Sadar Hospital, Amlatola, Chaibasa, West Singhbhum, Jharkhand - 833201.\nYou can use our direct Google Maps navigation button for turn-by-turn driving or walking directions.`,
         timestamp,
         actions: [
           {
-            label: isHi ? '🗺️ दिशा-निर्देश एवं मैप्स' : '🗺️ Directions & Map',
+            label: isHi ? '🗺️ गूगल मैप्स पर रास्ता देखें' : '🗺️ Direct Google Maps Route',
+            url: VERIFIED_GOOGLE_MAPS_URL,
+            isExternal: true,
+          },
+          {
+            label: isHi ? '📍 चेंबर विवरण एवं नक्शा' : '📍 Chamber Location Details',
             url: '/clinic/location',
           },
           {
-            label: isHi ? '📷 चेंबर फोटो देखें' : '📷 Chamber Environment Photos',
+            label: isHi ? '📷 क्लिनिक तस्वीरें देखें' : '📷 Clinic Environment Photos',
             url: '/clinic/photos',
           },
         ],
       };
     }
 
-    // Intent: Doctor Profile / Credentials / Qualifications
+    // Intent: Doctor Profile / Credentials / Qualifications (Know Your Doctor)
     if (
-      /\b(doctor|soumya|sengupta|qualification|qualifications|experience|degree|dr|bio|profile)\b|(डॉक्टर|योग्यता|अनुभव|डिग्री)/i.test(
+      /\b(doctor|soumya|sengupta|qualification|qualifications|experience|degree|dr|bio|profile|tenure|practicing|practice)\b|(डॉक्टर|योग्यता|अनुभव|डिग्री|परिचय|प्रैक्टिस|साल)/i.test(
         text
       )
     ) {
@@ -261,17 +388,21 @@ export class LocalChatbotService implements ChatbotService {
         id,
         sender: 'assistant',
         text: isHi
-          ? `डॉ. सौम्य सेनगुप्ता कोलकाता में वरिष्ठ कंसल्टेंट डायबेटोलॉजिस्ट हैं (${qualificationsList})। वे टाइप 1 एवं टाइप 2 मधुमेह, सीजीएम (CGM) सेंसर प्रशिक्षण और हृदय-गुर्दा सुरक्षा में विशेषज्ञता रखते हैं।`
-          : `Dr. Soumya Sengupta is a Senior Consultant Diabetologist with qualifications including ${qualificationsList}. He has extensive clinical experience in evidence-based glycemic management, Continuous Glucose Monitoring (CGM), and cardiometabolic organ protection.`,
+          ? `डॉ. सौम्य सेनगुप्ता कार्डियो डायबिटिक क्लिनिक, चाईबासा (झारखंड) में वरिष्ठ कंसल्टेंट डायबेटोलॉजिस्ट एवं मेटाबोलिक फिजिशियन हैं (${qualificationsList})। वे 2007 से अभ्यास कर रहे हैं (डायबिटीज केयर में 19+ वर्षों का अनुभव) और टाइप 1 व 2 डायबिटीज, उच्च रक्तचाप (Hypertension), डिस्लिपिडेमिया, थायरॉयड और महत्वपूर्ण अंगों (किडनी, आंख, तंत्रिकाएं, हृदय, मस्तिष्क) की सुरक्षा में विशेष नैदानिक विशेषज्ञता रखते हैं।`
+          : `Dr. Soumya Sengupta is a Senior Consultant Diabetologist & Metabolic Physician practicing since 2007 (19+ Years in Diabetes Care) at Cardio Diabetic Clinic, Chaibasa, Jharkhand (${qualificationsList}). His dedicated expertise includes Type 1 & Type 2 Diabetes, Hypertension, Dyslipidemia, Hypothyroidism, and multi-organ protection (Kidneys, Eyes, Nerves, Heart, and Brain).`,
         timestamp,
         actions: [
           {
-            label: isHi ? '👨‍⚕️ डॉक्टर का पूरा परिचय' : '👨‍⚕️ Full Biography & Philosophy',
+            label: isHi ? '👨‍⚕️ डॉक्टर का पूरा परिचय' : '👨‍⚕️ Know Your Doctor',
             url: '/about',
           },
           {
-            label: isHi ? '📜 चिकित्सा योग्यताएं' : '📜 View Qualifications',
-            url: '/about/qualifications',
+            label: isHi ? '📜 उपलब्धियां व सम्मेलन' : '📜 Achievements & Conferences',
+            url: '/media/events',
+          },
+          {
+            label: isHi ? '🌐 सोशल मीडिया लिंक्स' : '🌐 Official Social Links',
+            url: '/about#social-media',
           },
         ],
       };
@@ -283,7 +414,7 @@ export class LocalChatbotService implements ChatbotService {
         id,
         sender: 'assistant',
         text: isHi
-          ? `परामर्श शुल्क: ${primaryClinic.consultationFee} (प्रथम एवं विस्तृत समीक्षा)। इसमें विस्तृत ग्लूकोज पैटर्न मूल्यांकन शामिल है।`
+          ? `परामर्श शुल्क: ${primaryClinic.consultationFee} (प्रथम एवं विस्तृत समीक्षा)। इसमें विस्तृत ग्लूकोज पैटर्न मूल्यांकन और अंगों की सुरक्षा रणनीति शामिल है।`
           : `The standard clinical consultation fee is ${primaryClinic.consultationFee}. This includes comprehensive glycemic pattern assessment and metabolic review.`,
         timestamp,
         actions: [
@@ -299,9 +430,9 @@ export class LocalChatbotService implements ChatbotService {
       };
     }
 
-    // Intent: Conditions / Diseases / Diabetes / Thyroid / Weight
+    // Intent: Conditions / Diseases / Diabetes / Thyroid / Hypertension / Dyslipidemia
     if (
-      /(diabetes|sugar|thyroid|weight|obesity|prediabetes|डायबिटीज|शुगर|थायरॉयड|मोटापा|वजन)/i.test(
+      /(diabetes|sugar|thyroid|hypertension|blood\s*pressure|bp|cholesterol|lipid|dyslipidemia|weight|obesity|prediabetes|डायबिटीज|शुगर|थायरॉयड|बीपी|रक्तचाप|कोलेस्ट्रॉल|मोटापा|वजन)/i.test(
         text
       )
     ) {
@@ -315,8 +446,8 @@ export class LocalChatbotService implements ChatbotService {
         id,
         sender: 'assistant',
         text: isHi
-          ? `क्लिनिक में मुख्य रूप से इन स्थितियों का उपचार किया जाता है: ${conditionNames} एवं मेटाबोलिक विकार। क्या आप किसी विशेष समस्या के बारे में सामान्य जानकारी चाहते हैं?`
-          : `The clinic specializes in evidence-based management of: ${conditionNames}, and complex metabolic disorders. You can explore our condition guides below.`,
+          ? `क्लिनिक में मुख्य रूप से इन 4 प्रमुख स्तंभों और स्थितियों का प्रमाण-आधारित उपचार किया जाता है: ${conditionNames}, उच्च रक्तचाप एवं लिपिड असंतुलन। उद्देश्य प्रारंभिक ग्लूकोज नियंत्रण और महत्वपूर्ण अंगों की दीर्घकालिक सुरक्षा है।`
+          : `The clinic specializes in evidence-based management of 4 core pillars: ${conditionNames}, Hypertension, Dyslipidemia, and complex metabolic disorders with a focus on multi-organ protection.`,
         timestamp,
         actions: [
           {
@@ -331,9 +462,9 @@ export class LocalChatbotService implements ChatbotService {
       };
     }
 
-    // Intent: Services / Care Pathways
+    // Intent: Services / Care Pathways / CGM Sensors
     if (
-      /\b(service|services|treatment|therapy|cgm|sensor|care)\b|(सेवाएं|उपचार|इलाज|केयर)/i.test(
+      /\b(service|services|treatment|therapy|cgm|sensor|care)\b|(सेवाएं|उपचार|इलाज|केयर|सेंसर)/i.test(
         text
       )
     ) {
@@ -347,8 +478,8 @@ export class LocalChatbotService implements ChatbotService {
         id,
         sender: 'assistant',
         text: isHi
-          ? `क्लिनिक में उपलब्ध मुख्य नैदानिक सेवाएं: ${serviceTitles} आदि। अधिक जानकारी के लिए नीचे दिए गए लिंक देखें।`
-          : `Key clinical services available at the chamber include: ${serviceTitles}, and comprehensive glycemic management.`,
+          ? `क्लिनिक में उपलब्ध प्रमुख नैदानिक सेवाएं: ${serviceTitles}, निरंतर ग्लूकोज मॉनिटरिंग (CGM) और जटिलता रोकथाम।`
+          : `Key clinical services available at the chamber include: ${serviceTitles}, Continuous Glucose Monitoring (CGM) analytics, and multi-organ preservation.`,
         timestamp,
         actions: [
           {
@@ -360,7 +491,7 @@ export class LocalChatbotService implements ChatbotService {
     }
 
     // Intent: FAQs / Questions
-    if (/\b(faq|faqs|question|questions|doubt|doubts|query)\b|(प्रश्न|सवाल|पूछें)/i.test(text)) {
+    if (/\b(faq|faqs|question|questions|doubt|doubts|query)\b|(प्रश्न|सवाल|पूछें|doubt)/i.test(text)) {
       const faqs = await this.faqService.getFaqs();
       return {
         id,
@@ -415,10 +546,15 @@ export class LocalChatbotService implements ChatbotService {
           ? `क्लिनिक संपर्क विवरण:\nफोन: ${primaryClinic.phone}\nव्हाट्सएप: ${primaryClinic.whatsapp}\nईमेल: ${primaryClinic.email}\nपता: ${getLocalizedText(
               primaryClinic.address.line1,
               'hi'
-            )}, कोलकाता।`
-          : `Clinic Contact Details:\nPhone: ${primaryClinic.phone}\nWhatsApp: ${primaryClinic.whatsapp}\nEmail: ${primaryClinic.email}\nLocation: ${primaryClinic.address.line1.en}, Kolkata.`,
+            )}, चाईबासा (झारखंड)।`
+          : `Clinic Contact Details:\nPhone: ${primaryClinic.phone}\nWhatsApp: ${primaryClinic.whatsapp}\nEmail: ${primaryClinic.email}\nLocation: ${primaryClinic.address.line1.en}, Chaibasa, Jharkhand.`,
         timestamp,
         actions: [
+          {
+            label: isHi ? '💬 व्हाट्सएप सहायता' : '💬 WhatsApp Helpdesk',
+            url: 'https://wa.me/919431114510?text=Hello%20Dr.%20Soumya%20Sengupta%20clinic%2C%20I%20would%20like%20to%20connect.',
+            isExternal: true,
+          },
           {
             label: isHi ? '📞 संपर्क पृष्ठ पर जाएं' : '📞 Contact Clinic Desk',
             url: '/contact',
@@ -431,15 +567,15 @@ export class LocalChatbotService implements ChatbotService {
       };
     }
 
-    // 4. FALLBACK: Polite general clinic orientation
+    // 4. FALLBACK: Bilingual friendly general orientation
     return {
       id,
       sender: 'assistant',
       text: isHi
-        ? 'मैं क्लिनिक की जानकारी, डॉक्टर परामर्श समय, चेंबर का पता, अपॉइंटमेंट प्रक्रिया और डायबिटीज से जुड़े सामान्य सवालों में आपकी सहायता कर सकता हूँ। कृपया नीचे दिए गए मुख्य विकल्पों में से चुनें या अपना प्रश्न लिखें।'
-        : "I can help with clinic information, consulting hours, chamber location, appointment guidance, and diabetes educational resources. How can I assist you today? Please choose an option below or type your question.",
+        ? 'मैं क्लिनिक की जानकारी, डॉक्टर परामर्श समय, चेंबर का पता (Google Maps), अपॉइंटमेंट प्रक्रिया, मरीजों की वास्तविक समीक्षाएं, सोशल मीडिया हैंडल्स और ताज़ा क्लिनिक सूचनाओं में आपकी सहायता कर सकता हूँ। कृपया नीचे दिए गए विकल्पों में से चुनें या अपना प्रश्न लिखें।'
+        : "I can help with appointment booking, consulting hours, chamber address & Google Maps route, verified patient reviews, official social media links, and latest clinic notices. How can I assist you today? Please choose an option below or type your question.",
       timestamp,
-      actions: this.getQuickActions(language),
+      actions: this.getQuickActions(isHi ? 'hi' : 'en'),
     };
   }
 }

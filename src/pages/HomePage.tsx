@@ -1,77 +1,45 @@
 import React from 'react';
 import { SEO } from '../components/common/SEO';
 import { HeroSection } from '../components/hero/HeroSection';
-import { QuickClinicInfo } from '../components/home/QuickClinicInfo';
-import { RecentNoticesSection } from '../components/home/RecentNoticesSection';
 import { HowCanWeHelpSection } from '../components/home/HowCanWeHelpSection';
 import { AboutDoctorSection } from '../components/home/AboutDoctorSection';
-import { ConditionsServicesSection } from '../components/home/ConditionsServicesSection';
 import { KnowYourProblemSection } from '../components/home/KnowYourProblemSection';
 import { CareJourneySection } from '../components/home/CareJourneySection';
-import { WhyChooseSection } from '../components/home/WhyChooseSection';
-import { KnowYourNumbersSection } from '../components/home/KnowYourNumbersSection';
-import { KnowledgeHubSection } from '../components/home/KnowledgeHubSection';
-import { DoctorVideosSection } from '../components/home/DoctorVideosSection';
 import { PatientReviewsSection } from '../components/home/PatientReviewsSection';
-import { ClinicShowcaseSection } from '../components/home/ClinicShowcaseSection';
-import { LocationContactSection } from '../components/home/LocationContactSection';
+import { ClinicInfoSection } from '../components/home/ClinicInfoSection';
 import { AppointmentTeaserSection } from '../components/home/AppointmentTeaserSection';
 
 export const HomePage: React.FC = () => {
   return (
     <>
       <SEO
-        title="Dr. Soumya Sengupta — Consultant Diabetologist"
-        description="Senior Consultant Diabetologist in Kolkata specializing in Type 1 & Type 2 diabetes, Continuous Glucose Monitoring (CGM), and cardiometabolic organ protection."
+        title="Dr. Soumya Sengupta — Consultant Diabetologist & Metabolic Physician"
+        description="Practicing since 2007 (19+ Years in Diabetes Care) at Cardio Diabetic Clinic, Chaibasa, West Singhbhum, Jharkhand specializing in Type 1 & Type 2 Diabetes, Hypertension, Dyslipidemia, and multi-organ protection."
         canonicalPath="/"
       />
 
-      {/* 1. Signature Hero Section (Instant LCP layer + Progressive Lazy 3D Pancreas) */}
+      {/* 1. Header & Hero Section (Includes 'Our Clinic' redirection button) */}
       <HeroSection />
 
-      {/* 2. Quick Clinic Information (Location, Timings, Direct Call, Prior Booking) */}
-      <QuickClinicInfo />
-
-      {/* 3. Recent Notices (Complete notice system: Recent in IST vs All, Category Filters, Empty States) */}
-      <RecentNoticesSection />
-
-      {/* 4. How Can We Help? (Diabetes, Thyroid, Weight Management, Metabolic Health) */}
+      {/* 2. How Can We Help? (Short overview reflecting conditions with link to full section) */}
       <HowCanWeHelpSection />
 
-      {/* 5. About Dr. Sengupta (Photo placeholder, qualifications, clinical focus, bio) */}
+      {/* 3. About Dr. Sengupta Preview (Overview with button to full About profile) */}
       <AboutDoctorSection />
 
-      {/* 6. Conditions & Services (5 verified conditions linking to /conditions/:slug) */}
-      <ConditionsServicesSection />
-
-      {/* 7. Know Your Problem (Interactive clinical guidance navigator with disclaimer) */}
+      {/* 4. Know Your Problem (Merged with 'Know Your Numbers' tabs & full report guides) */}
       <KnowYourProblemSection />
 
-      {/* 8. Treatment / Care Journey (6-step visual & accessible ordered list) */}
+      {/* 5. Care Journey / Consultation Process (Step-by-step roadmap with actions) */}
       <CareJourneySection />
 
-      {/* 9. Why Choose Dr. Sengupta (Evidence-based, patient-centered, non-claim positioning) */}
-      <WhyChooseSection />
-
-      {/* 10. Know Your Numbers (Glycemic & Metabolic Biomarkers cards from reportService) */}
-      <KnowYourNumbersSection />
-
-      {/* 11. Knowledge Hub (Featured and recent peer-reviewed clinical articles) */}
-      <KnowledgeHubSection />
-
-      {/* 12. Dr. Sengupta Explains (Video masterclasses with facade and transcripts) */}
-      <DoctorVideosSection />
-
-      {/* 13. Patient Reviews (Genuine observations, feature-flagged, NMC ethics disclaimer) */}
+      {/* 6. Patient Reviews (Observations & feedback) */}
       <PatientReviewsSection />
 
-      {/* 14. Clinic Showcase (Chamber environment, waiting lounge, and photo gallery) */}
-      <ClinicShowcaseSection />
+      {/* 7. Clinic Info (New section merging Showcase, Photos, Location, Map & Directions) */}
+      <ClinicInfoSection />
 
-      {/* 15. Location & Contact (Interactive map & chamber directions) */}
-      <LocationContactSection />
-
-      {/* 16. Book Appointment (Dedicated interactive reservation module) */}
+      {/* 8. Book Appointment Module (1-step scheduling & WhatsApp confirmation) */}
       <AppointmentTeaserSection />
     </>
   );

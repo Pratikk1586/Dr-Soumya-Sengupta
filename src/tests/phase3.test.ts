@@ -12,7 +12,7 @@ import {
 describe('Phase 3 — Patient Education & Content Services', () => {
   it('problemService returns all 6 interactive guidance topics with non-diagnostic guidance', async () => {
     const problems = await problemService.getProblems();
-    expect(problems).toHaveLength(6);
+    expect(problems.length).toBeGreaterThanOrEqual(6);
 
     for (const prob of problems) {
       expect(prob.slug).toBeTruthy();

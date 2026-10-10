@@ -18,9 +18,9 @@ export function isRecentInIST(dateString: string, maxDays = 3): boolean {
     // Milliseconds difference
     const diffMs = now.getTime() - targetDate.getTime();
 
-    // If future or older than maxDays in ms
+    // If within last maxDays (with 1 day buffer for timezone offset)
     const maxMs = maxDays * 24 * 60 * 60 * 1000;
-    return diffMs >= 0 && diffMs <= maxMs;
+    return diffMs >= -86400000 && diffMs <= maxMs;
   } catch {
     return false;
   }

@@ -15,8 +15,8 @@ interface MapSectionProps {
 export const MapSection: React.FC<MapSectionProps> = ({
   embedUrl,
   mapsUrl,
-  address = 'Salt Lake Sector 1 Chamber, Kolkata 700064',
-  landmark = 'Near BD Market & Water Tank No. 4',
+  address = 'Amlatola, Post Box No. 20, Chaibasa – 833201, West Singhbhum, Jharkhand',
+  landmark = 'Near Post Office, Amlatola, Chaibasa',
   className = '',
   title = 'Chamber Location & Directions',
 }) => {
@@ -48,7 +48,7 @@ export const MapSection: React.FC<MapSectionProps> = ({
             </div>
 
             <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-              {isHindi ? 'डॉ. सौम्य सेनगुप्ता डायबिटीज़ क्लिनिक' : 'Dr. Soumya Sengupta Diabetology Chamber'}
+              {isHindi ? 'कार्डियो डायबिटिक क्लिनिक — डॉ. सौम्य सेनगुप्ता' : 'Cardio Diabetic Clinic — Dr. Soumya Sengupta'}
             </h3>
 
             <p className="mt-2 text-sm text-slate-700 font-medium leading-relaxed max-w-lg">

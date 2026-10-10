@@ -8,12 +8,13 @@ import {
   AlertCircle,
   Copy,
   Check,
-  ChevronRight,
-  ChevronLeft,
-  CalendarCheck,
-  ShieldCheck,
-  Stethoscope,
-  Video,
+  Calendar,
+  User,
+  Phone,
+  FileText,
+  MessageSquare,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import { SEO } from '../components/common/SEO';
 import { Container } from '../components/common/Container';
@@ -22,64 +23,59 @@ import { Card } from '../components/common/Card';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { MedicalDisclaimerBanner } from '../components/common/MedicalDisclaimerBanner';
-import { WhatsAppButton } from '../components/common/WhatsAppButton';
 import { CallButton } from '../components/common/CallButton';
 import { useLanguage } from '../context/useLanguage';
 import { appointmentService } from '../services';
+import { buildWhatsAppUrl } from '../lib/whatsapp';
 
 const appointmentFormSchema = z.object({
-  patientType: z.enum(['new', 'followup'], {
-    required_error: 'Please select whether you are a new or follow-up patient.',
-  }),
-  consultationType: z.enum(['in_clinic', 'telemedicine'], {
-    required_error: 'Please select an in-clinic or telemedicine consultation mode.',
-  }),
-  preferredDate: z
-    .string()
-    .min(1, 'Please select a preferred consultation date.')
-    .refine((val) => {
-      const selected = new Date(val);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return selected >= today;
-    }, 'Preferred date cannot be in the past.'),
-  preferredSlot: z.enum(['morning', 'afternoon', 'evening'], {
-    required_error: 'Please choose a preferred consultation time window.',
-  }),
   patientName: z
     .string()
-    .min(2, 'Patient name must be at least 2 characters.')
+    .min(2, 'Please enter the patient full name (at least 2 characters).')
     .max(80, 'Patient name cannot exceed 80 characters.'),
   phone: z
     .string()
     .min(10, 'Contact phone number must have at least 10 digits.')
     .max(16, 'Phone number format is too long.')
     .regex(/^(\+?[0-9\s-]{10,16})$/, 'Please enter a valid telephone or mobile number.'),
-  email: z
+  age: z
     .string()
-    .email('Please enter a valid email address.')
+    .max(3, 'Please enter a valid age.')
+    .refine(
+      (val) => !val || (parseInt(val, 10) >= 1 && parseInt(val, 10) <= 120),
+      'Age must be between 1 and 120.'
+    )
     .optional()
     .or(z.literal('')),
   reasonForVisit: z
     .string()
-    .max(250, 'Brief note must not exceed 250 characters.')
+    .max(250, 'Brief reason must not exceed 250 characters.')
     .optional()
     .or(z.literal('')),
-  consent: z.literal(true, {
-    errorMap: () => ({
-      message: 'You must acknowledge the clinical appointment terms before submission.',
-    }),
-  }),
+  preferredDate: z
+    .string()
+    .min(1, 'Please select a preferred date.')
+    .refine((val) => {
+      const selected = new Date(val);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return selected >= today;
+    }, 'Preferred date cannot be in the past.'),
+  preferredTime: z
+    .string()
+    .min(1, 'Please select a preferred time.')
+    .max(80, 'Preferred time is too long.'),
 });
 
 export type AppointmentFormData = z.infer<typeof appointmentFormSchema>;
 
 export const BookAppointmentPage: React.FC = () => {
   const { isHindi } = useLanguage();
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4 | 5>(1);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [referenceId, setReferenceId] = useState<string>('');
   const [hasCopied, setHasCopied] = useState(false);
+  const [whatsappChatUrl, setWhatsappChatUrl] = useState<string>('');
 
   // Tomorrow's date formatted as YYYY-MM-DD for min date picker
   const tomorrow = new Date();
@@ -89,7 +85,6 @@ export const BookAppointmentPage: React.FC = () => {
   const {
     register,
     handleSubmit,
-    trigger,
     getValues,
     reset,
     formState: { errors },
@@ -97,59 +92,58 @@ export const BookAppointmentPage: React.FC = () => {
     resolver: zodResolver(appointmentFormSchema),
     mode: 'onTouched',
     defaultValues: {
-      patientType: 'new',
-      consultationType: 'in_clinic',
-      preferredDate: minDateStr,
-      preferredSlot: 'evening',
       patientName: '',
       phone: '',
-      email: '',
+      age: '',
       reasonForVisit: '',
-      consent: true,
+      preferredDate: minDateStr,
+      preferredTime: 'Evening OPD (5:00 PM – 8:00 PM)',
     },
   });
-
-  const nextStep = async () => {
-    let isValid = false;
-    if (currentStep === 1) {
-      isValid = await trigger(['patientType', 'consultationType']);
-    } else if (currentStep === 2) {
-      isValid = await trigger(['preferredDate', 'preferredSlot']);
-    } else if (currentStep === 3) {
-      isValid = await trigger(['patientName', 'phone', 'email', 'reasonForVisit', 'consent']);
-    }
-
-    if (isValid) {
-      setCurrentStep((prev) => (Math.min(prev + 1, 4) as 1 | 2 | 3 | 4));
-    }
-  };
-
-  const prevStep = () => {
-    setCurrentStep((prev) => (Math.max(prev - 1, 1) as 1 | 2 | 3 | 4));
-  };
 
   const onSubmit = async (data: AppointmentFormData) => {
     setIsSubmitting(true);
     try {
+      const ref = `SS-REQ-${Date.now().toString().slice(-6)}`;
       const res = await appointmentService.submitInquiry({
         patientName: data.patientName,
         phone: data.phone,
-        email: data.email || undefined,
-        patientType: data.patientType,
-        consultationType: data.consultationType,
-        preferredClinicId: 'clinic-salt-lake',
+        age: data.age ? parseInt(data.age, 10) : undefined,
         preferredDate: data.preferredDate,
-        preferredSlot: data.preferredSlot,
+        preferredTime: data.preferredTime,
         reasonForVisit: data.reasonForVisit || undefined,
-        consent: data.consent,
+        consultationType: 'in_clinic',
+        preferredClinicId: 'cardio-diabetic-clinic',
       });
 
-      if (res.success && res.referenceId) {
-        setReferenceId(res.referenceId);
-      } else {
-        setReferenceId(`SS-REQ-${Date.now().toString().slice(-6)}`);
+      const finalRef = res.success && res.referenceId ? res.referenceId : ref;
+      setReferenceId(finalRef);
+
+      // Build WhatsApp chat URL with all prefilled form information
+      const waUrl = buildWhatsAppUrl('appointment', {
+        referenceId: finalRef,
+        patientName: data.patientName,
+        phone: data.phone,
+        age: data.age,
+        preferredDate: data.preferredDate,
+        preferredTime: data.preferredTime,
+        reason: data.reasonForVisit,
+      });
+
+      if (waUrl) {
+        setWhatsappChatUrl(waUrl);
+        // Automatically redirect to the clinic's WhatsApp chatbox
+        try {
+          const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+          if (!win || win.closed || typeof win.closed === 'undefined') {
+            window.location.href = waUrl;
+          }
+        } catch {
+          window.location.href = waUrl;
+        }
       }
-      setCurrentStep(5);
+
+      setIsSubmitted(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -159,13 +153,15 @@ export const BookAppointmentPage: React.FC = () => {
     const values = getValues();
     const details = [
       `Appointment Request Reference: ${referenceId}`,
-      `Patient Name: ${values.patientName}`,
-      `Type: ${values.patientType === 'followup' ? 'Follow-up' : 'First Visit'}`,
-      `Mode: ${values.consultationType === 'telemedicine' ? 'Telemedicine' : 'In-Chamber'}`,
-      `Preferred Date: ${values.preferredDate}`,
-      `Preferred Slot: ${values.preferredSlot}`,
+      `Patient Full Name: ${values.patientName}`,
       `Contact Phone: ${values.phone}`,
-    ].join('\n');
+      values.age ? `Age: ${values.age}` : null,
+      `Prefered Date: ${values.preferredDate}`,
+      `Prefered Time: ${values.preferredTime}`,
+      values.reasonForVisit ? `Brief Reason for Visit: ${values.reasonForVisit}` : null,
+    ]
+      .filter(Boolean)
+      .join('\n');
 
     navigator.clipboard.writeText(details).then(() => {
       setHasCopied(true);
@@ -175,8 +171,9 @@ export const BookAppointmentPage: React.FC = () => {
 
   const resetForm = () => {
     reset();
-    setCurrentStep(1);
+    setIsSubmitted(false);
     setReferenceId('');
+    setWhatsappChatUrl('');
     setHasCopied(false);
   };
 
@@ -185,8 +182,8 @@ export const BookAppointmentPage: React.FC = () => {
   return (
     <>
       <SEO
-        title="Book Consultation — Dr. Soumya Sengupta Diabetology"
-        description="Request an in-person or telemedicine consultation slot with Dr. Soumya Sengupta at the Salt Lake Chamber, Kolkata."
+        title="Book Appointment — Dr. Soumya Sengupta Diabetology"
+        description="Schedule a consultation with Dr. Soumya Sengupta at Cardio Diabetic Clinic, Chaibasa directly on WhatsApp."
         canonicalPath="/book-appointment"
       />
 
@@ -197,103 +194,108 @@ export const BookAppointmentPage: React.FC = () => {
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
             <Badge variant="primary">{isHindi ? 'ओपीडी स्लॉट अनुरोध' : 'Chamber Scheduling'}</Badge>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#06181f] tracking-tight">
-              {isHindi ? 'परामर्श समय आरक्षित करें' : 'Request a Clinical Appointment Slot'}
+              {isHindi ? 'परामर्श समय आरक्षित करें' : 'Book an Appointment'}
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
               {isHindi
-                ? '3-चरणों में अपना पसंदीदा समय और जानकारी दर्ज करें। चेंबर डेस्क आपकी उपलब्धता की पुष्टि हेतु फोन अथवा व्हाट्सएप पर संपर्क करेगा।'
-                : 'Complete our 3-step scheduling request. Our chamber desk will contact you via phone or WhatsApp to finalize your exact appointment slot.'}
+                ? 'नीचे अपना विवरण भरें और बुक अपॉइंटमेंट पर क्लिक करें। आपका अनुरोध सीधे क्लिनिक के व्हाट्सएप चैट में खुल जाएगा, जहाँ सिर्फ सेंड बटन दबाकर आप विवरण भेज सकते हैं।'
+                : 'Fill in your details below. When you click Book Appointment, you will be redirected to the clinic WhatsApp chat with your details ready to send. The clinic will contact you for final confirmation.'}
             </p>
           </div>
         </Container>
       </div>
 
-      <Container size="xl" className="py-10 sm:py-14 space-y-8 max-w-3xl">
+      <Container size="xl" className="py-10 sm:py-14 space-y-8 max-w-2xl">
         <MedicalDisclaimerBanner />
 
-        {/* STEP PROGRESS INDICATOR (Steps 1 to 4) */}
-        {currentStep < 5 && (
-          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
-            <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-2">
-              <span className="text-[#0f3d4a]">
-                {isHindi ? `चरण ${currentStep} / 4` : `Step ${currentStep} of 4`}
-              </span>
-              <span>
-                {currentStep === 1
-                  ? isHindi
-                    ? 'परामर्श प्रकार'
-                    : 'Patient & Mode'
-                  : currentStep === 2
-                  ? isHindi
-                    ? 'तिथि एवं समय'
-                    : 'Date & Slot'
-                  : currentStep === 3
-                  ? isHindi
-                    ? 'संपर्क विवरण'
-                    : 'Contact Info'
-                  : isHindi
-                  ? 'समीक्षा एवं पुष्टि'
-                  : 'Review & Submit'}
-              </span>
-            </div>
-            {/* Visual Progress Bar */}
-            <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#0f3d4a] transition-all duration-300 rounded-full"
-                style={{ width: `${(currentStep / 4) * 100}%` }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* STEP 5: PREPARED SUBMISSION RESULT (EXACT REQUIRED SPEC) */}
-        {currentStep === 5 ? (
-          <Card padding="lg" className="text-center space-y-6 animate-in fade-in zoom-in-95 duration-200 border-emerald-200 bg-emerald-50/40">
+        {/* SUBMISSION CONFIRMATION VIEW */}
+        {isSubmitted ? (
+          <Card padding="lg" className="text-center space-y-6 animate-in fade-in zoom-in-95 duration-200 border-emerald-200 bg-gradient-to-b from-emerald-50/60 to-white shadow-lg">
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto shadow-inner">
               <CheckCircle2 className="w-9 h-9" />
             </div>
 
             <div className="space-y-2">
-              <span className="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
-                {isHindi ? 'अनुरोध तैयार है' : 'Request Prepared'}
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" />
+                {isHindi ? 'व्हाट्सएप चैट तैयार है' : 'Redirected to WhatsApp'}
               </span>
 
-              {/* Exact required sentence */}
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight max-w-lg mx-auto">
-                Your appointment request has been prepared. Please contact the clinic to confirm availability.
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight max-w-md mx-auto">
+                {isHindi
+                  ? 'आपका विवरण क्लिनिक व्हाट्सएप पर भेजा जा रहा है!'
+                  : 'Your appointment details are ready in WhatsApp!'}
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
+              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
                 {isHindi
-                  ? 'कृपया ध्यान दें: यह स्लॉट सीधे क्लिनिक पुष्टि के बाद ही अंतिम माना जाएगा। त्वरित पुष्टि के लिए नीचे दिए गए व्हाट्सएप अथवा कॉल बटन का उपयोग करें।'
-                  : 'Note: This request does not guarantee an immediate confirmed slot. Please connect with our clinic desk to finalize your time.'}
+                  ? 'सभी विवरण और समय क्लिनिक के व्हाट्सएप चैटबॉक्स में तैयार हैं। बस सेंड बटन दबाएं और अंतिम पुष्टि के लिए क्लिनिक से आपको कॉल या मैसेज प्राप्त होगा।'
+                  : 'All your appointment information and timings are filled in the chatbox. Simply hit the Send button in WhatsApp, and our clinic desk will contact you via call or message for final confirmation.'}
               </p>
             </div>
 
             {referenceId && (
-              <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 font-mono text-xs font-bold text-slate-800 shadow-2xs">
-                <span>{isHindi ? 'अनुरोध संदर्भ:' : 'Reference ID:'}</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 font-mono text-xs font-bold text-slate-800 shadow-2xs">
+                <span className="text-slate-500">{isHindi ? 'अनुरोध संदर्भ:' : 'Reference ID:'}</span>
                 <span className="text-[#0f3d4a] text-sm">{referenceId}</span>
               </div>
             )}
 
-            {/* Action Bar: WhatsApp, Call, Copy Details */}
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
-              <WhatsAppButton
-                variant="appointment"
-                details={{
-                  referenceId,
-                  patientName: formValues.patientName,
-                  patientType: formValues.patientType,
-                  preferredDate: formValues.preferredDate,
-                  preferredSlot: formValues.preferredSlot,
-                  reason: formValues.reasonForVisit,
-                }}
-                size="md"
-              >
-                {isHindi ? 'व्हाट्सएप पर भेजें' : 'Send via WhatsApp'}
-              </WhatsAppButton>
+            {/* Prominent Action Button to Open WhatsApp */}
+            {whatsappChatUrl && (
+              <div className="pt-1">
+                <a
+                  href={whatsappChatUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-white bg-[#25D366] hover:bg-[#20ba59] active:bg-[#1caa52] shadow-md shadow-[#25D366]/20 transition-all text-sm cursor-pointer"
+                >
+                  <MessageSquare className="w-4 h-4 fill-current" />
+                  <span>{isHindi ? 'व्हाट्सएप चैट खोलें (सेंड दबाएं)' : 'Open WhatsApp Chat (Hit Send)'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            )}
 
+            {/* Booking Details Summary Card */}
+            <div className="text-left bg-slate-50/70 rounded-xl border border-slate-200 p-4 space-y-2.5 text-xs sm:text-sm">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">
+                {isHindi ? 'जमा किए गए विवरण:' : 'Submitted Appointment Details:'}
+              </div>
+              <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
+                <span className="text-slate-500 font-medium">Patient Full Name:</span>
+                <span className="font-semibold text-slate-900">{formValues.patientName}</span>
+              </div>
+              <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
+                <span className="text-slate-500 font-medium">Contact Phone:</span>
+                <span className="font-semibold text-slate-900">{formValues.phone}</span>
+              </div>
+              {formValues.age && (
+                <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
+                  <span className="text-slate-500 font-medium">Age:</span>
+                  <span className="font-semibold text-slate-900">{formValues.age}</span>
+                </div>
+              )}
+              <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
+                <span className="text-slate-500 font-medium">Prefered Date:</span>
+                <span className="font-semibold text-slate-900">{formValues.preferredDate}</span>
+              </div>
+              <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
+                <span className="text-slate-500 font-medium">Prefered Time:</span>
+                <span className="font-semibold text-slate-900">{formValues.preferredTime}</span>
+              </div>
+              {formValues.reasonForVisit && (
+                <div className="flex justify-between pt-0.5">
+                  <span className="text-slate-500 font-medium">Reason for Visit:</span>
+                  <span className="font-medium text-slate-800 text-right max-w-[220px] truncate" title={formValues.reasonForVisit}>
+                    {formValues.reasonForVisit}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Action Bar: Call Clinic & Copy Details */}
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
               <CallButton size="md" />
 
               <button
@@ -322,449 +324,201 @@ export const BookAppointmentPage: React.FC = () => {
             </div>
           </Card>
         ) : (
-          /* MULTI-STEP FORM WRAPPER */
-          <Card padding="lg" className="space-y-6">
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
-              {/* STEP 1: PATIENT TYPE & MODE */}
-              {currentStep === 1 && (
-                <div className="space-y-6 animate-in fade-in duration-150">
-                  <div className="border-b border-slate-100 pb-3">
-                    <h2 className="text-base sm:text-lg font-bold text-slate-900">
-                      {isHindi ? '1. मरीज का प्रकार एवं परामर्श का माध्यम' : '1. Patient Type & Consultation Mode'}
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      {isHindi
-                        ? 'कृपया चुनें कि यह पहला परामर्श है या फॉलो-अप समीक्षा।'
-                        : 'Select whether this is your first visit or a follow-up consultation.'}
-                    </p>
-                  </div>
-
-                  {/* Patient Type Radios */}
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-                      {isHindi ? 'परामर्श का प्रकार *' : 'Visit Type *'}
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <label className="flex items-center gap-3 p-3.5 rounded-xl border border-slate-200 hover:border-[#0f3d4a] cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                        <input
-                          type="radio"
-                          value="new"
-                          {...register('patientType')}
-                          className="w-4 h-4 text-[#0f3d4a] focus:ring-[#0f3d4a]"
-                        />
-                        <div>
-                          <p className="text-xs sm:text-sm font-bold text-slate-800">
-                            {isHindi ? 'प्रथम परामर्श (New Patient)' : 'First Consultation (New Patient)'}
-                          </p>
-                          <p className="text-[11px] text-slate-500">
-                            {isHindi ? 'विस्तृत 30-मिनट का ग्लूकोज मूल्यांकन' : 'Comprehensive 30-min evaluation'}
-                          </p>
-                        </div>
-                      </label>
-
-                      <label className="flex items-center gap-3 p-3.5 rounded-xl border border-slate-200 hover:border-[#0f3d4a] cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                        <input
-                          type="radio"
-                          value="followup"
-                          {...register('patientType')}
-                          className="w-4 h-4 text-[#0f3d4a] focus:ring-[#0f3d4a]"
-                        />
-                        <div>
-                          <p className="text-xs sm:text-sm font-bold text-slate-800">
-                            {isHindi ? 'फॉलो-अप समीक्षा (Follow-up)' : 'Follow-up Review'}
-                          </p>
-                          <p className="text-[11px] text-slate-500">
-                            {isHindi ? 'पिछली रिपोर्ट एवं दवा समीक्षा' : 'Review recent HbA1c & prescription'}
-                          </p>
-                        </div>
-                      </label>
-                    </div>
-                    {errors.patientType && (
-                      <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        <span>{errors.patientType.message}</span>
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Consultation Mode */}
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-                      {isHindi ? 'परामर्श का माध्यम *' : 'Consultation Mode *'}
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <label className="flex items-center gap-3 p-3.5 rounded-xl border border-slate-200 hover:border-[#0f3d4a] cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                        <input
-                          type="radio"
-                          value="in_clinic"
-                          {...register('consultationType')}
-                          className="w-4 h-4 text-[#0f3d4a] focus:ring-[#0f3d4a]"
-                        />
-                        <div className="flex items-center gap-2">
-                          <Stethoscope className="w-4 h-4 text-[#0f3d4a]" />
-                          <div>
-                            <p className="text-xs sm:text-sm font-bold text-slate-800">
-                              {isHindi ? 'चेंबर परामर्श (Salt Lake)' : 'In-Chamber (Salt Lake)'}
-                            </p>
-                            <p className="text-[11px] text-slate-500">
-                              {isHindi ? 'व्यक्तिगत शारीरिक जांच' : 'Physical in-person clinical examination'}
-                            </p>
-                          </div>
-                        </div>
-                      </label>
-
-                      <label className="flex items-center gap-3 p-3.5 rounded-xl border border-slate-200 hover:border-[#0f3d4a] cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                        <input
-                          type="radio"
-                          value="telemedicine"
-                          {...register('consultationType')}
-                          className="w-4 h-4 text-[#0f3d4a] focus:ring-[#0f3d4a]"
-                        />
-                        <div className="flex items-center gap-2">
-                          <Video className="w-4 h-4 text-[#0f3d4a]" />
-                          <div>
-                            <p className="text-xs sm:text-sm font-bold text-slate-800">
-                              {isHindi ? 'ऑनलाइन वीडियो परामर्श' : 'Telemedicine (Video Call)'}
-                            </p>
-                            <p className="text-[11px] text-slate-500">
-                              {isHindi ? 'दूरस्थ रोगी समीक्षा' : 'Remote secure clinical video consultation'}
-                            </p>
-                          </div>
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 2: PREFERRED DATE & TIME SLOT */}
-              {currentStep === 2 && (
-                <div className="space-y-6 animate-in fade-in duration-150">
-                  <div className="border-b border-slate-100 pb-3">
-                    <h2 className="text-base sm:text-lg font-bold text-slate-900">
-                      {isHindi ? '2. पसंदीदा तिथि एवं समय स्लॉट' : '2. Preferred Date & Time Slot'}
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      {isHindi
-                        ? 'अपनी सुविधानुसार संभावित परामर्श तिथि और समय विंडो का चयन करें।'
-                        : 'Choose your desired consultation date and preferred time window.'}
-                    </p>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div>
-                      <label htmlFor="preferredDate" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                        {isHindi ? 'पसंदीदा तिथि *' : 'Preferred Date *'}
-                      </label>
-                      <div className="relative">
-                        <input
-                          id="preferredDate"
-                          type="date"
-                          min={minDateStr}
-                          {...register('preferredDate')}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 focus:outline-2 focus:outline-[#0f3d4a]"
-                        />
-                      </div>
-                      {errors.preferredDate && (
-                        <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
-                          <AlertCircle className="w-3.5 h-3.5" />
-                          <span>{errors.preferredDate.message}</span>
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label htmlFor="preferredSlot" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                        {isHindi ? 'पसंदीदा समय स्लॉट *' : 'Preferred Time Slot *'}
-                      </label>
-                      <select
-                        id="preferredSlot"
-                        {...register('preferredSlot')}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 focus:outline-2 focus:outline-[#0f3d4a]"
-                      >
-                        <option value="evening">
-                          {isHindi ? 'संध्या ओपीडी (5:00 PM – 8:00 PM)' : 'Evening OPD (5:00 PM – 8:00 PM)'}
-                        </option>
-                        <option value="morning">
-                          {isHindi ? 'प्रातः ओपीडी (10:00 AM – 1:00 PM)' : 'Morning OPD (10:00 AM – 1:00 PM)'}
-                        </option>
-                        <option value="afternoon">
-                          {isHindi ? 'दोपहर स्लॉट (2:00 PM – 4:00 PM)' : 'Afternoon Slot (2:00 PM – 4:00 PM)'}
-                        </option>
-                      </select>
-                      {errors.preferredSlot && (
-                        <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
-                          <AlertCircle className="w-3.5 h-3.5" />
-                          <span>{errors.preferredSlot.message}</span>
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-sky-50 border border-sky-200 text-xs text-sky-900 flex items-start gap-2">
-                    <Clock className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
-                    <span>
-                      {isHindi
-                        ? 'नोट: चेंबर ओपीडी समय सोमवार से शनिवार शाम 5:00 बजे से रात 8:00 बजे तक रहता है। रविवार को अग्रिम अपॉइंटमेंट के आधार पर विशेष समय दिया जाता है।'
-                        : 'Notice: Standard chamber consulting hours run Monday through Saturday, 5:00 PM – 8:00 PM. Sunday slots are reserved by prior arrangement.'}
+          /* SINGLE-PAGE ALL-IN-ONE APPOINTMENT FORM */
+          <Card padding="lg" className="border-slate-200 shadow-xl shadow-slate-900/5 rounded-2xl bg-white">
+            <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {/* 1. Patient Full Name */}
+                <div className="sm:col-span-1 space-y-1.5">
+                  <label htmlFor="patientName" className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    <span className="inline-flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5 text-slate-500" />
+                      {isHindi ? 'मरीज का पूरा नाम' : 'Patient Full Name'}
+                      <span className="text-rose-500 font-bold">*</span>
                     </span>
-                  </div>
+                  </label>
+                  <input
+                    id="patientName"
+                    type="text"
+                    inputMode="text"
+                    autoComplete="name"
+                    {...register('patientName')}
+                    placeholder={isHindi ? 'उदा. अमित कुमार' : 'e.g. Ramesh Chandra Mukherjee'}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                  />
+                  {errors.patientName && (
+                    <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{errors.patientName.message}</span>
+                    </p>
+                  )}
                 </div>
-              )}
 
-              {/* STEP 3: CONTACT INFORMATION & REASON */}
-              {currentStep === 3 && (
-                <div className="space-y-6 animate-in fade-in duration-150">
-                  <div className="border-b border-slate-100 pb-3">
-                    <h2 className="text-base sm:text-lg font-bold text-slate-900">
-                      {isHindi ? '3. मरीज का संपर्क विवरण' : '3. Patient Contact & Details'}
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      {isHindi
-                        ? 'आवश्यक संपर्क जानकारी दर्ज करें ताकि क्लिनिक डेस्क समय की पुष्टि कर सके।'
-                        : 'Provide accurate contact details so our reception can reach you.'}
-                    </p>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div>
-                      <label htmlFor="patientName" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                        {isHindi ? 'मरीज का पूरा नाम *' : 'Patient Full Name *'}
-                      </label>
-                      <div className="relative">
-                        <input
-                          id="patientName"
-                          type="text"
-                          inputMode="text"
-                          autoComplete="name"
-                          {...register('patientName')}
-                          placeholder={isHindi ? 'उदा. अमित कुमार सरकार' : 'e.g. Ramesh Chandra Mukherjee'}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 focus:outline-2 focus:outline-[#0f3d4a]"
-                        />
-                      </div>
-                      {errors.patientName && (
-                        <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
-                          <AlertCircle className="w-3.5 h-3.5" />
-                          <span>{errors.patientName.message}</span>
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label htmlFor="phone" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                        {isHindi ? 'मोबाइल नंबर (कॉल / व्हाट्सएप) *' : 'Contact Phone (Mobile / WhatsApp) *'}
-                      </label>
-                      <div className="relative">
-                        <input
-                          id="phone"
-                          type="tel"
-                          inputMode="tel"
-                          autoComplete="tel"
-                          {...register('phone')}
-                          placeholder="+91 98300 XXXXX"
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 focus:outline-2 focus:outline-[#0f3d4a]"
-                        />
-                      </div>
-                      {errors.phone && (
-                        <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
-                          <AlertCircle className="w-3.5 h-3.5" />
-                          <span>{errors.phone.message}</span>
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                      {isHindi ? 'ईमेल पता (वैकल्पिक)' : 'Email Address (Optional)'}
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      inputMode="email"
-                      autoComplete="email"
-                      {...register('email')}
-                      placeholder="e.g. patient@example.com"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 focus:outline-2 focus:outline-[#0f3d4a]"
-                    />
-                    {errors.email && (
-                      <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        <span>{errors.email.message}</span>
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="reasonForVisit" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                      {isHindi ? 'परामर्श का संक्षिप्त कारण (वैकल्पिक)' : 'Brief Reason for Visit (Optional)'}
-                    </label>
-                    <textarea
-                      id="reasonForVisit"
-                      rows={2}
-                      maxLength={250}
-                      {...register('reasonForVisit')}
-                      placeholder={
-                        isHindi
-                          ? 'उदा. उच्च फास्टिंग शुगर, HbA1c समीक्षा या सीजीएम सेंसर लगाने की जानकारी।'
-                          : 'e.g. High fasting glucose, HbA1c report review, or continuous glucose sensor inquiry.'
-                      }
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-900 focus:outline-2 focus:outline-[#0f3d4a]"
-                    />
-                    <p className="text-[11px] text-slate-400 mt-1">
-                      {isHindi
-                        ? '⚠️ कृपया यहां विस्तृत मेडिकल रिपोर्ट या संवेदनशील इतिहास दर्ज न करें।'
-                        : '⚠️ Do not include detailed medical history or laboratory reports.'}
-                    </p>
-                  </div>
-
-                  {/* Privacy & Consent Affirmation */}
-                  <div className="pt-2">
-                    <label className="flex items-start gap-2.5 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        {...register('consent')}
-                        className="w-4 h-4 rounded text-[#0f3d4a] focus:ring-[#0f3d4a] mt-0.5"
-                      />
-                      <span className="text-xs text-slate-600 leading-relaxed">
-                        {isHindi
-                          ? 'मैं समझता/समझती हूँ कि यह अनुरोध केवल चेंबर समय निर्धारण के लिए है और यह तत्काल आपातकालीन उपचार या प्रत्यक्ष नुस्खा नहीं है।'
-                          : 'I understand this request is for chamber scheduling and does not constitute medical treatment or emergency triage.'}
-                      </span>
-                    </label>
-                    {errors.consent && (
-                      <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        <span>{errors.consent.message}</span>
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 4: REVIEW & CONFIRM */}
-              {currentStep === 4 && (
-                <div className="space-y-6 animate-in fade-in duration-150">
-                  <div className="border-b border-slate-100 pb-3">
-                    <h2 className="text-base sm:text-lg font-bold text-slate-900">
-                      {isHindi ? '4. विवरण की समीक्षा एवं पुष्टि' : '4. Review Consultation Request'}
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      {isHindi
-                        ? 'अनुरोध सबमिट करने से पहले कृपया अपने विवरण की जांच कर लें।'
-                        : 'Please review your choices before submitting to the clinic scheduling queue.'}
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5 space-y-4 text-xs sm:text-sm">
-                    <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                      <div>
-                        <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">
-                          {isHindi ? 'परामर्श प्रकार' : 'Consultation Mode'}
-                        </span>
-                        <span className="font-bold text-slate-900">
-                          {formValues.patientType === 'followup' ? 'Follow-up Review' : 'First Consultation'} •{' '}
-                          {formValues.consultationType === 'telemedicine' ? 'Telemedicine (Video Call)' : 'In-Chamber (Salt Lake)'}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(1)}
-                        className="text-xs font-semibold text-[#0f3d4a] hover:underline cursor-pointer"
-                      >
-                        {isHindi ? 'बदलें' : 'Edit'}
-                      </button>
-                    </div>
-
-                    <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                      <div>
-                        <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">
-                          {isHindi ? 'पसंदीदा समय' : 'Requested Schedule'}
-                        </span>
-                        <span className="font-bold text-slate-900">
-                          {formValues.preferredDate} ({formValues.preferredSlot.toUpperCase()} Slot)
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(2)}
-                        className="text-xs font-semibold text-[#0f3d4a] hover:underline cursor-pointer"
-                      >
-                        {isHindi ? 'बदलें' : 'Edit'}
-                      </button>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">
-                          {isHindi ? 'मरीज एवं संपर्क' : 'Patient & Contact'}
-                        </span>
-                        <span className="font-bold text-slate-900 block">
-                          {formValues.patientName}
-                        </span>
-                        <span className="text-slate-600 block text-xs">
-                          {formValues.phone} {formValues.email ? `• ${formValues.email}` : ''}
-                        </span>
-                        {formValues.reasonForVisit && (
-                          <span className="text-slate-500 italic block text-xs mt-1">
-                            "{formValues.reasonForVisit}"
-                          </span>
-                        )}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(3)}
-                        className="text-xs font-semibold text-[#0f3d4a] hover:underline cursor-pointer"
-                      >
-                        {isHindi ? 'बदलें' : 'Edit'}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0" />
-                    <span>
-                      {isHindi
-                        ? 'डेटा सुरक्षा: आपके विवरण केवल इस अपॉइंटमेंट अनुरोध के लिए उपयोग किए जाएंगे। कोई भी व्यक्तिगत मेडिकल डेटा ऑनलाइन सर्वर पर संग्रहीत नहीं होता।'
-                        : 'Data minimization: No medical history or confidential lab reports are stored on public servers.'}
+                {/* 2. Contact Phone (Mobile / WhatsApp) * */}
+                <div className="sm:col-span-1 space-y-1.5">
+                  <label htmlFor="phone" className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-slate-500" />
+                      {isHindi ? 'संपर्क फोन (मोबाइल / व्हाट्सएप)' : 'Contact Phone (Mobile / WhatsApp)'}
+                      <span className="text-rose-500 font-bold">*</span>
                     </span>
-                  </div>
+                  </label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    {...register('phone')}
+                    placeholder="+91 98300 XXXXX"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                  />
+                  {errors.phone && (
+                    <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{errors.phone.message}</span>
+                    </p>
+                  )}
                 </div>
-              )}
 
-              {/* NAVIGATION BUTTONS */}
-              <div className="pt-6 border-t border-slate-100 flex items-center justify-between gap-3">
-                {currentStep > 1 ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={prevStep}
-                    disabled={isSubmitting}
-                  >
-                    <ChevronLeft className="w-4 h-4 mr-1" />
-                    <span>{isHindi ? 'पीछे' : 'Back'}</span>
-                  </Button>
-                ) : (
-                  <div />
-                )}
+                {/* 3. Age */}
+                <div className="sm:col-span-1 space-y-1.5">
+                  <label htmlFor="age" className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    {isHindi ? 'उम्र' : 'Age'}
+                  </label>
+                  <input
+                    id="age"
+                    type="number"
+                    min="1"
+                    max="120"
+                    inputMode="numeric"
+                    {...register('age')}
+                    placeholder={isHindi ? 'उदा. 45' : 'e.g. 45'}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                  />
+                  {errors.age && (
+                    <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{errors.age.message}</span>
+                    </p>
+                  )}
+                </div>
 
-                {currentStep < 4 ? (
-                  <Button type="button" variant="primary" size="md" onClick={nextStep}>
-                    <span>{isHindi ? 'आगे बढ़ें' : 'Next Step'}</span>
-                    <ChevronRight className="w-4 h-4 ml-1" />
-                  </Button>
-                ) : (
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    size="md"
-                    isLoading={isSubmitting}
+                {/* 4. Prefered Date */}
+                <div className="sm:col-span-1 space-y-1.5">
+                  <label htmlFor="preferredDate" className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                      {isHindi ? 'पसंदीदा तारीख' : 'Prefered Date'}
+                      <span className="text-rose-500 font-bold">*</span>
+                    </span>
+                  </label>
+                  <input
+                    id="preferredDate"
+                    type="date"
+                    min={minDateStr}
+                    {...register('preferredDate')}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                  />
+                  {errors.preferredDate && (
+                    <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{errors.preferredDate.message}</span>
+                    </p>
+                  )}
+                </div>
+
+                {/* 5. Prefered Time */}
+                <div className="sm:col-span-2 space-y-1.5">
+                  <label htmlFor="preferredTime" className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-slate-500" />
+                      {isHindi ? 'पसंदीदा समय' : 'Prefered Time'}
+                      <span className="text-rose-500 font-bold">*</span>
+                    </span>
+                  </label>
+                  <select
+                    id="preferredTime"
+                    {...register('preferredTime')}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
                   >
-                    <CalendarCheck className="w-4 h-4 mr-1.5" />
-                    <span>{isHindi ? 'अनुरोध तैयार करें' : 'Prepare Consultation Request'}</span>
-                  </Button>
-                )}
+                    <option value="Evening OPD (5:00 PM – 8:00 PM)">
+                      {isHindi ? 'संध्या ओपीडी (5:00 PM – 8:00 PM)' : 'Evening OPD (5:00 PM – 8:00 PM)'}
+                    </option>
+                    <option value="Morning OPD (10:00 AM – 1:00 PM)">
+                      {isHindi ? 'प्रातः ओपीडी (10:00 AM – 1:00 PM)' : 'Morning OPD (10:00 AM – 1:00 PM)'}
+                    </option>
+                    <option value="Afternoon Slot (2:00 PM – 4:00 PM)">
+                      {isHindi ? 'दोपहर स्लॉट (2:00 PM – 4:00 PM)' : 'Afternoon Slot (2:00 PM – 4:00 PM)'}
+                    </option>
+                    <option value="Any Available Time">
+                      {isHindi ? 'उपलब्ध कोई भी समय (Any Available Time)' : 'Any Available Time'}
+                    </option>
+                  </select>
+                  {errors.preferredTime && (
+                    <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{errors.preferredTime.message}</span>
+                    </p>
+                  )}
+                </div>
+
+                {/* 6. Brief Reason for Visit (Optional) */}
+                <div className="sm:col-span-2 space-y-1.5">
+                  <label htmlFor="reasonForVisit" className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    <span className="inline-flex items-center gap-1.5">
+                      <FileText className="w-3.5 h-3.5 text-slate-500" />
+                      {isHindi ? 'परामर्श का संक्षिप्त कारण' : 'Brief Reason for Visit'}
+                      <span className="text-slate-400 font-normal lowercase">(optional)</span>
+                    </span>
+                  </label>
+                  <textarea
+                    id="reasonForVisit"
+                    rows={3}
+                    maxLength={250}
+                    {...register('reasonForVisit')}
+                    placeholder={
+                      isHindi
+                        ? 'उदा. उच्च फास्टिंग शुगर, HbA1c समीक्षा या मधुमेह परामर्श।'
+                        : 'e.g. High fasting blood sugar, HbA1c report review, diabetes management...'
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all resize-y"
+                  />
+                  {errors.reasonForVisit && (
+                    <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{errors.reasonForVisit.message}</span>
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Timing Notice */}
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
+                <Clock className="w-4 h-4 text-[#0f3d4a] shrink-0 mt-0.5" />
+                <span className="leading-relaxed">
+                  {isHindi
+                    ? 'क्लिनिक समय: सोमवार से शनिवार शाम 5:00 से 8:00 बजे। व्हाट्सएप पर भेजने के बाद क्लिनिक डेस्क आपको पुष्टि के लिए संपर्क करेगा।'
+                    : 'Standard Chamber Hours: Monday to Saturday, 5:00 PM – 8:00 PM. Our clinic desk will call or message you to confirm your final appointment slot.'}
+                </span>
+              </div>
+
+              {/* Submit Button (Direct WhatsApp Booking) */}
+              <div className="pt-2 space-y-2">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-bold text-white bg-[#0f3d4a] hover:bg-[#0c2f39] active:bg-[#09232a] shadow-md shadow-[#0f3d4a]/20 transition-all text-sm sm:text-base cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <MessageSquare className="w-4 h-4 text-[#25D366] fill-[#25D366]" />
+                  <span>{isHindi ? 'व्हाट्सएप पर अपॉइंटमेंट बुक करें' : 'Book Appointment via WhatsApp'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <p className="text-[11px] text-center text-slate-500 leading-normal">
+                  {isHindi
+                    ? 'क्लिक करने पर आपका विवरण क्लिनिक के व्हाट्सएप चैट में खुल जाएगा। बस सेंड बटन दबाएं।'
+                    : 'Clicking will open WhatsApp with your filled details. Just hit Send in the chat, and the clinic will reach out to confirm.'}
+                </p>
               </div>
             </form>
           </Card>

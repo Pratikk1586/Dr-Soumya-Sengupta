@@ -12,7 +12,7 @@ export const DisclaimerPage: React.FC = () => {
     <>
       <SEO
         title="Medical Disclaimer & Legal Notice — Dr. Soumya Sengupta"
-        description="Important clinical disclaimer regarding educational medical content, prescription rules, and emergency guidelines."
+        description="Clinical disclaimer regarding educational medical content, prescription rules, and emergency guidelines."
         canonicalPath="/disclaimer"
       />
 
