@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dr. Soumya Sengupta — Consultant Diabetologist Practice Web Platform
 
 A high-performance, accessible, bilingual (English & Hindi) clinical web application designed for the practice of **Dr. Soumya Sengupta**, Consultant Diabetologist and Metabolic Physician (Salt Lake & Kolkata).
@@ -298,3 +299,6 @@ Ensure build command is `npm run build` and publish directory is `dist`. Add a `
    > *"Your appointment request has been prepared. Please contact the clinic to confirm availability."*
 3. **No Fabricated Data**:
    All doctor qualifications, credentials, registration numbers, and testimonials must be confirmed by the physician prior to removing placeholder badges. Run `npm run content:audit` to verify launch readiness.
+=======
+
+>>>>>>> 6270c46d7c58194877f4355887686dcf2f180061
