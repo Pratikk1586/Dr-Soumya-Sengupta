@@ -43,9 +43,9 @@ export interface PancreasPartInfo {
 export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
   islets: {
     id: 'islets',
-    name: 'Beta Cells & Islets',
-    nameHi: 'बीटा कोशिकाएं एवं लैंगरहेंस द्वीप',
-    scientificName: 'Islets of Langerhans',
+    name: 'Islets of Langerhans',
+    nameHi: 'लैंगरहेंस द्वीप (Beta Cells & Islets)',
+    scientificName: 'Insulae Pancreaticae',
     category: 'endocrine',
     badge: 'Beta & Alpha Cells',
     badgeType: 'insulin',
@@ -147,9 +147,9 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
   },
   duct: {
     id: 'duct',
-    name: 'Duct of Wirsung',
-    nameHi: 'विर्सुंग की मुख्य नली (Duct)',
-    scientificName: 'Main pancreatic duct',
+    name: 'Main Pancreatic Duct',
+    nameHi: 'विर्सुंग की मुख्य नली (Duct of Wirsung)',
+    scientificName: 'Duct of Wirsung (Ductus Pancreaticus)',
     category: 'exocrine',
     badge: 'Enzyme Conductor',
     badgeType: 'enzyme',

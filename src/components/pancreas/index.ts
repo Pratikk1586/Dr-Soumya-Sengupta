@@ -1,3 +1,5 @@
+export { PancreasViewer } from './PancreasViewer';
+export type { PancreasViewerProps } from './PancreasViewer';
 export { AnimatedPancreas, default } from './AnimatedPancreas';
 export type { AnimatedPancreasProps } from './AnimatedPancreas';
 export {
