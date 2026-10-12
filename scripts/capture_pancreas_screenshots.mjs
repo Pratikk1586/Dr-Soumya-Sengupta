@@ -7,6 +7,7 @@ async function triggerHover(page, selector) {
   await page.evaluate((sel) => {
     const el = document.querySelector(sel);
     if (el) {
+      el.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
       el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
       el.focus();
     }
@@ -25,6 +26,9 @@ async function main() {
     const viewer = page.locator('[data-pancreas-viewer="true"]');
     await viewer.scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
+
+    const imgBox = await page.locator('[data-pancreas-viewer="true"] img').boundingBox();
+    console.log('Pancreas image width at 1440px:', imgBox?.width, 'px (Target: 800-880px)');
 
     // Initial 1440px
     await page.screenshot({

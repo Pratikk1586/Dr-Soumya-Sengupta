@@ -95,10 +95,10 @@ export const HeroSection: React.FC = () => {
         </g>
       </svg>
 
-      <Container size="xl" className="relative z-10">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <Container size="xl" className="relative z-10 xl:max-w-[1440px]">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-8 items-center">
           {/* Left Column: Instant-render text & clinical authority */}
-          <div className="lg:col-span-7 space-y-3 sm:space-y-3.5">
+          <div className="lg:col-span-6 xl:col-span-4 space-y-3 sm:space-y-3.5">
             {/* Top credentials pill & practicing tenure */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50/90 border border-teal-300 text-teal-950 text-xs font-bold shadow-2xs backdrop-blur-xs">
@@ -213,8 +213,8 @@ export const HeroSection: React.FC = () => {
           </div>
 
           {/* Right Column: Interactive 3D Pancreas Anatomy */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
-            <div className="relative w-full flex flex-col items-center justify-center max-w-[480px] lg:max-w-[540px]">
+          <div className="lg:col-span-6 xl:col-span-8 relative flex items-center justify-center">
+            <div className="relative w-full flex flex-col items-center justify-center max-w-[580px] lg:max-w-[700px] xl:max-w-[880px] xl:w-[880px]">
               <Suspense fallback={<HeroStaticVisual />}>
                 <PancreasViewer
                   className="w-full"

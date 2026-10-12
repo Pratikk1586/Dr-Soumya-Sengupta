@@ -10,10 +10,8 @@ import {
   type PancreasPartCategory,
 } from './pancreasData';
 
-// Optimized WebP & PNG fallback assets
-import pancreas1536Webp from '../../assets/pancreas/pancreas-1536.webp';
-import pancreas768Webp from '../../assets/pancreas/pancreas-768.webp';
-import pancreasFallbackPng from '../../assets/pancreas/pancreas-fallback.png';
+// Clean white background anatomical visual asset
+import pancreasCleanWhitePng from '../../assets/pancreas/pancreas-clean-white.png';
 
 export interface PancreasViewerProps {
   className?: string;
@@ -107,15 +105,13 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
         clearTimeout(leaveTimerRef.current);
         leaveTimerRef.current = null;
       }
-      setSelectedPart((prev) => {
-        const next = prev === id ? null : id;
-        setActivePart(next);
-        return next;
-      });
+      const next = selectedPart === id ? null : id;
+      setSelectedPart(next);
+      setActivePart(next);
       setHasInteracted(true);
       if (onPartClick) onPartClick(id);
     },
-    [onPartClick]
+    [selectedPart, onPartClick]
   );
 
   // Keyboard navigation support
@@ -131,6 +127,8 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
     const handleOutsideClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | SVGElement | null;
       if (!target) return;
+      // If the clicked target was unmounted during this click's state transition, ignore
+      if (!target.isConnected) return;
       if (target.closest && target.closest('[data-pancreas-viewer]')) {
         return;
       }
@@ -203,34 +201,32 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
         </div>
       )}
 
-      {/* Visual Canvas Wrapper with soft teal boundary blend */}
-      <div className="relative w-full overflow-hidden rounded-2xl bg-[#0B2E3A]/5 shadow-[0_16px_40px_rgba(11,46,58,0.12)] border border-[#D7E5E6]/70 group">
-        {/* Soft edge masking for seamless background integration */}
+      {/* Visual Canvas Wrapper: No border, no background, no box-shadow; 4-6% padding for labels */}
+      <div className="relative w-full rounded-2xl bg-transparent border-0 shadow-none p-3 sm:p-5 md:p-6 group">
+        {/* Soft radial teal glow behind the image in CSS (var(--primary-soft) fading to transparent) */}
         <div
-          className="relative w-full aspect-[1536/1024] overflow-hidden"
+          className="absolute inset-0 pointer-events-none -z-10"
           style={{
-            WebkitMaskImage:
-              'radial-gradient(ellipse 98% 96% at 50% 50%, black 85%, transparent 100%)',
-            maskImage:
-              'radial-gradient(ellipse 98% 96% at 50% 50%, black 85%, transparent 100%)',
+            background:
+              'radial-gradient(ellipse 70% 60% at 50% 50%, var(--primary-soft, #E8F5F4) 0%, rgba(232, 245, 244, 0.45) 45%, transparent 75%)',
           }}
-        >
-          {/* Base Clean Anatomy Image (High Priority LCP) */}
+          aria-hidden="true"
+        />
+
+        {/* 3:2 Aspect Ratio Container */}
+        <div className="relative w-full aspect-[1536/1024]">
+          {/* Base Clean Anatomy Image with mix-blend-mode: multiply */}
           <picture className="absolute inset-0 w-full h-full pointer-events-none">
-            <source
-              type="image/webp"
-              srcSet={`${pancreas768Webp} 768w, ${pancreas1536Webp} 1536w`}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 540px"
-            />
             <img
-              src={pancreasFallbackPng}
+              src={pancreasCleanWhitePng}
               alt="Detailed anatomical illustration of human pancreas, duodenum, gallbladder, stomach, spleen, and microscopic endocrine islets"
               width={1536}
               height={1024}
               fetchPriority="high"
               loading="eager"
               decoding="async"
-              className="w-full h-full object-cover object-center"
+              style={{ mixBlendMode: 'multiply' }}
+              className="w-full h-full object-contain object-center"
             />
           </picture>
 
@@ -247,14 +243,14 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               width="1536"
               height="1024"
               fill="#0B2E3A"
-              className="pointer-events-none transition-opacity duration-250 ease-out"
+              className="pointer-events-none transition-opacity duration-200 ease-out"
               style={{
                 opacity: activePart ? 0.40 : 0,
                 willChange: 'opacity',
               }}
             />
 
-            {/* 2. Highlight Path on Top of Dim Layer (cheap opacity/stroke transition, no filters) */}
+            {/* 2. Highlight Path on Top of Dim Layer (cheap opacity/stroke transition) */}
             {activePartInfo && !isIsletsActive && (
               <path
                 d={activePartInfo.svgPath}
@@ -267,13 +263,49 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               />
             )}
 
-            {/* 3. Islets Inset Ring on Top of Dim Layer */}
+            {/* 3. Thin Teal Ring (2px, var(--primary)) around inset circle at all times */}
+            <circle
+              cx="1236"
+              cy="753"
+              r={163}
+              fill="transparent"
+              stroke="#0E5A6B"
+              strokeWidth="2"
+              pointerEvents="none"
+              style={{ stroke: 'var(--primary, #0E5A6B)' }}
+            />
+
+            {/* 4. Teal leader line from duct dot to inset circle at 60% opacity */}
+            <line
+              x1="1075"
+              y1="486"
+              x2="1145"
+              y2="630"
+              stroke="#0E5A6B"
+              strokeOpacity="0.6"
+              strokeWidth="2"
+              strokeDasharray="4 3"
+              pointerEvents="none"
+              style={{ stroke: 'var(--primary, #0E5A6B)' }}
+            />
+            <circle
+              cx="1075"
+              cy="486"
+              r="5"
+              fill="#0E5A6B"
+              stroke="#ffffff"
+              strokeWidth="1.5"
+              pointerEvents="none"
+              style={{ fill: 'var(--primary, #0E5A6B)' }}
+            />
+
+            {/* 5. Islets Active Selection Ring */}
             {isIsletsActive && (
               <circle
-                cx="1208"
-                cy="734"
-                r={162}
-                fill="rgba(14, 90, 107, 0.12)"
+                cx="1236"
+                cy="753"
+                r={163}
+                fill="rgba(14, 90, 107, 0.16)"
                 stroke="#65D9D0"
                 strokeWidth={4}
                 className="pointer-events-none transition-all duration-200 ease-out"
@@ -281,7 +313,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               />
             )}
 
-            {/* 4. Interactive SVG Hotspot Hit Areas (with transparent hit slop of 12-16px) */}
+            {/* 6. Interactive SVG Hotspot Hit Areas (with transparent hit slop of 12-16px) */}
             {HOTSPOT_LIST.map((id) => {
               if (isPartFilteredOut(id)) return null;
               const part = PANCREAS_DATA[id];
@@ -309,7 +341,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               );
             })}
 
-            {/* 5. Small White Dot on Pancreatic Duct linked to Islets */}
+            {/* 7. Small White Dot on Pancreatic Duct linked to Islets */}
             <g
               className="cursor-pointer"
               tabIndex={0}
@@ -321,13 +353,13 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               onKeyDown={(e) => handleKeyDown(e, 'islets')}
             >
               {/* Hit testing halo with expanded radius */}
-              <circle cx="1043" cy="461" r="26" fill="transparent" pointerEvents="all" />
+              <circle cx="1075" cy="486" r="26" fill="transparent" pointerEvents="all" />
 
               {/* Pulsing ring in idle state */}
               {!hasInteracted && !activePart && (
                 <circle
-                  cx="1043"
-                  cy="461"
+                  cx="1075"
+                  cy="486"
                   r="18"
                   fill="none"
                   stroke="#F2A33A"
@@ -340,8 +372,8 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               {/* Active selection ring */}
               {isIsletsActive && (
                 <circle
-                  cx="1043"
-                  cy="461"
+                  cx="1075"
+                  cy="486"
                   r="22"
                   fill="none"
                   stroke="#65D9D0"
@@ -352,11 +384,11 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               )}
             </g>
 
-            {/* 6. Islets Circular Inset Hotspot Lens */}
+            {/* 8. Islets Circular Inset Hotspot Lens */}
             <circle
-              cx="1208"
-              cy="734"
-              r={158}
+              cx="1236"
+              cy="753"
+              r={163}
               fill="transparent"
               stroke={isDebugMode ? '#8B5CF6' : 'transparent'}
               strokeWidth={isDebugMode ? 3 : 0}
@@ -370,106 +402,6 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               onClick={() => handlePartSelect('islets')}
               onKeyDown={(e) => handleKeyDown(e, 'islets')}
             />
-
-            {/* 7. SVG Leader Line to Active Part */}
-            {activePartInfo && !isIsletsActive && !showHotspots && (
-              <g className="pointer-events-none transition-opacity duration-200">
-                <line
-                  x1={activePartInfo.hotspot.cx}
-                  y1={activePartInfo.hotspot.cy}
-                  x2={activePartInfo.hotspot.calloutX}
-                  y2={activePartInfo.hotspot.calloutY}
-                  stroke="#65D9D0"
-                  strokeWidth="2"
-                  strokeDasharray="4 4"
-                  pointerEvents="none"
-                />
-                <circle
-                  cx={activePartInfo.hotspot.cx}
-                  cy={activePartInfo.hotspot.cy}
-                  r="4.5"
-                  fill="#65D9D0"
-                  stroke="#FFFFFF"
-                  strokeWidth="1.5"
-                  pointerEvents="none"
-                />
-              </g>
-            )}
-
-            {/* 8. Interactive Hotspot Callout Pins (when showHotspots is true) */}
-            {showHotspots && (
-              <g id="hotspots-layer" className="pointer-events-none">
-                {HOTSPOT_LIST.map((id) => {
-                  if (isPartFilteredOut(id)) return null;
-                  const part = PANCREAS_DATA[id];
-                  const isCurrent = activePart === id;
-
-                  return (
-                    <g key={`hotspot-pin-${id}`} className="pointer-events-none">
-                      {/* Leader Line */}
-                      <line
-                        x1={part.hotspot.cx}
-                        y1={part.hotspot.cy}
-                        x2={part.hotspot.calloutX}
-                        y2={part.hotspot.calloutY}
-                        stroke={isCurrent ? '#65D9D0' : 'rgba(14, 90, 107, 0.45)'}
-                        strokeWidth={isCurrent ? 1.5 : 1}
-                        strokeDasharray="2 3"
-                        pointerEvents="none"
-                      />
-
-                      {/* Hotspot Target Radar Dot */}
-                      <circle
-                        cx={part.hotspot.cx}
-                        cy={part.hotspot.cy}
-                        r={4}
-                        fill={isCurrent ? '#65D9D0' : '#F2A33A'}
-                        stroke="#ffffff"
-                        strokeWidth="1.5"
-                        pointerEvents="none"
-                      />
-
-                      {/* Interactive Callout Button */}
-                      <g
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Inspect ${part.hotspot.title}`}
-                        className="cursor-pointer focus-visible:outline-none pointer-events-auto"
-                        transform={`translate(${part.hotspot.calloutX}, ${part.hotspot.calloutY})`}
-                        onClick={() => handlePartSelect(id)}
-                        onPointerEnter={() => handleHotspotPointerEnter(id)}
-                        onKeyDown={(e) => handleKeyDown(e, id)}
-                      >
-                        <rect
-                          x="-62"
-                          y="-13"
-                          width="124"
-                          height="26"
-                          rx="13"
-                          pointerEvents="all"
-                          fill={isCurrent ? '#0B2E3A' : 'rgba(255, 255, 255, 0.95)'}
-                          stroke={isCurrent ? '#65D9D0' : 'rgba(14, 90, 107, 0.3)'}
-                          strokeWidth="1.2"
-                        />
-                        <text
-                          x="0"
-                          y="4"
-                          textAnchor="middle"
-                          fontSize="9"
-                          fontWeight="700"
-                          fontFamily="sans-serif"
-                          fill={isCurrent ? '#ffffff' : '#0B2E3A'}
-                          letterSpacing="0.01em"
-                          pointerEvents="none"
-                        >
-                          {isHindi ? part.hotspot.titleHi : part.hotspot.title}
-                        </text>
-                      </g>
-                    </g>
-                  );
-                })}
-              </g>
-            )}
 
             {/* Debug Mode Labels */}
             {isDebugMode && (
@@ -495,64 +427,95 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
             )}
           </svg>
 
-          {/* Floating HTML Label Pill for Active Organ (Non-Islets) */}
-          {activePartInfo && !isIsletsActive && !showHotspots && (
+          {/* Key HTML Labels at Rest (min 13px): Head, Body, Duct, Islets */}
+          {showHotspots && !activePart && (
+            <div className="absolute inset-0 pointer-events-none z-20">
+              {(['head', 'body', 'duct', 'islets'] as PancreasPartId[]).map((id) => {
+                if (isPartFilteredOut(id)) return null;
+                const part = PANCREAS_DATA[id];
+                return (
+                  <div
+                    key={`key-rest-pill-${id}`}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center transition-opacity duration-200"
+                    style={{
+                      left: `${part.labelPosition.x}%`,
+                      top: `${part.labelPosition.y}%`,
+                    }}
+                  >
+                    <button
+                      type="button"
+                      tabIndex={0}
+                      onClick={() => handlePartSelect(id)}
+                      onPointerEnter={() => handleHotspotPointerEnter(id)}
+                      className="px-3 py-1.5 rounded-full bg-white/95 text-[#0B2E3A] border border-[#0E5A6B]/30 hover:border-[#0E5A6B] hover:bg-[#E8F5F4] text-[13px] font-bold shadow-xs flex items-center gap-1.5 backdrop-blur-md pointer-events-auto transition-all"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-[#0E5A6B]" />
+                      <span>{isHindi ? part.hotspot.titleHi : part.hotspot.title}</span>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Floating HTML Label Pill on Hover (min 13px, non-islets) */}
+          {activePartInfo && !isIsletsActive && (
             <div
-              className="absolute pointer-events-none transition-all duration-200 -translate-x-1/2 -translate-y-1/2 z-20 hidden sm:flex"
+              className="absolute pointer-events-none transition-all duration-150 -translate-x-1/2 -translate-y-1/2 z-20 flex"
               style={{
-                left: `${(activePartInfo.hotspot.calloutX / 1536) * 100}%`,
-                top: `${(activePartInfo.hotspot.calloutY / 1024) * 100}%`,
+                left: `${activePartInfo.labelPosition.x}%`,
+                top: `${activePartInfo.labelPosition.y}%`,
               }}
             >
-              <div className="px-3 py-1.5 rounded-full bg-[#0B2E3A]/95 text-white border border-[#65D9D0] text-xs font-bold shadow-[0_4px_16px_rgba(11,46,58,0.25)] flex items-center gap-1.5 backdrop-blur-md animate-in fade-in zoom-in-95 duration-150">
+              <div className="px-3.5 py-1.5 rounded-full bg-[#0B2E3A] text-white border border-[#65D9D0] text-[13px] font-bold shadow-lg flex items-center gap-2 backdrop-blur-md animate-in fade-in zoom-in-95 duration-150">
                 <span className="w-2 h-2 rounded-full bg-[#65D9D0] animate-pulse" />
                 <span>{isHindi ? activePartInfo.nameHi : activePartInfo.name}</span>
               </div>
             </div>
           )}
 
-          {/* Zoomed Islets Lens & HTML Cellular Labels (Alpha, Beta, Delta) */}
+          {/* Zoomed Islets Lens & HTML Cellular Labels (Alpha, Beta, Delta: min 13px) */}
           {isIsletsActive && (
             <div className="absolute inset-0 pointer-events-none z-20">
-              {/* Zoomed Magnified Lens Indicator (1.6x zoom feel) */}
+              {/* Zoomed Magnified Lens Indicator */}
               <div
-                className="absolute w-[316px] h-[316px] rounded-full border-2 border-[#65D9D0] pointer-events-none shadow-[0_0_30px_rgba(101,217,208,0.4)] transition-transform duration-300 ease-out"
+                className="absolute w-[326px] h-[326px] rounded-full border-2 border-[#65D9D0] pointer-events-none shadow-[0_0_30px_rgba(101,217,208,0.4)] transition-transform duration-300 ease-out"
                 style={{
-                  left: 'calc(78.6% - 158px)',
-                  top: 'calc(71.7% - 158px)',
-                  transform: 'scale(1.15)',
+                  left: 'calc(80.5% - 163px)',
+                  top: 'calc(73.5% - 163px)',
+                  transform: 'scale(1.08)',
                 }}
               >
-                <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-[#0B2E3A]/95 text-white text-[10px] font-bold border border-[#65D9D0]/70 tracking-wider uppercase shadow-md whitespace-nowrap">
+                <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-[#0B2E3A]/95 text-white text-[11px] font-bold border border-[#65D9D0]/70 tracking-wider uppercase shadow-md whitespace-nowrap">
                   HISTOLOGY (1000x)
                 </div>
               </div>
 
-              {/* Cellular Callout Pills */}
+              {/* Cellular Callout Pills (min 13px) */}
               {/* 1. Alpha Cell (Glucagon) */}
               <div
-                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-amber-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
+                className="absolute flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0B2E3A]/95 text-white border border-amber-400 text-[13px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
                 style={{ left: '96%', top: '59%' }}
               >
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
                 <span>{isHindi ? 'अल्फा कोशिका (ग्लूकागन)' : 'Alpha Cell (glucagon)'}</span>
               </div>
 
               {/* 2. Beta Cell (Insulin) */}
               <div
-                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-fuchsia-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
+                className="absolute flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0B2E3A]/95 text-white border border-fuchsia-400 text-[13px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
                 style={{ left: '96%', top: '70%' }}
               >
-                <span className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
+                <span className="w-2.5 h-2.5 rounded-full bg-fuchsia-400 animate-pulse" />
                 <span>{isHindi ? 'बीटा कोशिका (इंसुलिन)' : 'Beta Cell (insulin)'}</span>
               </div>
 
               {/* 3. Delta Cell (Somatostatin) */}
               <div
-                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-cyan-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
+                className="absolute flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0B2E3A]/95 text-white border border-cyan-400 text-[13px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
                 style={{ left: '96%', top: '81%' }}
               >
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
                 <span>{isHindi ? 'डेल्टा कोशिका (सोमाटोस्टैटिन)' : 'Delta Cell (somatostatin)'}</span>
               </div>
             </div>
@@ -560,7 +523,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
 
           {/* Idle Hint Badge */}
           {!hasInteracted && !activePart && (
-            <div className="absolute top-4 left-4 z-10 pointer-events-none animate-pulse">
+            <div className="absolute top-2 left-2 z-10 pointer-events-none animate-pulse">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0B2E3A]/90 text-white text-xs font-semibold border border-[#65D9D0]/60 shadow-md backdrop-blur-sm">
                 <Compass className="w-3.5 h-3.5 text-[#65D9D0]" />
                 <span>
@@ -574,7 +537,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
         </div>
 
         {/* Small Bottom Caption: "Illustrative anatomy, for patient education." */}
-        <div className="px-4 py-2 bg-slate-50/90 border-t border-[#D7E5E6] flex items-center justify-between text-xs text-[#4F6470] w-full pointer-events-none select-none">
+        <div className="px-2 pt-2 flex items-center justify-between text-xs text-[#4F6470] w-full pointer-events-none select-none">
           <span>
             {isHindi
               ? 'मरीज स्वास्थ्य शिक्षा हेतु दृष्टांत शारीरिक रचना।'

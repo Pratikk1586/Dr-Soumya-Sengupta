@@ -90,8 +90,7 @@ describe('AnimatedPancreas Component Rendering & Interaction', () => {
     const ductCallout = screen.getByText('Duct of Wirsung');
     expect(ductCallout).toBeDefined();
     fireEvent.click(ductCallout);
-
     expect(handlePartClick).toHaveBeenCalledWith('duct');
-    expect(await screen.findByText('Main Pancreatic Duct')).toBeDefined();
+    expect(await screen.findByRole('heading', { level: 3, name: /Main Pancreatic Duct/i })).toBeDefined();
   });
 });
