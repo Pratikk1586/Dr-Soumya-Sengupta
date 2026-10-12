@@ -74,38 +74,58 @@ export const CareJourneySection: React.FC = () => {
           : 'A transparent, collaborative 6-step medical roadmap for confident, continuous diabetes care.'
       }
       containerSize="xl"
-      className="bg-white border-b border-slate-200/80 py-10 sm:py-14"
+      className="bg-gradient-to-b from-[#FCFEFF] via-[#F8FCFD] to-white border-b border-slate-200/80 py-10 sm:py-14 relative"
     >
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-        {JOURNEY_STEPS.map((step) => {
-          const StepIcon = step.icon;
-          return (
-            <Card
-              key={step.step}
-              padding="sm"
-              hoverable
-              className="p-3.5 sm:p-4 border-slate-200/90 shadow-2xs hover:shadow-xs transition-all flex items-start gap-3 bg-white"
-            >
-              <div className="w-8 h-8 rounded-lg bg-teal-50 text-[#0f3d4a] flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
-                <StepIcon className="w-4 h-4 text-[#0f3d4a]" aria-hidden="true" />
-              </div>
+      <div className="relative">
+        {/* Desktop horizontal connecting progress line */}
+        <div
+          className="hidden lg:block absolute top-6 left-12 right-12 h-0.5 bg-gradient-to-r from-[#103F4A] via-[#65D9D0] to-[#103F4A]/60 z-0"
+          aria-hidden="true"
+        />
 
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold text-teal-800 bg-teal-50/80 px-1.5 py-0.5 rounded">
-                    Step {step.step}
-                  </span>
-                  <h3 className="font-bold text-slate-900 text-xs sm:text-sm truncate">
-                    {step.title[langKey]}
-                  </h3>
+        {/* Mobile vertical connecting progress line */}
+        <div
+          className="lg:hidden absolute top-6 bottom-8 left-5 sm:left-6 w-0.5 bg-gradient-to-b from-[#103F4A] via-[#65D9D0] to-[#103F4A]/60 z-0"
+          aria-hidden="true"
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 sm:gap-4 relative z-10">
+          {JOURNEY_STEPS.map((step) => {
+            const StepIcon = step.icon;
+            return (
+              <div
+                key={step.step}
+                className="flex items-start gap-3.5 lg:flex-col lg:items-center lg:text-center group"
+              >
+                {/* Larger Step Number Circle */}
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#103F4A] text-white flex items-center justify-center font-bold text-sm sm:text-base shadow-sm ring-4 ring-white shrink-0 z-10 border-2 border-[#65D9D0] group-hover:scale-105 transition-transform">
+                  {step.step}
                 </div>
-                <p className="text-xs text-slate-600 mt-1 leading-snug">
-                  {step.desc[langKey]}
-                </p>
+
+                {/* Step Card Content */}
+                <Card
+                  padding="sm"
+                  hoverable
+                  className="flex-1 p-3.5 sm:p-4 border-slate-200/85 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-xs transition-all bg-white/95 w-full flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center gap-2 mb-1 lg:justify-center">
+                      <div className="w-6 h-6 rounded bg-[#EAF7FA] flex items-center justify-center text-[#103F4A] shrink-0">
+                        <StepIcon className="w-3.5 h-3.5" aria-hidden="true" />
+                      </div>
+                      <h3 className="font-bold text-slate-900 text-xs sm:text-sm">
+                        {step.title[langKey]}
+                      </h3>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-1 leading-snug">
+                      {step.desc[langKey]}
+                    </p>
+                  </div>
+                </Card>
               </div>
-            </Card>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       <div className="mt-6 text-center flex flex-wrap items-center justify-center gap-3">
@@ -113,7 +133,7 @@ export const CareJourneySection: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            className="border-[#0f3d4a]/30 hover:bg-[#0f3d4a] hover:text-white transition-all text-xs"
+            className="border-[#103F4A]/30 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all text-xs"
           >
             <span>{isHindi ? 'डायबिटीज प्रबंधन गाइड पढ़ें' : 'Read Full Diabetes Management Guide'}</span>
             <ArrowRight className="w-3.5 h-3.5 ml-1" />
