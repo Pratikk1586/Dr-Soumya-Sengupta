@@ -2,13 +2,11 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
-  Calendar,
-  ExternalLink,
 } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
 import { noticeService } from '../../services';
-import { formatDateInIST, isRecentInIST } from '../../utils/date';
+import { isRecentInIST } from '../../utils/date';
 import { ClinicNoticesModal } from '../notices/ClinicNoticesModal';
 import { cn } from '../../utils/cn';
 
@@ -19,16 +17,14 @@ interface HeroNewsTickerProps {
 export const HeroNewsTicker: React.FC<HeroNewsTickerProps> = ({ className = '' }) => {
   const { localize, isHindi } = useLanguage();
   const { data: allNotices, isLoading } = useService(() => noticeService.getNotices(), []);
-  const [filterType, setFilterType] = useState<'latest' | 'all'>('latest');
+  const [filterType] = useState<'latest' | 'all'>('latest');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const notices = useMemo(() => allNotices ?? [], [allNotices]);
 
-  // Filter notices based on the two options:
-  // 1. "Latest news": updated within 3 days
-  // 2. "All news": all notices
+  // Filter notices based on recent news
   const filteredNotices = useMemo(() => {
     if (filterType === 'latest') {
       const recent = notices.filter((n) => isRecentInIST(n.publishedAt || n.effectiveDate, 3));
@@ -36,12 +32,6 @@ export const HeroNewsTicker: React.FC<HeroNewsTickerProps> = ({ className = '' }
     }
     return notices;
   }, [filterType, notices]);
-
-  // Reset index when switching tabs
-  const handleTabChange = (type: 'latest' | 'all') => {
-    setFilterType(type);
-    setCurrentIndex(0);
-  };
 
   const handleNext = useCallback(() => {
     if (filteredNotices.length === 0) return;

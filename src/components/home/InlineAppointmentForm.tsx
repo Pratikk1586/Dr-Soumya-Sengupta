@@ -97,7 +97,8 @@ export const InlineAppointmentForm: React.FC = () => {
           data,
         });
       } else {
-        setSubmitError(res.message ? (isHindi ? res.message.hi : res.message.en) : 'Submission failed');
+        const errorMsg = res.message ? (isHindi ? res.message.hi : res.message.en) : null;
+        setSubmitError(errorMsg ?? 'Submission failed');
       }
     } catch {
       setSubmitError(isHindi ? 'तकनीकी त्रुटि। कृपया व्हाट्सएप या फोन से संपर्क करें।' : 'An error occurred. Please contact via WhatsApp or phone.');

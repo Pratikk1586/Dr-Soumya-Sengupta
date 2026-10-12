@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Award, Stethoscope, ArrowRight, ShieldCheck, GraduationCap } from 'lucide-react';
+import { Award, Stethoscope, ArrowRight, GraduationCap } from 'lucide-react';
 import { Section } from '../common/Section';
 import { Button } from '../common/Button';
 import { SmartImage } from '../common/SmartImage';
-import { VerificationBadge } from '../common/VerificationBadge';
 import { DoctorSocialLinks } from '../doctor/DoctorSocialLinks';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
