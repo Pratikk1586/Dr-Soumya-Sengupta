@@ -14,7 +14,6 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { MapSection } from '../common/MapSection';
 import { DirectionsButton } from '../common/DirectionsButton';
-import { WhatsAppButton } from '../common/WhatsAppButton';
 import { CallButton } from '../common/CallButton';
 import { VerificationBadge } from '../common/VerificationBadge';
 import { useLanguage } from '../../context/useLanguage';
@@ -131,10 +130,9 @@ export const ClinicInfoSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Direct Action Buttons */}
+            {/* Direct Action Buttons: Directions and Call Clinic */}
             <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-2">
               <DirectionsButton destination={addressText} size="sm" />
-              <WhatsAppButton variant="location" size="sm" />
               <CallButton size="sm" />
             </div>
           </Card>
@@ -142,11 +140,12 @@ export const ClinicInfoSection: React.FC = () => {
 
         {/* Right Column: Embedded Map */}
         <div className="lg:col-span-6 flex flex-col">
-          <div className="h-full min-h-[280px]">
+          <div className="h-full min-h-[300px]">
             <MapSection
               address={addressText}
               landmark={clinic?.address.landmark ? localize(clinic.address.landmark) : 'Near Post Office, Amlatola, Chaibasa'}
               mapsUrl={clinic?.mapsUrl}
+              embedUrl={clinic?.embedUrl || 'https://maps.google.com/maps?q=Cardio+Diabetic+Clinic,+Amlatola,+Chaibasa,+Jharkhand&t=&z=15&ie=UTF8&iwloc=&output=embed'}
             />
           </div>
         </div>

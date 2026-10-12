@@ -1,4 +1,5 @@
 import type { Clinic } from '../types';
+import { CLINIC_IMAGES } from '../config/images';
 
 export const CLINICS_DATA: Clinic[] = [
   {
@@ -11,6 +12,7 @@ export const CLINICS_DATA: Clinic[] = [
       en: 'Primary Diabetes & Cardiovascular Consultation Chamber',
       hi: 'मुख्य मधुमेह एवं कार्डियो परामर्श केंद्र',
     },
+    logo: CLINIC_IMAGES.logo,
     address: {
       line1: {
         en: 'Amlatola, Post Box No. 20',
@@ -28,6 +30,7 @@ export const CLINICS_DATA: Clinic[] = [
     whatsapp: '+91 94311 14510',
     email: 'saumyasengupta@yahoo.co.in',
     mapsUrl: 'https://maps.app.goo.gl/59pyGSNwQ8x2ruQ26',
+    embedUrl: 'https://maps.google.com/maps?q=Cardio+Diabetic+Clinic,+Amlatola,+Chaibasa,+Jharkhand&t=&z=15&ie=UTF8&iwloc=&output=embed',
     timings: [
       {
         day: 'Monday',

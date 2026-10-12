@@ -28,11 +28,11 @@ export const MapSection: React.FC<MapSectionProps> = ({
   return (
     <div className={`overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs ${className}`}>
       {hasValidEmbed ? (
-        <div className="relative w-full aspect-16/9 min-h-[320px]">
+        <div className="relative w-full h-full min-h-[320px] aspect-16/9 md:aspect-auto">
           <iframe
             src={embedUrl}
             title={title}
-            className="w-full h-full border-0"
+            className="w-full h-full min-h-[320px] border-0"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             sandbox="allow-scripts allow-same-origin"
@@ -40,9 +40,9 @@ export const MapSection: React.FC<MapSectionProps> = ({
         </div>
       ) : (
         /* Styled Static Map Card Fallback */
-        <div className="p-6 sm:p-8 bg-gradient-to-br from-slate-50 via-[#dff0f4]/20 to-slate-100 flex flex-col justify-between min-h-[280px]">
+        <div className="p-6 sm:p-8 bg-gradient-to-br from-slate-50 via-[#EAF7FA]/40 to-slate-100 flex flex-col justify-between min-h-[280px]">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0f3d4a]/10 text-[#0f3d4a] text-xs font-bold uppercase tracking-wider mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/40 text-[#103F4A] text-xs font-bold uppercase tracking-wider mb-4">
               <MapPin className="w-3.5 h-3.5" />
               <span>{isHindi ? 'परामर्श केंद्र का पता' : 'Physical Consultation Chamber'}</span>
             </div>
@@ -69,7 +69,7 @@ export const MapSection: React.FC<MapSectionProps> = ({
                 href={directionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-[#0f3d4a] hover:bg-[#082229] text-white shadow-xs transition-all active:scale-98"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-[#103F4A] hover:bg-[#0C323B] text-white shadow-xs transition-all active:scale-98"
               >
                 <Navigation className="w-4 h-4 shrink-0" />
                 <span>{isHindi ? 'रास्ता देखें (Directions)' : 'Get Driving Directions'}</span>

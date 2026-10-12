@@ -69,6 +69,7 @@ export interface Doctor {
   languagesSpoken: LocalizedString[];
   registrationNumber: string;
   registrationStatus: ContentStatus;
+  photoUrl?: string;
   achievements?: DoctorAchievement[];
   certifications?: DoctorCertification[];
   socialLinks?: DoctorSocialLink[];
@@ -196,6 +197,7 @@ export interface Clinic {
   id: string;
   name: LocalizedString;
   facilityType: LocalizedString;
+  logo?: string;
   address: {
     line1: LocalizedString;
     line2?: LocalizedString;
@@ -207,6 +209,7 @@ export interface Clinic {
   whatsapp: string;
   email: string;
   mapsUrl?: string;
+  embedUrl?: string;
   timings: ClinicTiming[];
   consultationFee: string;
   facilities: Facility[];
