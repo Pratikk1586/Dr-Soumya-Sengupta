@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
-import { CONTENT_TO_BE_VERIFIED_MARKER } from '../../config/constants';
+import { CONTENT_TO_BE_VERIFIED_MARKER, SHOW_VERIFY_BADGES } from '../../config/constants';
 
 interface VerificationBadgeProps {
   note?: string;
@@ -11,6 +11,10 @@ export const VerificationBadge: React.FC<VerificationBadgeProps> = ({
   note = 'Pending confirmation with clinical records',
   className = '',
 }) => {
+  if (!SHOW_VERIFY_BADGES) {
+    return null;
+  }
+
   return (
     <span
       className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium bg-amber-50 text-amber-900 border border-amber-300 shadow-2xs select-none ${className}`}

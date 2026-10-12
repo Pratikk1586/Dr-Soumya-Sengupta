@@ -1,4 +1,11 @@
 export const CONTENT_TO_BE_VERIFIED_MARKER = '[CONTENT TO BE VERIFIED]';
+
+/**
+ * Dev flag to toggle display of "[CONTENT TO BE VERIFIED]" placeholder badges in UI.
+ * Default is false in production/preview so clinical badges are hidden.
+ */
+export const SHOW_VERIFY_BADGES = false;
+
 export const STANDARD_DISCLAIMER_TEXT = 'For medical diagnosis or treatment, please consult a qualified doctor.';
 
 export const UNIVERSAL_DISCLAIMER_TEXT = {
