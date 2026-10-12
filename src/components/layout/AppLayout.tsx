@@ -9,16 +9,16 @@ import { ScrollRestoration } from './ScrollRestoration';
 
 export const AppLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcfdfd] text-slate-900 font-sans antialiased selection:bg-[#dff0f4] selection:text-[#06181f]">
+    <div className="min-h-screen flex flex-col bg-[#FCFEFF] text-slate-900 font-sans antialiased selection:bg-[#EAF7FA] selection:text-[#103F4A]">
       <SkipLink targetId="main-content" />
       <ScrollRestoration />
       <Navbar />
 
-      {/* Main Content Area: pb-20 on mobile ensures bottom navigation and future chatbot float never overlaps text */}
+      {/* Main Content Area: pb-28 on mobile and pb-16 on desktop ensures floating assistant & bottom nav never cover buttons or cards */}
       <main
         id="main-content"
         tabIndex={-1}
-        className="flex-1 outline-none pb-20 md:pb-0 focus-visible:outline-none"
+        className="flex-1 outline-none pb-28 md:pb-16 focus-visible:outline-none"
       >
         <Outlet />
       </main>
