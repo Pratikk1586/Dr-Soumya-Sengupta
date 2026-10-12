@@ -3,13 +3,11 @@ import { Link } from 'react-router-dom';
 import {
   ShieldCheck,
   Calendar,
-  User,
   MessageCircle,
   Activity,
   HeartPulse,
-  BookOpen,
-  Sparkles,
-  Building2,
+  Flame,
+  Scale,
 } from 'lucide-react';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
@@ -154,46 +152,44 @@ export const HeroSection: React.FC = () => {
               )}
             </p>
 
-            {/* 4 Core Specialisation Badges */}
-            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 pt-0.5 text-xs">
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:py-2 rounded-xl bg-teal-50/90 border border-teal-300 text-teal-950 font-bold shadow-2xs">
-                <Activity className="w-3.5 h-3.5 text-teal-700 shrink-0" />
-                <span>Diabetes Care</span>
-              </span>
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:py-2 rounded-xl bg-rose-50/90 border border-rose-300 text-rose-950 font-bold shadow-2xs">
-                <HeartPulse className="w-3.5 h-3.5 text-rose-700 shrink-0" />
-                <span>Hypertension</span>
-              </span>
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:py-2 rounded-xl bg-amber-50/90 border border-amber-300 text-amber-950 font-bold shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                <span>Dyslipidemia</span>
-              </span>
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:py-2 rounded-xl bg-sky-50/90 border border-sky-300 text-sky-950 font-bold shadow-2xs">
-                <BookOpen className="w-3.5 h-3.5 text-sky-700 shrink-0" />
-                <span>Hypothyroidism</span>
-              </span>
+            {/* Condition Chips: Single Accent Color, Each Linking to Its Dedicated Page */}
+            <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+              <Link
+                to="/conditions/diabetes"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/60 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all font-semibold shadow-2xs group"
+              >
+                <Activity className="w-3.5 h-3.5 text-[#103F4A] group-hover:text-white shrink-0 transition-colors" />
+                <span>{isHindi ? 'डायबिटीज' : 'Diabetes Care'}</span>
+              </Link>
+              <Link
+                to="/conditions/thyroid"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/60 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all font-semibold shadow-2xs group"
+              >
+                <Flame className="w-3.5 h-3.5 text-[#103F4A] group-hover:text-white shrink-0 transition-colors" />
+                <span>{isHindi ? 'थायरॉयड' : 'Thyroid Disorders'}</span>
+              </Link>
+              <Link
+                to="/conditions/weight-management"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/60 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all font-semibold shadow-2xs group"
+              >
+                <Scale className="w-3.5 h-3.5 text-[#103F4A] group-hover:text-white shrink-0 transition-colors" />
+                <span>{isHindi ? 'वजन प्रबंधन' : 'Weight Management'}</span>
+              </Link>
+              <Link
+                to="/conditions/metabolic-health"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/60 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all font-semibold shadow-2xs group"
+              >
+                <HeartPulse className="w-3.5 h-3.5 text-[#103F4A] group-hover:text-white shrink-0 transition-colors" />
+                <span>{isHindi ? 'मेटाबोलिक व दिल' : 'Metabolic Health'}</span>
+              </Link>
             </div>
 
-            {/* Action Buttons: Dominant Primary CTA + Clean Secondary Actions */}
-            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2">
+            {/* Hero CTAs: One Primary (Book Appointment) + One Secondary (WhatsApp) */}
+            <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link to="/book-appointment" className="w-full sm:w-auto">
-                <Button variant="primary" size="lg" className="w-full sm:w-auto shadow-md font-bold px-5">
+                <Button variant="primary" size="lg" className="w-full sm:w-auto shadow-md font-bold px-6">
                   <Calendar className="w-4 h-4 mr-2" aria-hidden="true" />
                   <span>{t('cta.bookAppointment')}</span>
-                </Button>
-              </Link>
-
-              <Link to="/about" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto font-medium">
-                  <User className="w-4 h-4 mr-2" aria-hidden="true" />
-                  <span>{isHindi ? 'डॉक्टर परिचय' : 'Know Your Doctor'}</span>
-                </Button>
-              </Link>
-
-              <Link to="/clinic" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto font-medium">
-                  <Building2 className="w-4 h-4 mr-2 text-[#103F4A]" aria-hidden="true" />
-                  <span>Our Clinic</span>
                 </Button>
               </Link>
 
@@ -202,15 +198,15 @@ export const HeroSection: React.FC = () => {
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block"
+                  className="w-full sm:w-auto inline-block"
                 >
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="lg"
-                    className="text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50 font-medium"
+                    className="w-full sm:w-auto border-emerald-500/80 text-emerald-800 bg-emerald-50/70 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 font-bold px-5 transition-all shadow-xs"
                   >
-                    <MessageCircle className="w-4 h-4 mr-1.5 text-emerald-600" aria-hidden="true" />
-                    <span>WhatsApp Inquiry</span>
+                    <MessageCircle className="w-4 h-4 mr-2 text-emerald-600" aria-hidden="true" />
+                    <span>WhatsApp</span>
                   </Button>
                 </a>
               )}

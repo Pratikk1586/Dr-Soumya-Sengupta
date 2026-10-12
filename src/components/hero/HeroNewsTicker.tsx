@@ -72,114 +72,60 @@ export const HeroNewsTicker: React.FC<HeroNewsTickerProps> = ({ className = '' }
     <>
       <div
         className={cn(
-          'w-full max-w-2xl bg-white rounded-xl sm:rounded-2xl border border-slate-200/90 p-3 sm:p-3.5 shadow-xs hover:shadow-md transition-all duration-200 overflow-hidden',
+          'w-full max-w-2xl bg-white/90 rounded-full border border-slate-200/90 px-3 py-1.5 sm:py-2 flex items-center justify-between gap-2 shadow-2xs hover:shadow-xs hover:border-[#65D9D0]/70 transition-all backdrop-blur-xs',
           className
         )}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         role="region"
-        aria-label="Clinic Notices & News"
+        aria-label="Clinic Announcements"
       >
-        {/* Top bar: Two Tab Options (Latest news / All news) + Controls */}
-        <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 flex-wrap">
-          {/* Two Options: Latest news & All news (No category tags) */}
-          <div className="flex items-center gap-1 p-0.5 bg-slate-100/90 rounded-lg">
-            <button
-              type="button"
-              onClick={() => handleTabChange('latest')}
-              className={cn(
-                'px-2.5 py-0.5 sm:py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer',
-                filterType === 'latest'
-                  ? 'bg-[#0f3d4a] text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              )}
-            >
-              {isHindi ? 'ताज़ा समाचार' : 'Latest news'}
-            </button>
+        {/* Left: Slim badge & notice text */}
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#103F4A] text-white text-[10px] sm:text-[11px] font-bold shrink-0 uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>{isHindi ? 'सूचना' : 'Notice'}</span>
+          </span>
 
-            <button
-              type="button"
-              onClick={() => handleTabChange('all')}
-              className={cn(
-                'px-2.5 py-0.5 sm:py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer',
-                filterType === 'all'
-                  ? 'bg-[#0f3d4a] text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              )}
-            >
-              {isHindi ? 'सभी समाचार' : 'All news'}
-            </button>
-          </div>
-
-          {/* Controls: Prev / Counter / Next + Dialog trigger */}
-          <div className="flex items-center gap-1.5">
-            {filteredNotices.length > 1 && (
-              <span className="text-[10px] text-slate-500 font-medium">
-                {currentIndex + 1} / {filteredNotices.length}
-              </span>
-            )}
-
-            {filteredNotices.length > 1 && (
-              <div className="flex items-center gap-0.5">
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  className="w-5 h-5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
-                  aria-label="Previous notice"
-                >
-                  <ChevronLeft className="w-3 h-3" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="w-5 h-5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
-                  aria-label="Next notice"
-                >
-                  <ChevronRight className="w-3 h-3" />
-                </button>
-              </div>
-            )}
-
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="text-[11px] font-bold text-[#0f3d4a] hover:underline flex items-center gap-1 cursor-pointer px-1.5 py-0.5 rounded-md hover:bg-teal-50 transition-colors ml-0.5"
-            >
-              <span>{isHindi ? 'विस्तार से' : 'View Notices'}</span>
-              <ExternalLink className="w-2.5 h-2.5" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="text-left text-xs text-slate-700 hover:text-[#103F4A] truncate font-medium transition-colors cursor-pointer"
+            title={localize(currentNotice.title)}
+          >
+            {localize(currentNotice.title)}
+          </button>
         </div>
 
-        {/* Notice Content (Compact & click to open full popup dialog) */}
-        <div
-          onClick={() => setIsModalOpen(true)}
-          className="pt-2 cursor-pointer group"
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setIsModalOpen(true);
-            }
-          }}
-        >
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-500 font-medium shrink-0">
-                <Calendar className="w-3 h-3 text-slate-400" />
-                <span>{formatDateInIST(currentNotice.effectiveDate)}</span>
-              </span>
-              <h4 className="text-xs sm:text-sm font-bold text-slate-950 group-hover:text-[#0f3d4a] transition-colors leading-tight line-clamp-1 truncate">
-                {localize(currentNotice.title)}
-              </h4>
+        {/* Right: Controls & View All */}
+        <div className="flex items-center gap-1 shrink-0 text-slate-400">
+          {filteredNotices.length > 1 && (
+            <div className="flex items-center gap-0.5">
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="p-1 rounded-full hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
+                aria-label="Previous announcement"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="p-1 rounded-full hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
+                aria-label="Next announcement"
+              >
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
             </div>
-
-            <p className="text-[11px] sm:text-xs text-slate-600 leading-snug line-clamp-1 sm:line-clamp-2">
-              {localize(currentNotice.content)}
-            </p>
-          </div>
+          )}
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="text-[11px] font-bold text-[#103F4A] hover:underline px-1.5 py-0.5 ml-1 hidden sm:inline cursor-pointer"
+          >
+            {isHindi ? 'सभी देखें' : 'View All'}
+          </button>
         </div>
       </div>
 
