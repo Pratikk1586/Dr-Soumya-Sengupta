@@ -9,6 +9,7 @@ interface CallButtonProps {
   children?: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
   hideIfUnavailable?: boolean;
+  variant?: 'primary' | 'outline';
 }
 
 export const CallButton: React.FC<CallButtonProps> = ({
@@ -17,6 +18,7 @@ export const CallButton: React.FC<CallButtonProps> = ({
   children,
   size = 'md',
   hideIfUnavailable = false,
+  variant = 'primary',
 }) => {
   const { isHindi } = useLanguage();
   const href = getTelHref(phone);
@@ -38,10 +40,14 @@ export const CallButton: React.FC<CallButtonProps> = ({
     );
   }
 
+  const baseClasses = variant === 'outline'
+    ? 'border border-[#103F4A]/40 text-[#103F4A] hover:bg-[#103F4A] hover:text-white bg-white'
+    : 'bg-sky-700 hover:bg-sky-800 text-white shadow-xs hover:shadow-md';
+
   return (
     <a
       href={href}
-      className={`inline-flex items-center justify-center gap-2 rounded-xl font-semibold bg-sky-700 hover:bg-sky-800 text-white shadow-xs hover:shadow-md transition-all active:scale-98 ${
+      className={`inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all active:scale-98 ${baseClasses} ${
         size === 'sm' ? 'px-3 py-1.5 text-xs' : size === 'lg' ? 'px-6 py-3 text-base' : 'px-4 py-2.5 text-sm'
       } ${className}`}
     >

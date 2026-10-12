@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Section } from '../common/Section';
-import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { WhatsAppButton } from '../common/WhatsAppButton';
 import { CallButton } from '../common/CallButton';
 import { useLanguage } from '../../context/useLanguage';
+
+import { InlineAppointmentForm } from './InlineAppointmentForm';
 
 export const AppointmentTeaserSection: React.FC = () => {
   const { isHindi } = useLanguage();
@@ -36,101 +37,78 @@ export const AppointmentTeaserSection: React.FC = () => {
     <Section
       eyebrow={isHindi ? 'ऑनलाइन ओपीडी शेड्यूलिंग' : 'Online OPD Scheduling Desk'}
       heading={isHindi ? 'परामर्श समय आरक्षित करें' : 'Consultation Scheduling & Slot Reservation'}
-      lede={isHindi}
+      lede={
+        isHindi
+          ? 'चाईबासा चेंबर ओपीडी — नीचे त्वरित फॉर्म भरें अथवा सीधे व्हाट्सएप/फोन से समय आरक्षित करें।'
+          : 'Cardio Diabetic Clinic Chaibasa — fill the inline form below or book directly via WhatsApp / phone.'
+      }
       containerSize="xl"
-      className="bg-gradient-to-b from-white via-[#FCFEFF] to-[#EAF7FA]/40 border-b border-slate-200/80 relative"
+      className="bg-gradient-to-b from-white via-[#FCFEFF] to-[#EAF7FA]/40 border-b border-slate-200/80 py-10 sm:py-14 relative"
     >
-      <div className="grid lg:grid-cols-12 gap-8 items-center">
-        {/* Left Column: Practice Overview & CTAs */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+      <div className="grid lg:grid-cols-12 gap-7 sm:gap-8 items-start">
+        {/* Left Column: Practice Overview, Benefits & Single-Row Direct Actions */}
+        <div className="lg:col-span-6 space-y-5">
+          <div className="space-y-2.5">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
               {isHindi
                 ? 'डॉ. सौम्य सेनगुप्ता के साथ चेंबर अथवा ऑनलाइन परामर्श का समय चुनें'
                 : 'Schedule an In-Chamber or Telemedicine Consultation with Dr. Soumya Sengupta'}
             </h3>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               {isHindi
                 ? 'हमारे आसान अपॉइंटमेंट फॉर्म के माध्यम से अपना पसंदीदा दिन और समय चुनें। हमारी टीम आपके समय की पुष्टि हेतु संपर्क करेगी।'
-                : 'Use our simple appointment request form to submit your preferred date, time, and details. Our chamber desk confirms each slot directly via phone or WhatsApp.'}
+                : 'Submit your preferred date, time slot, and clinical concern. Our chamber desk reviews requests promptly and confirms your appointment via phone or WhatsApp.'}
             </p>
           </div>
 
-          <div className="space-y-3 pt-2">
+          <div className="space-y-3 pt-1">
             {benefits.map((b) => (
-              <div key={b.title} className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <div key={b.title} className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">{b.title}</h4>
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900">{b.title}</h4>
                   <p className="text-xs text-slate-500 mt-0.5">{b.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="pt-4 flex flex-wrap items-center gap-3">
-            <Link to="/book-appointment">
-              <Button variant="primary" size="lg" className="shadow-md">
-                <Calendar className="w-4 h-4 mr-2" />
-                <span>{isHindi ? 'अपॉइंटमेंट फॉर्म भरें' : 'Book Appointment Online'}</span>
-                <ArrowRight className="w-4 h-4 ml-2" />
+          {/* OPD Hours & Fee Banner */}
+          <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-800">
+              <span className="flex items-center gap-1.5 text-[#103F4A]">
+                <Clock className="w-3.5 h-3.5 text-[#103F4A]" />
+                <span>{isHindi ? 'परामर्श समय:' : 'Consulting Hours:'}</span>
+              </span>
+              <span className="text-slate-600 font-normal">Mon–Sat: 10 AM – 2 PM & 5 PM – 8 PM</span>
+            </div>
+            <div className="flex items-center justify-between text-xs text-slate-600 pt-1 border-t border-slate-100">
+              <span>{isHindi ? 'परामर्श शुल्क:' : 'Standard Fee:'} <strong className="text-slate-900 font-semibold">₹1,000</strong></span>
+              <Link to="/clinic/timings" className="text-[11px] text-[#103F4A] hover:underline font-semibold flex items-center gap-0.5">
+                <span>{isHindi ? 'नियम व समय' : 'View Timings'}</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Action Row: Teal primary, Green WhatsApp, Outline Call aligned on one row */}
+          <div className="pt-2 flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+            <Link to="/book-appointment" className="w-full sm:w-auto">
+              <Button variant="primary" size="md" className="w-full bg-[#103F4A] hover:bg-[#0C323B] text-white shadow-xs">
+                <Calendar className="w-4 h-4 mr-1.5" />
+                <span>{isHindi ? 'ऑनलाइन फॉर्म' : 'Book Appointment'}</span>
               </Button>
             </Link>
 
-            <WhatsAppButton variant="appointment" size="lg" />
+            <WhatsAppButton variant="appointment" size="md" className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs" />
 
-            <CallButton size="lg" />
+            <CallButton size="md" variant="outline" className="w-full sm:w-auto border border-[#103F4A]/40 text-[#103F4A] hover:bg-[#103F4A] hover:text-white" />
           </div>
         </div>
 
-        {/* Right Column: Quick Chamber Logistics Card */}
-        <div className="lg:col-span-5">
-          <Card padding="lg" className="border-slate-200/85 hover:border-[#65D9D0]/60 shadow-md bg-white/95 space-y-5 backdrop-blur-xs">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2 text-[#103F4A]">
-                <Clock className="w-5 h-5 text-[#103F4A]" />
-                <h4 className="font-bold text-sm">
-                  {isHindi ? 'चेंबर समय सारणी' : 'OPD Consulting Hours'}
-                </h4>
-              </div>
-              <span className="text-[11px] font-bold text-[#103F4A] bg-[#E7F8F2] px-2.5 py-0.5 rounded-full border border-[#65D9D0]/50">
-                {isHindi ? 'चाईबासा क्लिनिक' : 'Cardio Diabetic Clinic'}
-              </span>
-            </div>
-
-            <div className="space-y-3 text-xs sm:text-sm">
-              <div className="flex justify-between items-center py-1.5 border-b border-slate-100">
-                <span className="font-medium text-slate-600">
-                  {isHindi ? 'सोमवार – शनिवार' : 'Monday – Saturday'}
-                </span>
-                <span className="font-bold text-slate-900">10 AM – 2 PM & 5 PM – 8 PM</span>
-              </div>
-              <div className="flex justify-between items-center py-1.5 border-b border-slate-100">
-                <span className="font-medium text-slate-600">
-                  {isHindi ? 'रविवार' : 'Sunday'}
-                </span>
-                <span className="font-semibold text-amber-700">
-                  {isHindi ? 'जांच शिविर / पूर्व अनुमति' : 'Screening Camps / Prior Booking'}
-                </span>
-              </div>
-              <div className="flex justify-between items-center py-1.5">
-                <span className="font-medium text-slate-600">
-                  {isHindi ? 'परामर्श शुल्क' : 'Standard Fee'}
-                </span>
-                <span className="font-bold text-slate-900">₹1,000</span>
-              </div>
-            </div>
-
-            <div className="pt-3 border-t border-slate-100 text-center">
-              <Link
-                to="/clinic/timings"
-                className="text-xs font-semibold text-[#103F4A] hover:underline inline-flex items-center gap-1"
-              >
-                <span>{isHindi ? 'विस्तृत ओपीडी नियम व जानकारी' : 'View Full Chamber Schedule & FAQ'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </Card>
+        {/* Right Column: Inline Appointment Request Form */}
+        <div className="lg:col-span-6">
+          <InlineAppointmentForm />
         </div>
       </div>
     </Section>
