@@ -1,48 +1,48 @@
 @import "tailwindcss";
+@import "./tokens.css";
 
 @theme {
-  --color-primary-950: #06181f;
-  --color-primary-900: #0a252f;
-  --color-primary-800: #103F4A;
-  --color-primary-700: #145466;
-  --color-primary-600: #1b6c83;
+  --color-primary-950: #073843;
+  --color-primary-900: var(--primary-dark);
+  --color-primary-800: var(--primary);
+  --color-primary-700: #126e82;
+  --color-primary-600: #19879f;
   --color-primary-500: #238ba7;
-  --color-primary-100: #EAF7FA;
-  --color-primary-50: #EAF7FA;
+  --color-primary-100: var(--primary-soft);
+  --color-primary-50: var(--primary-soft);
 
   /* Curated Dr. Sengupta Medical Brand Tokens */
-  --color-medical-teal: #103F4A;
+  --color-medical-teal: var(--primary);
   --color-medical-aqua: #65D9D0;
-  --color-medical-ice: #EAF7FA;
+  --color-medical-ice: var(--primary-soft);
   --color-medical-mint: #E7F8F2;
-  --color-medical-warm: #FCFEFF;
+  --color-medical-warm: var(--surface);
 
-  --color-surface-bg: #FCFEFF;
-  --color-surface-card: #ffffff;
-  --color-surface-muted: #F4FBFC;
-  --color-surface-border: #e2e8f0;
-  --color-surface-border-subtle: #f1f5f9;
+  --color-surface-bg: var(--surface);
+  --color-surface-card: var(--card);
+  --color-surface-muted: var(--primary-soft);
+  --color-surface-border: var(--border);
+  --color-surface-border-subtle: #EBF3F4;
 
-  --color-accent: #d97706;
-  --color-accent-hover: #b45309;
-  --color-accent-light: #fef3c7;
+  --color-accent: var(--accent);
+  --color-accent-hover: #D88924;
+  --color-accent-light: #FEF6EB;
 
   --color-success: #15803d;
   --color-success-bg: #f0fdf4;
   --color-success-border: #bbf7d0;
 
-  --color-warning: #b45309;
+  --color-warning: var(--accent);
   --color-warning-bg: #fffbeb;
   --color-warning-border: #fde68a;
 
-  --color-error: #b91c1c;
+  --color-error: var(--danger);
   --color-error-bg: #fef2f2;
   --color-error-border: #fecaca;
 
-  --color-text-main: #0f172a;
-  --color-text-main: #0f172a;
-  --color-text-muted: #334155;
-  --color-text-subtle: #475569;
+  --color-text-main: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: #6D828E;
 
   --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -53,6 +53,7 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
+  --radius-card: 16px;
 }
 
 :root {

@@ -1,0 +1,136 @@
+/**
+ * ============================================================================
+ * DR. SOUMYA SENGUPTA - CORE DESIGN TOKENS & COLOUR SYSTEM
+ * Single source of truth for branding, typography, shadows, and surfaces.
+ * Edit values here to customize the design system across the entire site.
+ * ============================================================================
+ */
+
+:root {
+  /* 1. Core Brand Colors */
+  --primary: #0E5A6B;          /* Deep Medical Teal */
+  --primary-dark: #0B2E3A;     /* Navy Teal (Headers, Footer base) */
+  --primary-soft: #E8F5F4;     /* Crisp Mint/Ice Tint (Cards, Chips, Section Alternates) */
+  --accent: #F2A33A;           /* Warm Amber Gold (Stars, Single Highlights, Badges) */
+  --whatsapp: #1E9E5A;         /* Verified WhatsApp Emerald */
+  --surface: #F7FAFA;          /* Subtle Clinical Surface Background */
+  --card: #FFFFFF;             /* Pure Card White */
+  --text: #1B2B34;             /* Slate Charcoal (High contrast, WCAG AAA compliant) */
+  --text-muted: #4F6470;       /* Cool Slate (Subtle body copy, WCAG AA compliant) */
+  --border: #D7E5E6;           /* Refined Medical Border */
+  --danger: #C0392B;           /* Clinical Red (Emergency & Disclaimers strictly) */
+
+  /* 2. Interactive & Derivative Tokens */
+  --primary-hover: #094755;
+  --primary-active: #073843;
+  --accent-soft: #FEF6EB;
+  --danger-soft: #FDF2F2;
+
+  /* 3. Geometry & Elevation (16px Card Radius + Soft Layered Shadows) */
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+
+  /* Layered soft ambient shadows */
+  --shadow-card: 0 2px 8px -2px rgba(11, 46, 58, 0.05), 0 10px 24px -4px rgba(11, 46, 58, 0.04);
+  --shadow-card-hover: 0 4px 16px -2px rgba(11, 46, 58, 0.10), 0 16px 36px -6px rgba(11, 46, 58, 0.07);
+  --shadow-glow-teal: 0 0 40px rgba(14, 90, 107, 0.18);
+}
+
+/* ============================================================================
+   REUSABLE UI UTILITY CLASSES DRIVEN BY TOKENS
+   ============================================================================ */
+
+/* Primary Button with subtle lift */
+.btn-primary {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(14, 90, 107, 0.25);
+}
+.btn-primary:active {
+  background-color: var(--primary-active);
+  transform: translateY(0);
+}
+
+/* Uniform Hero & Section Condition Chip */
+.condition-chip {
+  background-color: var(--primary-soft);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+.condition-chip:hover {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14, 90, 107, 0.15);
+}
+
+/* Card Surface with 16px radius, layered shadow, and hover lift */
+.card-medical {
+  background-color: var(--card);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-medical:hover {
+  border-color: rgba(14, 90, 107, 0.35);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* Duotone Icon Base: Primary Teal icon with warm accent amber badge */
+.duotone-icon-box {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  background-color: var(--primary-soft);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+}
+.duotone-icon-box .accent-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: var(--accent);
+}
+.duotone-icon-box:hover {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+}
+
+/* Molecule & Hexagon Background Patterns */
+.bg-molecule-pattern {
+  background-image: 
+    radial-gradient(var(--border) 1px, transparent 1px),
+    radial-gradient(rgba(14, 90, 107, 0.12) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+.bg-hexagon-pattern {
+  background-color: transparent;
+  background-image: radial-gradient(circle at 50% 50%, rgba(14, 90, 107, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Footer Gradient from --primary-dark to slightly lighter teal */
+.footer-gradient {
+  background: linear-gradient(180deg, var(--primary-dark) 0%, #114252 100%);
+}
