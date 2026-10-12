@@ -1,6 +1,6 @@
 /**
- * Scientific anatomical data and clinical diabetology descriptions for the Pancreas System.
- * Specifically structured for patient education and clinical precision.
+ * Anatomical Data and Clinical Diabetology Content for Realistic Pancreas Anatomy Viewer.
+ * Aligned with W3C WCAG 2.2 accessibility, clinical education, and bilingual EN/HI support.
  */
 
 export type PancreasPartCategory = 'all' | 'endocrine' | 'exocrine' | 'vascular' | 'structural';
@@ -14,284 +14,435 @@ export type PancreasPartId =
   | 'duodenum'
   | 'vasculature'
   | 'spleen'
-  | 'bile-duct';
+  | 'bile-duct'
+  | 'gallbladder'
+  | 'stomach';
+
+export interface IsletCellInfo {
+  id: 'alpha' | 'beta' | 'delta';
+  name: string;
+  nameHi: string;
+  hormone: string;
+  hormoneHi: string;
+  percentage: string;
+  role: string;
+  roleHi: string;
+}
 
 export interface PancreasPartInfo {
   id: PancreasPartId;
   name: string;
-  nameHi?: string;
+  nameHi: string;
   scientificName: string;
   category: Exclude<PancreasPartCategory, 'all'>;
   badge: string;
-  badgeType: 'insulin' | 'enzyme' | 'metabolic' | 'vascular';
+  badgeType: 'insulin' | 'enzyme' | 'metabolic' | 'vascular' | 'organ';
   stat: string;
   clinicalMarker: string;
   summary: string;
+  oneLineFunction: string;
+  oneLineFunctionHi: string;
   description: string;
-  descriptionHi?: string;
+  descriptionHi: string;
+  clinicalNote: string;
+  clinicalNoteHi: string;
   diabeticRelevance: string;
+  // Visual anchor points in 1536 x 1024 viewBox space
   hotspot: {
     cx: number;
     cy: number;
     calloutX: number;
     calloutY: number;
     title: string;
-    titleHi?: string;
+    titleHi: string;
   };
+  svgPath: string;
+  labelPosition: { x: number; y: number }; // Percentage position for pill on 1536x1024
 }
+
+export const ISLET_CELLS: IsletCellInfo[] = [
+  {
+    id: 'alpha',
+    name: 'Alpha Cell',
+    nameHi: 'अल्फा कोशिका',
+    hormone: 'Glucagon',
+    hormoneHi: 'ग्लूकागन',
+    percentage: '~15–20% of islet mass',
+    role: 'Mobilizes glucose from liver stores during fasting or low blood sugar',
+    roleHi: 'उपवास या लो-शुगर के समय लिवर से ग्लूकोज को रक्त में मुक्त करता है',
+  },
+  {
+    id: 'beta',
+    name: 'Beta Cell',
+    nameHi: 'बीटा कोशिका',
+    hormone: 'Insulin',
+    hormoneHi: 'इंसुलिन',
+    percentage: '~65–80% of islet mass',
+    role: 'Drives cellular glucose absorption, fuel storage, and anabolic metabolism',
+    roleHi: 'कोशिकाओं द्वारा ग्लूकोज अवशोषण, ऊर्जा भंडारण और सामान्य शर्करा स्तर नियंत्रित करता है',
+  },
+  {
+    id: 'delta',
+    name: 'Delta Cell',
+    nameHi: 'डेल्टा कोशिका',
+    hormone: 'Somatostatin',
+    hormoneHi: 'सोमाटोस्टैटिन',
+    percentage: '~3–5% of islet mass',
+    role: 'Acts as paracrine brake, regulating and modulating local insulin and glucagon release',
+    roleHi: 'स्थानीय पैराक्राइन नियंत्रण द्वारा इंसुलिन एवं ग्लूकागन के स्राव को संतुलित रखता है',
+  },
+];
 
 export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
   islets: {
     id: 'islets',
     name: 'Islets of Langerhans',
-    nameHi: 'लैंगरहेंस द्वीप (Beta Cells & Islets)',
-    scientificName: 'Insulae Pancreaticae',
+    nameHi: 'लैंगरहेंस द्वीप (Beta & Alpha Cells)',
+    scientificName: 'Insulae pancreaticae',
     category: 'endocrine',
-    badge: 'Beta & Alpha Cells',
+    badge: 'Endocrine Micro-Organs',
     badgeType: 'insulin',
     stat: '1–2 Million Micro-Islets',
     clinicalMarker: 'C-Peptide & Fasting Insulin',
-    summary: 'About 1-2 million clusters; beta cells make insulin, alpha cells make glucagon',
-    description:
-      'About 1-2 million clusters; beta cells make insulin, alpha cells make glucagon',
-    descriptionHi:
-      'अग्न्याशय में 10 से 20 लाख सूक्ष्म द्वीप; बीटा कोशिकाएं इंसुलिन और अल्फा कोशिकाएं ग्लूकागन बनाती हैं।',
-    diabeticRelevance:
-      'Primary target in diabetes: destroyed by autoimmunity in Type 1 and exhausted by chronic insulin resistance in Type 2.',
+    summary: 'Microscopic endocrine clusters; Beta cells synthesize insulin, Alpha cells secrete glucagon.',
+    oneLineFunction: 'Produces systemic blood-glucose regulating hormones (Insulin, Glucagon, Somatostatin).',
+    oneLineFunctionHi: 'रक्त शर्करा संतुलन हेतु हार्मोन (इंसुलिन, ग्लूकागन, सोमाटोस्टैटिन) का उत्पादन।',
+    description: 'Microscopic endocrine cell clusters scattered throughout the pancreas gland, with the highest concentration in the tail.',
+    descriptionHi: 'अग्न्याशय में बिखरे 10 से 20 लाख सूक्ष्म अंतःस्रावी द्वीप, जिनका सर्वाधिक घनत्व टेल (पूंछ) में होता है।',
+    clinicalNote: 'Islets are scattered throughout the pancreas. Destroyed by autoimmunity in Type 1 diabetes; progressively exhausted by chronic insulin resistance in Type 2.',
+    clinicalNoteHi: 'द्वीप संपूर्ण अग्न्याशय में फैले होते हैं। टाइप 1 में ऑटोइम्यूनिटी द्वारा नष्ट और टाइप 2 में इंसुलिन प्रतिरोध से शिथिल हो जाते हैं।',
+    diabeticRelevance: 'Primary cellular target in diabetes therapy: preservation of functional beta-cell reserve prevents long-term glycemic failure.',
     hotspot: {
-      cx: 415,
-      cy: 192,
-      calloutX: 415,
-      calloutY: 250,
+      cx: 1208,
+      cy: 734,
+      calloutX: 1210,
+      calloutY: 530,
       title: 'Beta Cells & Islets',
       titleHi: 'बीटा कोशिकाएं एवं द्वीप',
     },
+    svgPath: 'M 1208 576 A 158 158 0 1 0 1208 892 A 158 158 0 1 0 1208 576 Z',
+    labelPosition: { x: 79, y: 88 },
   },
-  tail: {
-    id: 'tail',
-    name: 'Pancreatic Tail',
-    nameHi: 'अग्न्याशय की पूंछ (Tail)',
-    scientificName: 'Cauda pancreatis',
-    category: 'endocrine',
-    badge: 'Peak Islet Density',
-    badgeType: 'insulin',
-    stat: '~60% Islet Concentration',
-    clinicalMarker: 'Beta-Cell Functional Reserve',
-    summary: 'Tapers toward the spleen; highest density of islets',
-    description:
-      'Tapers toward the spleen; highest density of islets',
-    descriptionHi:
-      'तिल्ली की ओर संकरा होता हिस्सा; इसमें इंसुलिन बनाने वाले द्वीपों का सर्वाधिक घनत्व होता है।',
-    diabeticRelevance:
-      'Preserving functional beta-cell reserve in the tail is vital for long-term metabolic control.',
-    hotspot: {
-      cx: 442,
-      cy: 188,
-      calloutX: 455,
-      calloutY: 125,
-      title: 'Pancreatic Tail',
-      titleHi: 'पैन्क्रियाटिक टेल',
-    },
-  },
-  body: {
-    id: 'body',
-    name: 'Pancreatic Body',
-    nameHi: 'अग्न्याशय का मुख्य भाग (Body)',
-    scientificName: 'Corpus pancreatis',
-    category: 'structural',
-    badge: 'Central Metabolic Bridge',
-    badgeType: 'metabolic',
-    stat: 'Lobulated Parenchyma',
-    clinicalMarker: 'HOMA-IR & Glycemic Variability',
-    summary: 'Central portion crossing the spine; rich in islet tissue',
-    description:
-      'Central portion crossing the spine; rich in islet tissue',
-    descriptionHi:
-      'रीढ़ के सामने से गुजरने वाला केंद्रीय भाग; रक्त शर्करा नियंत्रक ऊतकों से भरपूर।',
-    diabeticRelevance:
-      'Visceral lipid accumulation in the body parenchyma accelerates insulin resistance.',
-    hotspot: {
-      cx: 310,
-      cy: 220,
-      calloutX: 300,
-      calloutY: 110,
-      title: 'Pancreatic Body',
-      titleHi: 'पैन्क्रियाटिक बॉडी',
-    },
-  },
+
   head: {
     id: 'head',
     name: 'Head of Pancreas',
-    nameHi: 'अग्न्याशय का सिर (Head)',
+    nameHi: 'पैन्क्रियाटिक हेड (अग्न्याशय का सिर)',
     scientificName: 'Caput pancreatis',
-    category: 'structural',
-    badge: 'Duodenal Interface',
+    category: 'exocrine',
+    badge: 'Exocrine Epicenter',
     badgeType: 'enzyme',
-    stat: 'C-Loop Anchor',
-    clinicalMarker: 'Pancreatic Polypeptide (PP)',
-    summary: 'Sits inside the duodenal C-loop; releases digestive enzymes into the duodenum',
-    description:
-      'Sits inside the duodenal C-loop; releases digestive enzymes into the duodenum',
-    descriptionHi:
-      'ग्रहणी (Duodenum) के घुमाव में स्थित; पाचन एंजाइमों को सीधे आंत में स्रावित करता है।',
-    diabeticRelevance:
-      'Coordinates with duodenal incretins (GLP-1) to trigger early-phase insulin release upon nutrient entry.',
+    stat: '~30% Total Gland Mass',
+    clinicalMarker: 'Serum Amylase & Lipase',
+    summary: 'Expanded medial portion resting inside the C-shaped duodenal curve.',
+    oneLineFunction: 'Enzyme production hub nestled in the duodenal C-loop where pancreatic and bile ducts converge.',
+    oneLineFunctionHi: 'डुओडेनम के घेरे में स्थित प्रमुख भाग जहां पाचक रस और पित्त नलिकाएं आपस में मिलती हैं।',
+    description: 'The broad right extremity of the pancreas lying directly against the descending duodenum, sending uncinate process behind mesenteric vessels.',
+    descriptionHi: 'अग्न्याशय का चौड़ा दायां सिरा जो सीधे डुओडेनम के सी-लूप में स्थित रहता है।',
+    clinicalNote: 'Lesions or edema in the pancreatic head can compress the common bile duct, causing obstructive jaundice and rapid glycemic instability.',
+    clinicalNoteHi: 'पैन्क्रियाटिक हेड में सूजन या गांठ से पित्त नली दब सकती है, जिससे पीलिया और ब्लड शुगर असंतुलन हो सकता है।',
+    diabeticRelevance: 'Houses extensive exocrine tissue; head inflammation triggers pancreatogenic (Type 3c) diabetes.',
     hotspot: {
-      cx: 170,
-      cy: 290,
-      calloutX: 110,
-      calloutY: 390,
+      cx: 490,
+      cy: 540,
+      calloutX: 470,
+      calloutY: 730,
       title: 'Head of Pancreas',
-      titleHi: 'हेड ऑफ पैन्क्रियाज',
+      titleHi: 'पैन्क्रियाटिक हेड',
     },
+    svgPath: 'M 415 385 L 490 375 L 555 405 L 640 435 L 660 490 L 670 550 L 640 620 L 590 690 L 530 720 L 445 715 L 385 660 L 335 580 L 340 485 Z',
+    labelPosition: { x: 34, y: 72 },
   },
+
+  body: {
+    id: 'body',
+    name: 'Pancreatic Body',
+    nameHi: 'पैन्क्रियाटिक बॉडी (अग्न्याशय का मुख्य भाग)',
+    scientificName: 'Corpus pancreatis',
+    category: 'exocrine',
+    badge: 'Metabolic Trunk',
+    badgeType: 'enzyme',
+    stat: '~50% Total Gland Mass',
+    clinicalMarker: 'Fecal Elastase & Glucose Logs',
+    summary: 'Central elongated prismatic section crossing the aorta and spine.',
+    oneLineFunction: 'Central transverse portion synthesizing bulk digestive enzymes and interspersed islets.',
+    oneLineFunctionHi: 'मध्य भाग जो मुख्य पाचक एंजाइमों और अंतःस्रावी ग्रंथियों का निर्माण व संवहन करता है।',
+    description: 'Extends horizontally to the left across the vertebral column, bounded superiorly by the splenic artery and posteriorly by splenic vein.',
+    descriptionHi: 'रीढ़ और महाधमनी के आगे से होकर बाईं ओर फैली अग्न्याशय की मुख्य देह।',
+    clinicalNote: 'Contains abundant exocrine acini and extensive beta-cell islets; diffuse inflammation impairs both digestion and insulin output.',
+    clinicalNoteHi: 'इसमें पाचक ग्रंथियां और बीटा कोशिकाएं प्रचुर मात्रा में होती हैं; सूजन से पाचन और इंसुलिन दोनों प्रभावित होते हैं।',
+    diabeticRelevance: 'Chronic pancreatitis of the body leads to dual endocrine-exocrine failure.',
+    hotspot: {
+      cx: 880,
+      cy: 460,
+      calloutX: 980,
+      calloutY: 300,
+      title: 'Pancreatic Body',
+      titleHi: 'पैन्क्रियाटिक बॉडी',
+    },
+    svgPath: 'M 640 435 L 740 410 L 840 385 L 940 375 L 1050 365 L 1140 355 L 1160 410 L 1140 470 L 1050 510 L 940 550 L 840 570 L 740 575 L 660 560 L 640 490 Z',
+    labelPosition: { x: 67, y: 30 },
+  },
+
+  tail: {
+    id: 'tail',
+    name: 'Pancreatic Tail',
+    nameHi: 'पैन्क्रियाटिक टेल (अग्न्याशय की पूंछ)',
+    scientificName: 'Cauda pancreatis',
+    category: 'endocrine',
+    badge: 'Peak Beta-Cell Density',
+    badgeType: 'insulin',
+    stat: '~60% Relative Islet Concentration',
+    clinicalMarker: 'Beta-Cell Functional Reserve',
+    summary: 'Tapering leftward tip reaching the splenic hilum, rich in insulin-producing beta cells.',
+    oneLineFunction: 'Distal end reaching the spleen; possesses the highest concentration of beta-cell islets.',
+    oneLineFunctionHi: 'तिल्ली तक पहुंचने वाला संकरा सिरा जिसमें इंसुलिन बनाने वाले द्वीपों का सर्वाधिक घनत्व होता है।',
+    description: 'The narrow distal extremity contained within the splenorenal ligament, intimately related to the lower portion of the gastric surface of the spleen.',
+    descriptionHi: 'तिल्ली (स्प्लीन) के पास स्थित संकरा भाग जिसमें इंसुलिन-स्रावी बीटा कोशिकाएं घनी होती हैं।',
+    clinicalNote: 'Preserving functional tail parenchyma during surgery is crucial for maintaining residual insulin secretion and avoiding brittle diabetes.',
+    clinicalNoteHi: 'सर्जरी के समय टेल को सुरक्षित रखना महत्वपूर्ण है ताकि इंसुलिन उत्पादन क्षमता बनी रहे।',
+    diabeticRelevance: 'High concentration of Langerhans islets makes the tail vital for metabolic endurance.',
+    hotspot: {
+      cx: 1230,
+      cy: 395,
+      calloutX: 1350,
+      calloutY: 410,
+      title: 'Pancreatic Tail',
+      titleHi: 'पैन्क्रियाटिक टेल',
+    },
+    svgPath: 'M 1140 355 L 1210 335 L 1270 325 L 1320 355 L 1335 400 L 1300 435 L 1240 460 L 1180 470 L 1140 470 Z',
+    labelPosition: { x: 88, y: 41 },
+  },
+
   duct: {
     id: 'duct',
     name: 'Main Pancreatic Duct',
-    nameHi: 'विर्सुंग की मुख्य नली (Duct of Wirsung)',
-    scientificName: 'Duct of Wirsung (Ductus Pancreaticus)',
+    nameHi: 'पैन्क्रियाटिक डक्ट (विर्सुंग की नली)',
+    scientificName: 'Ductus pancreaticus (Wirsung)',
     category: 'exocrine',
     badge: 'Enzyme Conductor',
     badgeType: 'enzyme',
-    stat: '1.5–2.0 L/Day Secretion',
-    clinicalMarker: 'Serum Amylase & Lipase',
-    summary: 'Carries enzymes to the ampulla of Vater',
-    description:
-      'Carries enzymes to the ampulla of Vater',
-    descriptionHi:
-      'पाचन एंजाइमों को एम्प्युला ऑफ वैटर के माध्यम से छोटी आंत तक पहुंचाता है।',
-    diabeticRelevance:
-      'Exocrine insufficiency frequently coexists with long-standing diabetes, altering glycemic stability.',
+    stat: '1–2 L/day Secretion Flow',
+    clinicalMarker: 'Bicarbonate & Exocrine Pressure',
+    summary: 'Central pale conduit running head-to-tail, collecting digestive enzymes.',
+    oneLineFunction: 'Continuous pale tube collecting digestive enzymes to discharge into the duodenum.',
+    oneLineFunctionHi: 'अग्न्याशय की केंद्रीय नली जो पाचक एंजाइमों को इकट्ठा कर छोटी आंत में पहुंचाती है।',
+    description: 'Runs along the length of the pancreas from left to right, draining secondary lobular branches and uniting with the bile duct.',
+    descriptionHi: 'पूंछ से सिर तक फैली मुख्य वाहिनी जो पाचक रस को छोटी आंत में डालती है।',
+    clinicalNote: 'Ductal stones, alcohol toxicity, or intraductal mucin obstruct drainage, leading to acute pancreatitis flare-ups.',
+    clinicalNoteHi: 'डक्ट में रुकावट या पथरी से पाचक रस रुक जाता है, जिससे तीव्र पैन्क्रियाटाइटिस का खतरा होता है।',
+    diabeticRelevance: 'Ductal obstruction compromises adjacent beta-cell microcirculation, triggering secondary hyperglycemia.',
     hotspot: {
-      cx: 255,
-      cy: 242,
-      calloutX: 255,
-      calloutY: 335,
+      cx: 780,
+      cy: 450,
+      calloutX: 710,
+      calloutY: 370,
       title: 'Duct of Wirsung',
-      titleHi: 'डक्ट ऑफ विर्सुंग',
+      titleHi: 'विर्सुंग की नली (Duct of Wirsung)',
     },
+    svgPath: 'M 375 535 L 425 495 L 485 470 L 565 465 L 655 458 L 755 445 L 855 440 L 955 442 L 1043 461 L 1140 435 L 1220 405 L 1280 375 L 1295 385 L 1230 418 L 1145 448 L 1050 475 L 960 458 L 860 455 L 760 460 L 660 472 L 570 480 L 490 485 L 430 510 L 380 550 Z',
+    labelPosition: { x: 48, y: 36 },
   },
+
+  gallbladder: {
+    id: 'gallbladder',
+    name: 'Gallbladder',
+    nameHi: 'पित्ताशय (गॉलब्लैडर)',
+    scientificName: 'Vesica biliaris',
+    category: 'structural',
+    badge: 'Bile Reservoir',
+    badgeType: 'organ',
+    stat: '30–50 mL Bile Capacity',
+    clinicalMarker: 'Ultrasound Scan & Bilirubin',
+    summary: 'Green pear-shaped sac storing and concentrating liver bile for mealtime fat digestion.',
+    oneLineFunction: 'Stores and concentrates hepatic bile, contracting post-meal to aid dietary fat emulsification.',
+    oneLineFunctionHi: 'यकृत के पित्त रस का भंडारण व भोजन के बाद वसा पाचन हेतु पित्त का निष्कासन।',
+    description: 'Located in a fossa on the visceral surface of the liver, connecting to the biliary tree via the cystic duct.',
+    descriptionHi: 'यकृत के नीचे स्थित नाशपाती के आकार की थैली जो पित्त को गाढ़ा कर जमा करती है।',
+    clinicalNote: 'Gallstones (cholelithiasis) can migrate down into the common bile duct, causing gallstone pancreatitis—a major medical emergency.',
+    clinicalNoteHi: 'पित्त की पथरी फिसलकर पैन्क्रियाटिक नली में अटक सकती है, जो एक्यूट पैन्क्रियाटाइटिस का बड़ा कारण है।',
+    diabeticRelevance: 'Diabetic autonomic neuropathy impairs gallbladder motility, tripling the risk of gallstone formation.',
+    hotspot: {
+      cx: 300,
+      cy: 140,
+      calloutX: 210,
+      calloutY: 100,
+      title: 'Gallbladder',
+      titleHi: 'पित्ताशय (गॉलब्लैडर)',
+    },
+    svgPath: 'M 140 165 L 150 130 L 180 100 L 230 80 L 290 70 L 350 80 L 405 110 L 435 145 L 455 180 L 440 205 L 380 215 L 320 205 L 250 195 L 190 215 L 155 200 Z',
+    labelPosition: { x: 14, y: 11 },
+  },
+
+  'bile-duct': {
+    id: 'bile-duct',
+    name: 'Common Bile Duct',
+    nameHi: 'कॉमन बाइल डक्ट (पित्त वाहिनी)',
+    scientificName: 'Ductus choledochus',
+    category: 'exocrine',
+    badge: 'Biliary Transit',
+    badgeType: 'enzyme',
+    stat: '6–8 mm Normal Caliber',
+    clinicalMarker: 'Total Bilirubin & Alk Phos (ALP)',
+    summary: 'Green muscular conduit conducting bile from gallbladder and liver into the duodenum.',
+    oneLineFunction: 'Carries bile from liver and gallbladder through the pancreatic head to the intestine.',
+    oneLineFunctionHi: 'यकृत और पित्ताशय से पित्त को अग्न्याशय के सिर से होते हुए आंत तक पहुंचाती है।',
+    description: 'Forms by union of cystic and common hepatic ducts, descending behind and through the pancreatic head to open at the major duodenal papilla.',
+    descriptionHi: 'पित्त को यकृत से छोटी आंत तक ले जाने वाली प्रमुख नली।',
+    clinicalNote: 'Because it traverses the head of the pancreas, any pancreatic head mass compresses this duct, causing painless dark urine and jaundice.',
+    clinicalNoteHi: 'यह नली पैन्क्रियास के सिर से गुजरती है; सिर में सूजन या रुकावट से गहरा पीलिया हो जाता है।',
+    diabeticRelevance: 'Biliary obstruction triggers metabolic derangements and dyslipidemia.',
+    hotspot: {
+      cx: 410,
+      cy: 350,
+      calloutX: 180,
+      calloutY: 270,
+      title: 'Common Bile Duct',
+      titleHi: 'कॉमन बाइल डक्ट',
+    },
+    svgPath: 'M 435 145 L 455 180 L 468 235 L 458 295 L 435 365 L 415 425 L 405 485 L 390 535 L 355 525 L 370 460 L 395 385 L 420 305 L 435 245 Z',
+    labelPosition: { x: 12, y: 27 },
+  },
+
+  stomach: {
+    id: 'stomach',
+    name: 'Stomach',
+    nameHi: 'आमाशय (पेट)',
+    scientificName: 'Gaster',
+    category: 'structural',
+    badge: 'Anterior Bed',
+    badgeType: 'organ',
+    stat: '1.5 L Meal Reservoir',
+    clinicalMarker: 'Gastric Emptying Time',
+    summary: 'Large muscular digestive organ situated directly anterior to the pancreatic bed.',
+    oneLineFunction: 'Acid-peptic digestive pouch that empties partially digested chyme into the duodenum.',
+    oneLineFunctionHi: 'पाचन तंत्र का मुख्य अंग जो भोजन को पीसकर छोटी आंत में अग्रसारित करता है।',
+    description: 'Forms the anterior boundary of the lesser sac (omental bursa); the pancreas forms a key component of the posterior stomach bed.',
+    descriptionHi: 'अग्न्याशय के आगे स्थित मुख्य पाचक अंग जो भोजन को मथने का कार्य करता है।',
+    clinicalNote: 'Diabetic gastroparesis from vagus nerve autonomic neuropathy causes delayed gastric emptying, nausea, and severe postprandial glucose swings.',
+    clinicalNoteHi: 'डायबिटीज में वेगास तंत्रिका क्षति से पेट की गति धीमी हो जाती है (गैस्ट्रोपेरेसिस), जिससे शुगर अनियंत्रित होती है।',
+    diabeticRelevance: 'Gastric emptying rate governs the timing of mealtime glucose spikes and insulin dosing.',
+    hotspot: {
+      cx: 770,
+      cy: 190,
+      calloutX: 770,
+      calloutY: 110,
+      title: 'Stomach',
+      titleHi: 'आमाशय (पेट)',
+    },
+    svgPath: 'M 620 15 L 700 5 L 820 45 L 950 95 L 1035 175 L 1075 255 L 1090 340 L 1035 370 L 950 380 L 860 375 L 780 360 L 700 320 L 620 275 L 550 240 L 490 255 L 450 235 L 440 180 L 475 125 L 535 60 Z',
+    labelPosition: { x: 53, y: 11 },
+  },
+
   duodenum: {
     id: 'duodenum',
-    name: 'Duodenal C-Loop',
-    nameHi: 'ग्रहणी (Duodenal C-Loop)',
+    name: 'Duodenum (C-Loop)',
+    nameHi: 'ग्रहणी (डुओडेनम — छोटी आंत)',
     scientificName: 'Duodenum',
-    category: 'exocrine',
-    badge: 'Incretin Hormone Axis',
+    category: 'structural',
+    badge: 'Incretin Center',
     badgeType: 'metabolic',
-    stat: 'Primary Nutrient Sensor',
-    clinicalMarker: 'GLP-1 & GIP Incretin Axis',
-    summary: 'First part of the small intestine, wraps the pancreatic head',
-    description:
-      'First part of the small intestine, wraps the pancreatic head',
-    descriptionHi:
-      'छोटी आंत का प्रारंभिक C-आकार का घुमाव जो भोजन के प्रवेश पर GLP-1 हार्मोन सक्रिय करता है।',
-    diabeticRelevance:
-      'The incretin gut-pancreas axis accounts for 50–70% of postprandial insulin release.',
+    stat: '25 cm C-Shaped Curve',
+    clinicalMarker: 'GLP-1 & Incretin Response',
+    summary: 'First intestinal segment enclosing the pancreatic head; primary site of nutrient-stimulated incretin release.',
+    oneLineFunction: 'Intestinal C-loop that receives bile and pancreatic juice to absorb early nutrients and signal GLP-1.',
+    oneLineFunctionHi: 'छोटी आंत का सी-आकार का भाग जो पाचक रस प्राप्त कर ग्लूकोज नियंत्रण हेतु GLP-1 छोड़ता है।',
+    description: 'Forms an anatomical horseshoe around the head of the pancreas, divided into superior, descending, horizontal, and ascending parts.',
+    descriptionHi: 'अग्न्याशय के सिर को चारों ओर से घेरे रहने वाली छोटी आंत की प्रथम शाखा।',
+    clinicalNote: 'Duodenal enteroendocrine L-cells secrete GLP-1 in response to nutrients, stimulating glucose-dependent insulin secretion (the incretin effect).',
+    clinicalNoteHi: 'डुओडेनम की कोशिकाएं भोजन के बाद GLP-1 हार्मोन छोड़ती हैं, जो इंसुलिन स्राव को तेज करता है।',
+    diabeticRelevance: 'Modern GLP-1 receptor agonist therapies harness this duodenal incretin mechanism to control diabetes.',
     hotspot: {
-      cx: 88,
-      cy: 275,
-      calloutX: 52,
-      calloutY: 195,
-      title: 'Duodenal C-Loop',
-      titleHi: 'ड्यूओडिनल सी-लूप',
+      cx: 220,
+      cy: 580,
+      calloutX: 150,
+      calloutY: 690,
+      title: 'Duodenum',
+      titleHi: 'ग्रहणी (डुओडेनम)',
     },
+    svgPath: 'M 260 210 L 330 185 L 415 215 L 425 265 L 360 280 L 280 315 L 215 375 L 170 465 L 145 560 L 155 680 L 200 790 L 285 860 L 395 905 L 520 915 L 660 880 L 770 815 L 845 735 L 885 670 L 855 645 L 815 715 L 730 785 L 630 835 L 510 855 L 390 845 L 310 805 L 250 730 L 230 640 L 245 540 L 275 450 L 325 370 L 385 315 L 410 275 L 330 225 Z',
+    labelPosition: { x: 10, y: 69 },
   },
-  vasculature: {
-    id: 'vasculature',
-    name: 'Vascular Axis',
-    nameHi: 'रक्त वाहिका अक्ष (Vessels)',
-    scientificName: 'Splenic vein and artery',
-    category: 'vascular',
-    badge: 'First-Pass Transport',
-    badgeType: 'vascular',
-    stat: 'High-Volume Perfusion',
-    clinicalMarker: 'Hepatic Insulin Clearance',
-    summary: 'Supplies and drains the gland along its back surface',
-    description:
-      'Supplies and drains the gland along its back surface',
-    descriptionHi:
-      'अग्न्याशय के पिछले हिस्से में स्थित धमनियां एवं नसें जो नए बने इंसुलिन को सीधे यकृत तक ले जाती हैं।',
-    diabeticRelevance:
-      'Delivers newly secreted portal insulin directly to hepatic circulation for first-pass glycemic regulation.',
-    hotspot: {
-      cx: 345,
-      cy: 185,
-      calloutX: 375,
-      calloutY: 65,
-      title: 'Vascular Axis',
-      titleHi: 'वैस्कुलर एक्सिस',
-    },
-  },
+
   spleen: {
     id: 'spleen',
     name: 'Spleen',
-    nameHi: 'प्लीहा (तिल्ली / Spleen)',
-    scientificName: 'Splen',
+    nameHi: 'प्लीहा / तिल्ली (स्प्लीन)',
+    scientificName: 'Splen / Lien',
     category: 'structural',
-    badge: 'Anatomical Anchor',
-    badgeType: 'metabolic',
-    stat: 'Left Upper Quadrant',
-    clinicalMarker: 'Splenoportal Flow',
-    summary: 'Lies against the tail of the pancreas; anatomical landmark',
-    description:
-      'Lies against the tail of the pancreas; anatomical landmark',
-    descriptionHi:
-      'अग्न्याशय की पूंछ से सटा हुआ महत्वपूर्ण अंग; रक्त शोधन और संचार का प्रमुख लैंडमार्क।',
-    diabeticRelevance:
-      'Splenic vasculature carries newly released pancreatic hormones directly toward the portal system.',
+    badge: 'Vascular & Immune Filter',
+    badgeType: 'organ',
+    stat: '~150 g Lymphoid Mass',
+    clinicalMarker: 'Platelet Count & Splenic Axis',
+    summary: 'Dark crescent lymphoid organ at the far right touching the pancreatic tail.',
+    oneLineFunction: 'Filters blood, recycles old red blood cells, and houses immunological surveillance.',
+    oneLineFunctionHi: 'रक्त शुद्धिकरण, लाल रक्त कोशिकाओं का नवीनीकरण और प्रतिरक्षा निगरानी।',
+    description: 'Located in the left hypochondrium under the diaphragm; its hilum directly adjoins the tip of the pancreatic tail.',
+    descriptionHi: 'बाईं पसलियों के नीचे स्थित अंग जो अग्न्याशय की पूंछ से सीधा सटा होता है।',
+    clinicalNote: 'Splenic vein thrombosis is a known complication of chronic pancreatic inflammation, leading to gastric varices.',
+    clinicalNoteHi: 'पैन्क्रियास की गंभीर सूजन से स्प्लेनिक नस में रुकावट आ सकती है, जिससे रक्तस्राव का जोखिम बढ़ता है।',
+    diabeticRelevance: 'Diabetic susceptibility to encapsulated bacterial infections requires attention to splenic immune status.',
     hotspot: {
-      cx: 485,
-      cy: 180,
-      calloutX: 480,
-      calloutY: 235,
+      cx: 1360,
+      cy: 330,
+      calloutX: 1420,
+      calloutY: 240,
       title: 'Spleen',
-      titleHi: 'प्लीहा (Spleen)',
+      titleHi: 'प्लीहा (स्प्लीन)',
     },
+    svgPath: 'M 1210 240 L 1240 180 L 1290 150 L 1360 155 L 1425 200 L 1460 270 L 1465 360 L 1440 450 L 1395 520 L 1340 560 L 1280 565 L 1240 510 L 1255 460 L 1275 410 L 1260 340 L 1230 300 Z',
+    labelPosition: { x: 92, y: 24 },
   },
-  'bile-duct': {
-    id: 'bile-duct',
-    name: 'Gallbladder & Biliary System',
-    nameHi: 'पित्ताशय एवं पित्त नली',
-    scientificName: 'Vesica Biliaris & Ductus Choledochus',
-    category: 'exocrine',
-    badge: 'Biliary System',
-    badgeType: 'enzyme',
-    stat: 'Bile Delivery',
-    clinicalMarker: 'Total Bilirubin & Alk Phos',
-    summary: 'Stores and delivers bile into the duodenum at the ampulla of Vater.',
-    description:
-      'The pear-shaped gallbladder and common bile duct descend to join the pancreatic duct at the Ampulla of Vater, aiding digestion.',
-    descriptionHi:
-      'पित्त नली जो अग्न्याशय की नली से मिलकर पाचन में सहायता करती है।',
-    diabeticRelevance:
-      'Gallstone obstruction can trigger pancreatitis, requiring prompt clinical differentiation in diabetic patients.',
+
+  vasculature: {
+    id: 'vasculature',
+    name: 'Vascular Axis',
+    nameHi: 'संवहनी अक्ष (Splenic & Mesenteric Vessels)',
+    scientificName: 'Vasa splenica & mesenterica',
+    category: 'vascular',
+    badge: 'Microcirculatory Lifeline',
+    badgeType: 'vascular',
+    stat: 'High-Flow Portal Network',
+    clinicalMarker: 'Portal Doppler & Resistance',
+    summary: 'Splenic and mesenteric vascular trunks carrying oxygenated blood and draining portal insulin directly to the liver.',
+    oneLineFunction: 'Supplies high-pressure oxygenated blood and delivers secreted insulin directly to the hepatic portal system.',
+    oneLineFunctionHi: 'अग्न्याशय को रक्त प्रदान करता है और स्रावित इंसुलिन को सीधे यकृत (लिवर) तक पहुंचाता है।',
+    description: 'The splenic artery winds tortuously above the body/tail, while splenic and mesenteric veins unite behind the pancreatic neck to form the hepatic portal vein.',
+    descriptionHi: 'स्प्लेनिक व मेसेंटेरिक रक्त नलिकाएं जो अग्न्याशय को पोषित कर इंसुलिन को लिवर तक ले जाती हैं।',
+    clinicalNote: 'Insulin secreted by beta cells enters the portal vein at 2-3x higher concentration than peripheral circulation, driving hepatic glucose shutoff.',
+    clinicalNoteHi: 'बीटा कोशिकाओं से निकला इंसुलिन पोर्टल नस से सीधे लिवर पहुंचकर ग्लूकोज उत्पादन रोकता है।',
+    diabeticRelevance: 'Diabetic micro- and macroangiopathy accelerates arterial calcification across the celiac and mesenteric trunks.',
     hotspot: {
-      cx: 155,
-      cy: 115,
-      calloutX: 135,
-      calloutY: 55,
-      title: 'Common Bile Duct',
-      titleHi: 'पित्त नली',
+      cx: 560,
+      cy: 160,
+      calloutX: 380,
+      calloutY: 30,
+      title: 'Vascular Axis',
+      titleHi: 'संवहनी अक्ष',
     },
+    svgPath: 'M 510 35 L 560 25 L 575 95 L 600 130 L 620 210 L 605 280 L 560 280 L 545 210 Z M 710 580 L 765 575 L 800 610 L 820 670 L 790 715 L 740 720 L 710 670 Z',
+    labelPosition: { x: 38, y: 5 },
   },
 };
 
 export const HOTSPOT_LIST: PancreasPartId[] = [
   'islets',
-  'body',
-  'duct',
   'head',
+  'body',
   'tail',
+  'duct',
+  'gallbladder',
+  'bile-duct',
+  'stomach',
   'duodenum',
-  'vasculature',
   'spleen',
+  'vasculature',
 ];
 
-export const CATEGORY_TABS: Array<{ id: PancreasPartCategory; label: string; count: number }> = [
-  { id: 'all', label: 'All Anatomy', count: 8 },
-  { id: 'endocrine', label: 'Endocrine Axis', count: 2 },
-  { id: 'exocrine', label: 'Exocrine & Ducts', count: 2 },
-  { id: 'vascular', label: 'Vascular Supply', count: 1 },
-  { id: 'structural', label: 'Parenchyma & Organs', count: 3 },
+export const CATEGORY_TABS = [
+  { id: 'all', label: { en: 'All Structures', hi: 'सभी संरचनाएं' } },
+  { id: 'endocrine', label: { en: 'Endocrine Axis', hi: 'अंतःस्रावी अक्ष' } },
+  { id: 'exocrine', label: { en: 'Exocrine & Ducts', hi: 'पाचक रस एवं नलियां' } },
+  { id: 'vascular', label: { en: 'Vascular Axis', hi: 'संवहनी तंत्र' } },
+  { id: 'structural', label: { en: 'Surrounding Organs', hi: 'संबंधित अंग' } },
 ];

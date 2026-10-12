@@ -1,908 +1,684 @@
-import React, { useState, useCallback, useContext } from 'react';
-import { Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback, useContext } from 'react';
+import { Activity, X, Compass } from 'lucide-react';
 import { LanguageContext } from '../../context/languageContextDef';
 import {
   PANCREAS_DATA,
   HOTSPOT_LIST,
   CATEGORY_TABS,
   type PancreasPartId,
+  type PancreasPartInfo,
   type PancreasPartCategory,
 } from './pancreasData';
-import { REALISTIC_PATHS } from './PancreasAnatomicalPaths';
-import { PancreasShaders } from './PancreasShaders';
-import { IsletLoupeInset } from './IsletLoupeInset';
+
+// Optimized WebP & PNG fallback assets
+import pancreas1536Webp from '../../assets/pancreas/pancreas-1536.webp';
+import pancreas768Webp from '../../assets/pancreas/pancreas-768.webp';
+import pancreasFallbackPng from '../../assets/pancreas/pancreas-fallback.png';
 
 export interface PancreasViewerProps {
   className?: string;
   style?: React.CSSProperties;
   showDetailsCard?: boolean;
-  showMedicalBadges?: boolean;
-  showHotspots?: boolean;
   showCategoryTabs?: boolean;
+  showHotspots?: boolean;
+  showMedicalBadges?: boolean;
   enableParallax?: boolean;
   initialPart?: PancreasPartId | null;
   onPartHover?: (part: PancreasPartId | null) => void;
   onPartClick?: (part: PancreasPartId) => void;
 }
 
-const EMBEDDED_STYLES = `
-@keyframes wirsung-fluid-pulse {
-  0% { stroke-dashoffset: 40; }
-  100% { stroke-dashoffset: 0; }
-}
-.ap-wirsung-flow {
-  stroke-dasharray: 4 8;
-  animation: wirsung-fluid-pulse 2.8s linear infinite;
-}
-@keyframes ap-insulin-pulse {
-  0% { r: 18px; opacity: 0.85; }
-  50% { r: 34px; opacity: 0.35; }
-  100% { r: 48px; opacity: 0; }
-}
-.ap-islet-pulse-ring {
-  animation: ap-insulin-pulse 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
-  transform-origin: center;
-}
-.ap-organ-layer {
-  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1), transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  transform-box: fill-box;
-}
-.ap-glass-card {
-  background: rgba(252, 254, 255, 0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(101, 217, 208, 0.32);
-  box-shadow: 0 14px 32px -6px rgba(16, 63, 74, 0.12), 0 4px 12px -2px rgba(101, 217, 208, 0.08);
-}
-@media (prefers-reduced-motion: reduce) {
-  .ap-wirsung-flow, .ap-islet-pulse-ring {
-    animation: none !important;
-  }
-}
-`;
-
-/**
- * Realistic Medical-Grade Anatomical Pancreas Viewer
- * Uses procedural SVG shaders (feTurbulence, feSpecularLighting/feDiffuseLighting),
- * multi-stop organic tissue gradients, individual hoverable layers,
- * and an interactive histological loupe for Beta Cells & Islets of Langerhans.
- */
 export const PancreasViewer: React.FC<PancreasViewerProps> = ({
   className = '',
   style,
   showDetailsCard = true,
-  showHotspots = true,
   showCategoryTabs = false,
+  showHotspots = true,
   initialPart = null,
   onPartHover,
   onPartClick,
 }) => {
   const langContext = useContext(LanguageContext);
   const isHindi = langContext?.isHindi ?? false;
-  const [hoveredPart, setHoveredPart] = useState<PancreasPartId | null>(null);
-  const [selectedPart, setSelectedPart] = useState<PancreasPartId | null>(initialPart ?? 'islets');
-  const [activeCategory, setActiveCategory] = useState<PancreasPartCategory>('all');
 
-  const handlePartHover = useCallback(
-    (part: PancreasPartId | null) => {
-      setHoveredPart(part);
-      if (onPartHover) onPartHover(part);
+  const [hoveredPart, setHoveredPart] = useState<PancreasPartId | null>(null);
+  const [selectedPart, setSelectedPart] = useState<PancreasPartId | null>(initialPart);
+  const [activeCategory, setActiveCategory] = useState<PancreasPartCategory>('all');
+  const [hasInteracted, setHasInteracted] = useState<boolean>(false);
+  const [isDebugMode, setIsDebugMode] = useState<boolean>(false);
+
+  const isPartFilteredOut = (partId: PancreasPartId) => {
+    if (activeCategory === 'all') return false;
+    return PANCREAS_DATA[partId]?.category !== activeCategory;
+  };
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Check URL query param ?debug=1
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('debug') === '1') {
+        setIsDebugMode(true);
+      }
+    }
+  }, []);
+
+  // Active highlighted part: either hovered or selected
+  const activePartId = hoveredPart || selectedPart;
+  const activePartInfo: PancreasPartInfo | null = activePartId ? PANCREAS_DATA[activePartId] : null;
+
+  const handleMouseEnter = useCallback(
+    (id: PancreasPartId) => {
+      setHoveredPart(id);
+      setHasInteracted(true);
+      if (onPartHover) onPartHover(id);
     },
     [onPartHover]
   );
 
-  const handlePartClick = useCallback(
-    (part: PancreasPartId) => {
-      setSelectedPart(part);
-      if (onPartClick) onPartClick(part);
+  const handleMouseLeave = useCallback(() => {
+    setHoveredPart(null);
+    if (onPartHover) onPartHover(null);
+  }, [onPartHover]);
+
+  const handlePartSelect = useCallback(
+    (id: PancreasPartId) => {
+      setSelectedPart((prev) => (prev === id ? null : id));
+      setHasInteracted(true);
+      if (onPartClick) onPartClick(id);
     },
     [onPartClick]
   );
 
-  const displayedPart = hoveredPart || selectedPart || 'islets';
-  const activeDetails = PANCREAS_DATA[displayedPart] || PANCREAS_DATA.islets;
-
-  const isLayerActive = (partId: PancreasPartId) => displayedPart === partId;
-
-  const getLayerOpacity = (partId: PancreasPartId) => {
-    if (activeCategory !== 'all') {
-      const info = PANCREAS_DATA[partId];
-      if (info && info.category !== activeCategory) return 0.22;
+  // Keyboard navigation support
+  const handleKeyDown = (e: React.KeyboardEvent, id: PancreasPartId) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handlePartSelect(id);
     }
-    if (hoveredPart) {
-      return hoveredPart === partId ? 1 : 0.55;
-    }
-    return 1;
   };
+
+  // Close on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | SVGElement | null;
+      if (!target) return;
+      if (target.closest && target.closest('[data-pancreas-viewer]')) {
+        return;
+      }
+      if (containerRef.current && !containerRef.current.contains(target as Node)) {
+        setSelectedPart(null);
+        setHoveredPart(null);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, []);
+
+  // Distinct debug colors for ?debug=1 inspection
+  const debugColors: Record<PancreasPartId, string> = {
+    gallbladder: '#10B981',
+    'bile-duct': '#059669',
+    stomach: '#F43F5E',
+    duodenum: '#EA580C',
+    head: '#F59E0B',
+    body: '#EAB308',
+    tail: '#CA8A04',
+    duct: '#FACC15',
+    spleen: '#A855F7',
+    vasculature: '#3B82F6',
+    islets: '#8B5CF6',
+  };
+
+  const isIsletsActive = activePartId === 'islets';
 
   return (
     <div
-      className={`relative select-none flex flex-col items-center justify-center overflow-hidden max-w-full ${className}`}
-      style={{ width: '100%', height: '100%', ...style }}
+      ref={containerRef}
+      data-pancreas-viewer="true"
+      className={`relative flex flex-col items-center w-full select-none ${className}`}
+      style={style}
       role="region"
-      aria-label="3D Interactive Pancreas & Endocrine Visualization"
+      aria-label={
+        isHindi
+          ? 'अग्न्याशय एवं संबंधित अंगों की त्रि-आयामी शारीरिक रचना'
+          : '3D Interactive Pancreas & Endocrine Visualization'
+      }
     >
-      <style>{EMBEDDED_STYLES}</style>
-
-      {/* Atmospheric Clinical Aura (Teal #65D9D0 & Deep Navy #103F4A) */}
-      <div
-        className="absolute pointer-events-none rounded-full"
-        style={{
-          width: 440,
-          height: 440,
-          background:
-            'radial-gradient(circle, rgba(101, 217, 208, 0.24) 0%, rgba(16, 63, 74, 0.1) 45%, rgba(234, 247, 250, 0.2) 65%, transparent 80%)',
-          filter: 'blur(55px)',
-          zIndex: 0,
-        }}
-      />
-      <div
-        className="absolute pointer-events-none rounded-full"
-        style={{
-          width: 280,
-          height: 280,
-          background:
-            'radial-gradient(circle, rgba(231, 248, 242, 0.38) 0%, rgba(101, 217, 208, 0.14) 50%, transparent 75%)',
-          filter: 'blur(35px)',
-          zIndex: 0,
-        }}
-      />
-
-      {/* Optional Category Filter Switcher */}
+      {/* Category Tabs Bar (when enabled) */}
       {showCategoryTabs && (
-        <div className="w-full max-w-md px-3 mb-2 z-20 flex items-center justify-center">
-          <div className="inline-flex items-center gap-1 p-1 bg-white/90 backdrop-blur-md rounded-xl border border-slate-200 shadow-2xs text-[11px] font-semibold text-slate-700 overflow-x-auto max-w-full">
-            {CATEGORY_TABS.map((tab) => (
+        <div
+          className="w-full flex items-center justify-center gap-1.5 flex-wrap mb-3 px-2"
+          role="tablist"
+          aria-label="Anatomical axis categories"
+        >
+          {CATEGORY_TABS.map((tab) => {
+            const isSelected = activeCategory === tab.id;
+            return (
               <button
                 key={tab.id}
                 type="button"
-                onClick={() => setActiveCategory(tab.id)}
-                className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-                  activeCategory === tab.id
-                    ? 'bg-[#103F4A] text-white font-bold shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                role="button"
+                aria-pressed={isSelected}
+                onClick={() => setActiveCategory(tab.id as PancreasPartCategory)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border shrink-0 ${
+                  isSelected
+                    ? 'bg-[#0E5A6B] text-white border-[#0E5A6B] shadow-xs'
+                    : 'bg-white text-[#1B2B34] border-[#D7E5E6] hover:border-[#0E5A6B]/50'
                 }`}
-                aria-pressed={activeCategory === tab.id}
               >
-                {tab.label}
+                {isHindi ? tab.label.hi : tab.label.en}
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
       )}
 
-      {/* SVG Canvas Container */}
-      <div className="relative w-full max-w-[520px] aspect-[540/490] shrink-0 flex items-center justify-center">
-        <svg
-          viewBox="0 0 540 500"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full drop-shadow-xl"
-          style={{ maxWidth: 520, maxHeight: 490, zIndex: 10 }}
+      {/* Visual Canvas Wrapper with soft teal boundary blend */}
+      <div className="relative w-full overflow-hidden rounded-2xl bg-[#0B2E3A]/5 shadow-[0_16px_40px_rgba(11,46,58,0.12)] border border-[#D7E5E6]/70 group">
+        {/* Soft edge masking for seamless background integration */}
+        <div
+          className="relative w-full aspect-[1536/1024] overflow-hidden"
+          style={{
+            WebkitMaskImage:
+              'radial-gradient(ellipse 98% 96% at 50% 50%, black 85%, transparent 100%)',
+            maskImage:
+              'radial-gradient(ellipse 98% 96% at 50% 50%, black 85%, transparent 100%)',
+          }}
         >
-          {/* Procedural Shaders, Filters & Organic Gradients */}
-          <PancreasShaders />
-
-          {/* Calibrated Scientific Radial Guides */}
-          <g opacity="0.22" pointerEvents="none">
-            <circle cx="270" cy="245" r="215" stroke="#65D9D0" strokeWidth="0.8" strokeDasharray="4 8" />
-            <circle cx="270" cy="245" r="150" stroke="#103F4A" strokeWidth="0.7" strokeDasharray="2 5" />
-            <circle cx="270" cy="245" r="85" stroke="#65D9D0" strokeWidth="0.5" strokeOpacity="0.6" />
-          </g>
-
-          {/* ------------------------------------------------------------ */}
-          {/* 0. SOFT DROP SHADOW UNDER THE WHOLE GROUP                    */}
-          {/* ------------------------------------------------------------ */}
-          <path
-            d={REALISTIC_PATHS.pancreasGroupSilhouette}
-            fill="#081e26"
-            filter="url(#whole-group-drop-shadow)"
-            opacity="0.32"
-            pointerEvents="none"
-          />
-
-          {/* ------------------------------------------------------------ */}
-          {/* 1. STOMACH SILHOUETTE (Soft Retroperitoneal Context)         */}
-          {/* ------------------------------------------------------------ */}
-          <g id="stomach-backdrop" pointerEvents="none" opacity="0.22">
-            <path
-              d={REALISTIC_PATHS.stomachSilhouette}
-              fill="url(#stomach-bed-grad)"
-              stroke="#94a3b8"
-              strokeWidth="1.2"
-              strokeDasharray="4 6"
+          {/* Base Clean Anatomy Image (High Priority LCP) */}
+          <picture className="absolute inset-0 w-full h-full pointer-events-none">
+            <source
+              type="image/webp"
+              srcSet={`${pancreas768Webp} 768w, ${pancreas1536Webp} 1536w`}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 540px"
             />
-            {REALISTIC_PATHS.stomachRugae.map((rugae, idx) => (
-              <path
-                key={idx}
-                d={rugae}
-                stroke="#94a3b8"
-                strokeWidth="1.1"
-                fill="none"
-                opacity="0.4"
-                strokeLinecap="round"
-              />
-            ))}
-            {/* Label hidden to prevent collision with Pancreatic Body label */}
-          </g>
+            <img
+              src={pancreasFallbackPng}
+              alt="Detailed anatomical illustration of human pancreas, duodenum, gallbladder, stomach, spleen, and microscopic endocrine islets"
+              width={1536}
+              height={1024}
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              className="w-full h-full object-cover object-center"
+            />
+          </picture>
 
-          {/* ------------------------------------------------------------ */}
-          {/* 2. SPLEEN (Oval organ abutting tail at hilum, glossy finish) */}
-          {/* ------------------------------------------------------------ */}
-          <g
-            id="spleen"
-            role="button"
-            tabIndex={0}
-            aria-label="Spleen (Splen)"
-            aria-pressed={isLayerActive('spleen')}
-            className="cursor-pointer ap-organ-layer focus-visible:outline-none"
-            opacity={getLayerOpacity('spleen')}
-            style={{
-              transform: isLayerActive('spleen') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '480px 190px',
-            }}
-            onMouseEnter={() => handlePartHover('spleen')}
-            onMouseLeave={() => handlePartHover(null)}
-            onFocus={() => handlePartHover('spleen')}
-            onBlur={() => handlePartHover(null)}
-            onClick={() => handlePartClick('spleen')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePartClick('spleen');
-              }
-            }}
+          {/* SVG Overlay: Responsive 1536x1024 Hotspots & Shaders */}
+          <svg
+            className="absolute inset-0 w-full h-full"
+            viewBox="0 0 1536 1024"
+            preserveAspectRatio="xMidYMid meet"
           >
-            {/* Teal Glow halo when active */}
-            {isLayerActive('spleen') && (
-              <path
-                d={REALISTIC_PATHS.spleenOrgan}
-                fill="#65D9D0"
-                opacity="0.35"
-                filter="url(#hover-glow-teal)"
-                pointerEvents="none"
-              />
-            )}
-            {/* Oval Organ Body with Glossy 3D Shading */}
-            <path
-              d={REALISTIC_PATHS.spleenOrgan}
-              fill="url(#spleen-maroon-grad)"
-              filter="url(#spleen-smooth-gloss)"
-            />
-            {/* Splenic Hilum Notch */}
-            <path
-              d={REALISTIC_PATHS.spleenHilumNotch}
-              stroke="#fbcfe8"
-              strokeWidth="2.2"
-              strokeOpacity="0.55"
-              fill="none"
-              strokeLinecap="round"
-              pointerEvents="none"
-            />
-            {/* Glossy highlight on convex superolateral capsule */}
-            <path
-              d={REALISTIC_PATHS.spleenGlossyHighlight}
-              fill="url(#lens-glass-glare)"
-              opacity="0.75"
-              pointerEvents="none"
-            />
-          </g>
+            <defs>
+              {/* Vibrant Teal Glow Filter for Active Organ */}
+              <filter id="tealOrganGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="8" result="blur" />
+                <feComponentTransfer in="blur" result="glow">
+                  <feFuncA type="linear" slope="1.8" />
+                </feComponentTransfer>
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
 
-          {/* ------------------------------------------------------------ */}
-          {/* 3. VASCULAR AXIS (Splenic Vein posterior; Artery above)      */}
-          {/* ------------------------------------------------------------ */}
-          <g
-            id="vasculature"
-            role="button"
-            tabIndex={0}
-            aria-label="Vascular Axis (Splenic vein and artery)"
-            aria-pressed={isLayerActive('vasculature')}
-            className="cursor-pointer ap-organ-layer focus-visible:outline-none"
-            opacity={getLayerOpacity('vasculature')}
-            style={{
-              transform: isLayerActive('vasculature') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '320px 220px',
-            }}
-            onMouseEnter={() => handlePartHover('vasculature')}
-            onMouseLeave={() => handlePartHover(null)}
-            onFocus={() => handlePartHover('vasculature')}
-            onBlur={() => handlePartHover(null)}
-            onClick={() => handlePartClick('vasculature')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePartClick('vasculature');
-              }
-            }}
-          >
-            {/* Portal Confluence & SMV (Royal Blue) */}
-            <path
-              d={REALISTIC_PATHS.portalVeinConfluence}
-              fill="url(#splenic-vein-grad)"
-              filter={isLayerActive('vasculature') ? 'url(#hover-glow-teal)' : 'url(#vessel-3d-sheen)'}
-            />
-            {/* Splenic Vein: Running along posterior surface of body and tail */}
-            <path
-              d={REALISTIC_PATHS.splenicVein}
-              stroke="url(#splenic-vein-grad)"
-              strokeWidth="7"
-              strokeLinecap="round"
-              fill="none"
-              filter={isLayerActive('vasculature') ? 'url(#hover-glow-teal)' : 'url(#vessel-3d-sheen)'}
+              {/* Mask to cut out active organ from dark dimming overlay */}
+              <mask id="dimmingMask">
+                {/* White shows dimming everywhere */}
+                <rect x="0" y="0" width="1536" height="1024" fill="#FFFFFF" />
+                {/* Black punches hole for active organ */}
+                {activePartInfo && (
+                  <path
+                    d={activePartInfo.svgPath}
+                    fill="#000000"
+                    stroke="#000000"
+                    strokeWidth="12"
+                  />
+                )}
+                {/* Also punch hole for duct dot if islets active */}
+                {isIsletsActive && (
+                  <circle cx="1043" cy="461" r="24" fill="#000000" />
+                )}
+              </mask>
+            </defs>
+
+            {/* 1. Dark Teal Dimming Overlay on Unfocused Organs (40% opacity, 250ms transition) */}
+            <rect
+              x="0"
+              y="0"
+              width="1536"
+              height="1024"
+              fill="#0B2E3A"
+              opacity={activePartId ? 0.40 : 0}
+              mask="url(#dimmingMask)"
+              className="transition-opacity duration-250 ease-out pointer-events-none"
             />
 
-            {/* Splenic Artery: Tortuous crimson vessel running superiorly ABOVE the vein */}
-            <path
-              d={REALISTIC_PATHS.splenicArtery}
-              stroke="url(#splenic-artery-grad)"
-              strokeWidth="4.2"
-              strokeLinecap="round"
-              fill="none"
-              filter={isLayerActive('vasculature') ? 'url(#hover-glow-teal)' : 'url(#vessel-3d-sheen)'}
-            />
-            {/* Splenic Artery Branchlets */}
-            {REALISTIC_PATHS.splenicArteryBranches.map((branch, i) => (
-              <path
-                key={i}
-                d={branch}
-                stroke="url(#splenic-artery-grad)"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                fill="none"
-                pointerEvents="none"
-              />
-            ))}
-            {/* Superior Mesenteric Artery */}
-            <path
-              d={REALISTIC_PATHS.superiorMesentericArtery}
-              stroke="url(#splenic-artery-grad)"
-              strokeWidth="4"
-              strokeLinecap="round"
-              fill="none"
-              pointerEvents="none"
-            />
-          </g>
+            {/* 2. Interactive SVG Hotspot Paths */}
+            {HOTSPOT_LIST.map((id) => {
+              const part = PANCREAS_DATA[id];
+              const isActive = activePartId === id;
 
-          {/* ------------------------------------------------------------ */}
-          {/* 4. DUODENAL C-LOOP (Salmon-pink muscular wall & folds)        */}
-          {/* ------------------------------------------------------------ */}
-          <g
-            id="duodenum"
-            role="button"
-            tabIndex={0}
-            aria-label="Duodenal C-Loop (Duodenum)"
-            aria-pressed={isLayerActive('duodenum')}
-            className="cursor-pointer ap-organ-layer focus-visible:outline-none"
-            opacity={getLayerOpacity('duodenum')}
-            style={{
-              transform: isLayerActive('duodenum') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '170px 300px',
-            }}
-            onMouseEnter={() => handlePartHover('duodenum')}
-            onMouseLeave={() => handlePartHover(null)}
-            onFocus={() => handlePartHover('duodenum')}
-            onBlur={() => handlePartHover(null)}
-            onClick={() => handlePartClick('duodenum')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePartClick('duodenum');
-              }
-            }}
-          >
-            {/* Teal Glow when hovered */}
-            {isLayerActive('duodenum') && (
-              <path
-                d={REALISTIC_PATHS.duodenumMain}
-                fill="#65D9D0"
-                opacity="0.32"
-                filter="url(#hover-glow-teal)"
-                pointerEvents="none"
-              />
-            )}
-            {/* Organic Fleshy Duodenal C-Loop */}
-            <path
-              d={REALISTIC_PATHS.duodenumMain}
-              fill="url(#duodenum-salmon-grad)"
-              filter="url(#duodenum-fleshy-realistic)"
-            />
-            {/* Inner Mucosal Lumen Highlight */}
-            <path
-              d={REALISTIC_PATHS.duodenumLumenHighlight}
-              stroke="#ffffff"
-              strokeWidth="2.4"
-              strokeOpacity="0.4"
-              fill="none"
-              strokeLinecap="round"
-              pointerEvents="none"
-            />
-            {/* Plicae Circulares (Circular mucosal folds) */}
-            {REALISTIC_PATHS.duodenalFolds.map((fold, idx) => (
-              <path
-                key={idx}
-                d={fold}
-                stroke="#ffe4e6"
-                strokeWidth="1.8"
-                strokeOpacity="0.65"
-                fill="none"
-                strokeLinecap="round"
-                pointerEvents="none"
-              />
-            ))}
-          </g>
+              return (
+                <path
+                  key={id}
+                  d={part.svgPath}
+                  fill={
+                    isDebugMode
+                      ? debugColors[id] + '55'
+                      : isActive
+                      ? 'rgba(14, 90, 107, 0.12)'
+                      : 'transparent'
+                  }
+                  stroke={
+                    isDebugMode
+                      ? debugColors[id]
+                      : isActive
+                      ? '#65D9D0'
+                      : 'transparent'
+                  }
+                  strokeWidth={isActive || isDebugMode ? (id === 'duct' ? 5 : 3.5) : 0}
+                  strokeLinejoin="round"
+                  filter={isActive && !isDebugMode ? 'url(#tealOrganGlow)' : undefined}
+                  className="cursor-pointer transition-all duration-200 outline-none focus-visible:stroke-[#F2A33A] focus-visible:stroke-[4]"
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`${part.name} (${part.scientificName})`}
+                  onMouseEnter={() => handleMouseEnter(id)}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={() => handlePartSelect(id)}
+                  onFocus={() => handleMouseEnter(id)}
+                  onBlur={handleMouseLeave}
+                  onKeyDown={(e) => handleKeyDown(e, id)}
+                />
+              );
+            })}
 
-          {/* ------------------------------------------------------------ */}
-          {/* 5. CONTACT OCCLUSION SHADOW (Duodenum - Pancreatic Head)     */}
-          {/* ------------------------------------------------------------ */}
-          <path
-            d={REALISTIC_PATHS.contactShadowDuodenum}
-            stroke="#160502"
-            strokeWidth="5.5"
-            strokeLinecap="round"
-            fill="none"
-            filter="url(#contact-shadow-blur)"
-            opacity="0.72"
-            pointerEvents="none"
-          />
+            {/* 3. Small White Dot on Pancreatic Duct linked to Islets */}
+            <g
+              className="cursor-pointer group"
+              tabIndex={0}
+              role="button"
+              aria-label="Islets of Langerhans Biopsy Site on Pancreatic Duct"
+              onMouseEnter={() => handleMouseEnter('islets')}
+              onMouseLeave={handleMouseLeave}
+              onClick={() => handlePartSelect('islets')}
+              onFocus={() => handleMouseEnter('islets')}
+              onBlur={handleMouseLeave}
+              onKeyDown={(e) => handleKeyDown(e, 'islets')}
+            >
+              {/* Hit testing halo */}
+              <circle cx="1043" cy="461" r="26" fill="transparent" />
 
-          {/* ------------------------------------------------------------ */}
-          {/* 6. HEAD OF PANCREAS & UNCINATE PROCESS (Snug inside C-Loop)  */}
-          {/* ------------------------------------------------------------ */}
-          <g
-            id="head"
-            role="button"
-            tabIndex={0}
-            aria-label="Head of Pancreas (Caput pancreatis)"
-            aria-pressed={isLayerActive('head')}
-            className="cursor-pointer ap-organ-layer focus-visible:outline-none"
-            opacity={getLayerOpacity('head')}
-            style={{
-              transform: isLayerActive('head') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '185px 290px',
-            }}
-            onMouseEnter={() => handlePartHover('head')}
-            onMouseLeave={() => handlePartHover(null)}
-            onFocus={() => handlePartHover('head')}
-            onBlur={() => handlePartHover(null)}
-            onClick={() => handlePartClick('head')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePartClick('head');
-              }
-            }}
-          >
-            {isLayerActive('head') && (
-              <path
-                d={REALISTIC_PATHS.headParenchyma}
-                fill="#65D9D0"
-                opacity="0.35"
-                filter="url(#hover-glow-teal)"
-                pointerEvents="none"
-              />
-            )}
-            {/* Uncinate process posterior hook */}
-            <path
-              d={REALISTIC_PATHS.uncinateProcess}
-              fill="url(#pancreas-head-grad)"
-              filter="url(#pancreas-lobular-realistic)"
-              opacity="0.95"
-            />
-            {/* Head Lobulated Parenchyma: snug with zero gap inside C-Loop */}
-            <path
-              d={REALISTIC_PATHS.headParenchyma}
-              fill="url(#pancreas-head-grad)"
-              filter="url(#pancreas-lobular-realistic)"
-            />
-          </g>
-
-          {/* ------------------------------------------------------------ */}
-          {/* 7. PANCREATIC BODY (Slender, gently arching, narrowed neck)  */}
-          {/* ------------------------------------------------------------ */}
-          <g
-            id="body"
-            role="button"
-            tabIndex={0}
-            aria-label="Pancreatic Body (Corpus pancreatis)"
-            aria-pressed={isLayerActive('body')}
-            className="cursor-pointer ap-organ-layer focus-visible:outline-none"
-            opacity={getLayerOpacity('body')}
-            style={{
-              transform: isLayerActive('body') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '315px 225px',
-            }}
-            onMouseEnter={() => handlePartHover('body')}
-            onMouseLeave={() => handlePartHover(null)}
-            onFocus={() => handlePartHover('body')}
-            onBlur={() => handlePartHover(null)}
-            onClick={() => handlePartClick('body')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePartClick('body');
-              }
-            }}
-          >
-            {isLayerActive('body') && (
-              <path
-                d={REALISTIC_PATHS.bodyParenchyma}
-                fill="#65D9D0"
-                opacity="0.35"
-                filter="url(#hover-glow-teal)"
-                pointerEvents="none"
-              />
-            )}
-            {/* Slender Arched Glandular Body Tissue */}
-            <path
-              d={REALISTIC_PATHS.bodyParenchyma}
-              fill="url(#pancreas-body-grad)"
-              filter="url(#pancreas-lobular-realistic)"
-            />
-          </g>
-
-          {/* ------------------------------------------------------------ */}
-          {/* 8. PANCREATIC TAIL (Tapering to splenic hilum)               */}
-          {/* ------------------------------------------------------------ */}
-          <g
-            id="tail"
-            role="button"
-            tabIndex={0}
-            aria-label="Pancreatic Tail (Cauda pancreatis)"
-            aria-pressed={isLayerActive('tail')}
-            className="cursor-pointer ap-organ-layer focus-visible:outline-none"
-            opacity={getLayerOpacity('tail')}
-            style={{
-              transform: isLayerActive('tail') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '425px 195px',
-            }}
-            onMouseEnter={() => handlePartHover('tail')}
-            onMouseLeave={() => handlePartHover(null)}
-            onFocus={() => handlePartHover('tail')}
-            onBlur={() => handlePartHover(null)}
-            onClick={() => handlePartClick('tail')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePartClick('tail');
-              }
-            }}
-          >
-            {isLayerActive('tail') && (
-              <path
-                d={REALISTIC_PATHS.tailParenchyma}
-                fill="#65D9D0"
-                opacity="0.35"
-                filter="url(#hover-glow-teal)"
-                pointerEvents="none"
-              />
-            )}
-            {/* Tapering Tail Lobules Reaching Splenic Hilum */}
-            <path
-              d={REALISTIC_PATHS.tailParenchyma}
-              fill="url(#pancreas-tail-grad)"
-              filter="url(#pancreas-lobular-realistic)"
-            />
-          </g>
-
-          {/* Lobular Surface Contours (Acinar nodularity on all parenchyma) */}
-          <g pointerEvents="none" opacity="0.55">
-            {REALISTIC_PATHS.parenchymalLobules.map((lobule, idx) => (
-              <path
-                key={idx}
-                d={lobule}
-                fill="#fde68a"
-                opacity="0.32"
-                stroke="#d97706"
-                strokeWidth="0.6"
-              />
-            ))}
-          </g>
-
-          {/* Upper-left directional key light specular highlight ridge */}
-          <g pointerEvents="none" opacity="0.55">
-            <path
-              d="M 235 228 C 270 218, 320 210, 365 204 C 395 198, 425 190, 450 186"
-              stroke="#ffffff"
-              strokeWidth="1.6"
-              strokeOpacity="0.45"
-              fill="none"
-              strokeLinecap="round"
-            />
-          </g>
-
-          {/* ------------------------------------------------------------ */}
-          {/* 9. DUCT OF WIRSUNG (Continuous, thin pale-yellow tube)       */}
-          {/* ------------------------------------------------------------ */}
-          <g
-            id="duct"
-            role="button"
-            tabIndex={0}
-            aria-label="Duct of Wirsung (Main pancreatic duct)"
-            aria-pressed={isLayerActive('duct')}
-            className="cursor-pointer ap-organ-layer focus-visible:outline-none"
-            opacity={getLayerOpacity('duct')}
-            style={{
-              transform: isLayerActive('duct') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '280px 240px',
-            }}
-            onMouseEnter={() => handlePartHover('duct')}
-            onMouseLeave={() => handlePartHover(null)}
-            onFocus={() => handlePartHover('duct')}
-            onBlur={() => handlePartHover(null)}
-            onClick={() => handlePartClick('duct')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePartClick('duct');
-              }
-            }}
-          >
-            {/* Active hover glow halo */}
-            {isLayerActive('duct') && (
-              <path
-                d={REALISTIC_PATHS.ductOfWirsung}
-                stroke="#65D9D0"
-                strokeWidth="5"
-                strokeLinecap="round"
-                fill="none"
-                filter="url(#hover-glow-teal)"
-                opacity="0.9"
-                pointerEvents="none"
-              />
-            )}
-            {/* Translucent pale-yellow outer sheath visible through parenchyma */}
-            <path
-              d={REALISTIC_PATHS.ductOfWirsung}
-              stroke="#fef08a"
-              strokeWidth="3.2"
-              strokeOpacity="0.45"
-              strokeLinecap="round"
-              fill="none"
-              pointerEvents="none"
-            />
-            {/* Main continuous, thin pale-yellow duct tube */}
-            <path
-              d={REALISTIC_PATHS.ductOfWirsung}
-              stroke="url(#wirsung-duct-grad)"
-              strokeWidth="2.0"
-              strokeLinecap="round"
-              fill="none"
-            />
-            {/* Continuous translucent fluid inner sheen */}
-            <path
-              d={REALISTIC_PATHS.ductOfWirsung}
-              stroke="#ffffff"
-              strokeWidth="0.8"
-              strokeLinecap="round"
-              strokeOpacity="0.75"
-              fill="none"
-              pointerEvents="none"
-            />
-            {/* Ampulla of Vater junction at medial duodenal wall */}
-            <circle cx="118" cy="308" r="3.2" fill="#fde047" stroke="#ca8a04" strokeWidth="0.9" pointerEvents="none" />
-            <circle cx="118" cy="308" r="1.4" fill="#ffffff" pointerEvents="none" />
-          </g>
-
-          {/* ------------------------------------------------------------ */}
-          {/* 10. BETA CELLS & ISLETS (Islets of Langerhans)               */}
-          {/* ------------------------------------------------------------ */}
-          <g
-            id="islets"
-            role="button"
-            tabIndex={0}
-            aria-label="Beta Cells & Islets (Islets of Langerhans)"
-            aria-pressed={isLayerActive('islets')}
-            className="cursor-pointer ap-organ-layer focus-visible:outline-none"
-            opacity={getLayerOpacity('islets')}
-            onMouseEnter={() => handlePartHover('islets')}
-            onMouseLeave={() => handlePartHover(null)}
-            onFocus={() => handlePartHover('islets')}
-            onBlur={() => handlePartHover(null)}
-            onClick={() => handlePartClick('islets')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePartClick('islets');
-              }
-            }}
-          >
-            {/* Micro-Islet Golden/Amber Spheres distributed across parenchyma */}
-            {[
-              { cx: 442, cy: 190, r: 3.6 },
-              { cx: 432, cy: 184, r: 4.0 },
-              { cx: 422, cy: 198, r: 3.8 },
-              { cx: 410, cy: 192, r: 4.2 },
-              { cx: 392, cy: 210, r: 4.0 },
-              { cx: 365, cy: 204, r: 3.8 },
-              { cx: 335, cy: 210, r: 3.8 },
-              { cx: 295, cy: 220, r: 3.6 },
-              { cx: 310, cy: 238, r: 3.6 },
-              { cx: 180, cy: 242, r: 3.8 },
-              { cx: 155, cy: 275, r: 3.8 },
-            ].map((islet, idx) => (
-              <g key={idx}>
-                {/* Bioluminescent halo */}
+              {/* Pulsing ring in idle state */}
+              {!hasInteracted && !activePartId && (
                 <circle
-                  cx={islet.cx}
-                  cy={islet.cy}
-                  r={islet.r * 1.5}
+                  cx="1043"
+                  cy="461"
+                  r="18"
+                  fill="none"
+                  stroke="#F2A33A"
+                  strokeWidth="2"
+                  className="animate-ping origin-center"
+                />
+              )}
+
+              {/* Active selection ring */}
+              {isIsletsActive && (
+                <circle
+                  cx="1043"
+                  cy="461"
+                  r="22"
                   fill="none"
                   stroke="#65D9D0"
-                  strokeWidth="1.2"
-                  opacity={isLayerActive('islets') ? 0.95 : 0.45}
-                  filter={isLayerActive('islets') ? 'url(#hover-glow-teal)' : 'none'}
-                  pointerEvents="none"
+                  strokeWidth="3.5"
+                  filter="url(#tealOrganGlow)"
+                  className="transition-all"
                 />
-                {/* Islet core */}
-                <circle
-                  cx={islet.cx}
-                  cy={islet.cy}
-                  r={islet.r}
-                  fill="#fef08a"
-                  stroke="#d97706"
-                  strokeWidth="1"
+              )}
+            </g>
+
+            {/* 4. Islets Circular Inset Hotspot Lens */}
+            <g
+              className="cursor-pointer"
+              tabIndex={0}
+              role="button"
+              aria-label="Islets of Langerhans 1000x Cellular Loupe Lens"
+              onMouseEnter={() => handleMouseEnter('islets')}
+              onMouseLeave={handleMouseLeave}
+              onClick={() => handlePartSelect('islets')}
+              onFocus={() => handleMouseEnter('islets')}
+              onBlur={handleMouseLeave}
+              onKeyDown={(e) => handleKeyDown(e, 'islets')}
+            >
+              {/* Outer boundary ring on hover */}
+              <circle
+                cx="1208"
+                cy="734"
+                r={isIsletsActive ? 162 : 158}
+                fill={isIsletsActive ? 'rgba(14, 90, 107, 0.08)' : 'transparent'}
+                stroke={isIsletsActive ? '#65D9D0' : isDebugMode ? '#8B5CF6' : 'transparent'}
+                strokeWidth={isIsletsActive ? 4 : isDebugMode ? 3 : 0}
+                filter={isIsletsActive ? 'url(#tealOrganGlow)' : undefined}
+                className="transition-all duration-250 ease-out"
+              />
+            </g>
+
+            {/* 5. SVG Leader Line to Active Part */}
+            {activePartInfo && !isIsletsActive && (
+              <g className="pointer-events-none transition-opacity duration-200">
+                <line
+                  x1={activePartInfo.hotspot.cx}
+                  y1={activePartInfo.hotspot.cy}
+                  x2={activePartInfo.hotspot.calloutX}
+                  y2={activePartInfo.hotspot.calloutY}
+                  stroke="#65D9D0"
+                  strokeWidth="2"
+                  strokeDasharray="4 4"
                 />
-                {/* Glare dot */}
                 <circle
-                  cx={islet.cx - islet.r * 0.3}
-                  cy={islet.cy - islet.r * 0.3}
-                  r={islet.r * 0.35}
-                  fill="#ffffff"
-                  pointerEvents="none"
+                  cx={activePartInfo.hotspot.cx}
+                  cy={activePartInfo.hotspot.cy}
+                  r="4.5"
+                  fill="#65D9D0"
+                  stroke="#FFFFFF"
+                  strokeWidth="1.5"
                 />
               </g>
-            ))}
-          </g>
+            )}
 
-          {/* ------------------------------------------------------------ */}
-          {/* 9. INSET LOUPE MAGNIFIER FOR BETA CELLS & ISLETS             */}
-          {/* ------------------------------------------------------------ */}
-          <IsletLoupeInset isVisible={isLayerActive('islets')} isHindi={isHindi} />
+            {/* 6. Interactive Hotspot Callout Pins (when showHotspots is true) */}
+            {showHotspots && (
+              <g id="hotspots-layer">
+                {HOTSPOT_LIST.map((id) => {
+                  if (isPartFilteredOut(id)) return null;
+                  const part = PANCREAS_DATA[id];
+                  const isCurrent = activePartId === id;
 
-          {/* ------------------------------------------------------------ */}
-          {/* 10. HOTSPOT PINS & LEADER CALLOUTS                           */}
-          {/* ------------------------------------------------------------ */}
-          {showHotspots && (
-            <g id="hotspots-layer">
-              {HOTSPOT_LIST.map((partId) => {
-                const part = PANCREAS_DATA[partId];
-                if (!part) return null;
-                const isCurrent = displayedPart === partId;
+                  return (
+                    <g key={`hotspot-pin-${id}`}>
+                      {/* Leader Line */}
+                      <line
+                        x1={part.hotspot.cx}
+                        y1={part.hotspot.cy}
+                        x2={part.hotspot.calloutX}
+                        y2={part.hotspot.calloutY}
+                        stroke={isCurrent ? '#65D9D0' : 'rgba(14, 90, 107, 0.45)'}
+                        strokeWidth={isCurrent ? 1.5 : 1}
+                        strokeDasharray="2 3"
+                        pointerEvents="none"
+                      />
 
-                return (
-                  <g key={partId}>
-                    {/* Leader Line */}
-                    <line
-                      x1={part.hotspot.cx}
-                      y1={part.hotspot.cy}
-                      x2={part.hotspot.calloutX}
-                      y2={part.hotspot.calloutY}
-                      stroke={isCurrent ? '#103F4A' : 'rgba(16, 63, 74, 0.3)'}
-                      strokeWidth={isCurrent ? 1.6 : 1}
-                      strokeDasharray="2 2"
-                      pointerEvents="none"
-                    />
-
-                    {/* Radar Target Dot */}
-                    {isCurrent && (
+                      {/* Hotspot Target Radar Dot */}
                       <circle
                         cx={part.hotspot.cx}
                         cy={part.hotspot.cy}
-                        r={7.5}
-                        fill="none"
-                        stroke="#65D9D0"
+                        r={4}
+                        fill={isCurrent ? '#65D9D0' : '#F2A33A'}
+                        stroke="#ffffff"
                         strokeWidth="1.5"
-                        opacity="0.9"
                         pointerEvents="none"
                       />
-                    )}
-                    <circle
-                      cx={part.hotspot.cx}
-                      cy={part.hotspot.cy}
-                      r={3.5}
-                      fill={isCurrent ? '#103F4A' : '#f59e0b'}
-                      stroke="#ffffff"
-                      strokeWidth="1.5"
-                      pointerEvents="none"
-                    />
 
-                    {/* Interactive Callout Button */}
-                    <g
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`Inspect ${part.hotspot.title}`}
-                      aria-pressed={isCurrent}
-                      className="cursor-pointer focus-visible:outline-none"
-                      transform={`translate(${part.hotspot.calloutX}, ${part.hotspot.calloutY})`}
-                      onClick={() => handlePartClick(partId)}
-                      onTouchStart={(e) => {
-                        e.stopPropagation();
-                        handlePartClick(partId);
-                      }}
-                      onMouseEnter={() => handlePartHover(partId)}
-                      onMouseLeave={() => handlePartHover(null)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          handlePartClick(partId);
-                        }
-                      }}
-                    >
-                      <rect
-                        x="-44"
-                        y="-11"
-                        width="88"
-                        height="22"
-                        rx="11"
-                        pointerEvents="all"
-                        fill={isCurrent ? '#103F4A' : 'rgba(255, 255, 255, 0.96)'}
-                        stroke={isCurrent ? '#65D9D0' : 'rgba(16, 63, 74, 0.22)'}
-                        strokeWidth={isCurrent ? 1.5 : 1}
-                        filter="url(#anatomical-depth-shadow)"
-                      />
-                      <text
-                        x="0"
-                        y="3"
-                        textAnchor="middle"
-                        fontSize="8.5"
-                        fontWeight="700"
-                        fontFamily="sans-serif"
-                        fill={isCurrent ? '#ffffff' : '#103F4A'}
-                        letterSpacing="0.01em"
-                        pointerEvents="none"
+                      {/* Interactive Callout Button */}
+                      <g
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Inspect ${part.hotspot.title}`}
+                        className="cursor-pointer focus-visible:outline-none"
+                        transform={`translate(${part.hotspot.calloutX}, ${part.hotspot.calloutY})`}
+                        onClick={() => handlePartSelect(id)}
+                        onMouseEnter={() => handleMouseEnter(id)}
+                        onMouseLeave={handleMouseLeave}
+                        onKeyDown={(e) => handleKeyDown(e, id)}
                       >
-                        {isHindi && part.hotspot.titleHi ? part.hotspot.titleHi : part.hotspot.title}
-                      </text>
+                        <rect
+                          x="-62"
+                          y="-13"
+                          width="124"
+                          height="26"
+                          rx="13"
+                          pointerEvents="all"
+                          fill={isCurrent ? '#0B2E3A' : 'rgba(255, 255, 255, 0.95)'}
+                          stroke={isCurrent ? '#65D9D0' : 'rgba(14, 90, 107, 0.3)'}
+                          strokeWidth="1.2"
+                        />
+                        <text
+                          x="0"
+                          y="4"
+                          textAnchor="middle"
+                          fontSize="9"
+                          fontWeight="700"
+                          fontFamily="sans-serif"
+                          fill={isCurrent ? '#ffffff' : '#0B2E3A'}
+                          letterSpacing="0.01em"
+                          pointerEvents="none"
+                        >
+                          {isHindi ? part.hotspot.titleHi : part.hotspot.title}
+                        </text>
+                      </g>
                     </g>
-                  </g>
-                );
-              })}
-            </g>
-          )}
-        </svg>
-      </div>
+                  );
+                })}
+              </g>
+            )}
 
-      {/* ---------------------------------------------------------------------- */}
-      {/* 11. DOCKED FIXED-HEIGHT CLINICAL INFO CARD (ZERO LAYOUT SHIFT)         */}
-      {/* ---------------------------------------------------------------------- */}
-      {showDetailsCard && (
-        <div className="w-full max-w-lg h-[150px] sm:h-[142px] px-2 sm:px-4 mt-2 sm:mt-3 z-30 shrink-0 relative">
-          <div
-            key={activeDetails.id}
-            className="ap-glass-card rounded-2xl p-3 sm:p-3.5 h-full flex flex-col justify-between border border-slate-200/90 shadow-sm text-left transition-opacity duration-150 animate-in fade-in"
-          >
-            {/* Header: Title + Latin Scientific Name + Stat Badge */}
-            <div className="flex items-start justify-between gap-2.5">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap">
-                  <span className="font-extrabold text-sm sm:text-base text-[#103F4A] tracking-tight leading-snug">
-                    {isHindi && activeDetails.nameHi ? activeDetails.nameHi : activeDetails.name}
-                  </span>
-                  <span className="text-[11px] text-slate-500 italic font-medium">
-                    ({activeDetails.scientificName})
-                  </span>
+            {/* Debug Mode Labels */}
+            {isDebugMode && (
+              <g className="pointer-events-none font-bold text-[14px]">
+                {HOTSPOT_LIST.map((id) => {
+                  const part = PANCREAS_DATA[id];
+                  return (
+                    <text
+                      key={`debug-lbl-${id}`}
+                      x={part.hotspot.cx}
+                      y={part.hotspot.cy}
+                      fill={debugColors[id]}
+                      stroke="#0B2E3A"
+                      strokeWidth="3"
+                      paintOrder="stroke"
+                      textAnchor="middle"
+                    >
+                      {part.name}
+                    </text>
+                  );
+                })}
+              </g>
+            )}
+          </svg>
+
+          {/* Floating HTML Label Pill for Active Organ (Non-Islets) */}
+          {activePartInfo && !isIsletsActive && !showHotspots && (
+            <div
+              className="absolute pointer-events-none transition-all duration-200 -translate-x-1/2 -translate-y-1/2 z-20 hidden sm:flex"
+              style={{
+                left: `${(activePartInfo.hotspot.calloutX / 1536) * 100}%`,
+                top: `${(activePartInfo.hotspot.calloutY / 1024) * 100}%`,
+              }}
+            >
+              <div className="px-3 py-1.5 rounded-full bg-[#0B2E3A]/95 text-white border border-[#65D9D0] text-xs font-bold shadow-[0_4px_16px_rgba(11,46,58,0.25)] flex items-center gap-1.5 backdrop-blur-md animate-in fade-in zoom-in-95 duration-150">
+                <span className="w-2 h-2 rounded-full bg-[#65D9D0] animate-pulse" />
+                <span>{isHindi ? activePartInfo.nameHi : activePartInfo.name}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Zoomed Islets Lens & HTML Cellular Labels (Alpha, Beta, Delta) */}
+          {isIsletsActive && (
+            <div className="absolute inset-0 pointer-events-none z-20">
+              {/* Zoomed Magnified Lens Indicator (1.6x zoom feel) */}
+              <div
+                className="absolute w-[316px] h-[316px] rounded-full border-2 border-[#65D9D0] pointer-events-none shadow-[0_0_30px_rgba(101,217,208,0.4)] transition-transform duration-300 ease-out"
+                style={{
+                  left: 'calc(78.6% - 158px)',
+                  top: 'calc(71.7% - 158px)',
+                  transform: 'scale(1.15)',
+                }}
+              >
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-[#0B2E3A]/90 text-white text-[10px] font-bold border border-[#65D9D0]/60 tracking-wider uppercase">
+                  HISTOLOGY (1000x)
                 </div>
               </div>
 
-              <span className="shrink-0 text-[10px] sm:text-[11px] font-bold text-[#103F4A] bg-[#EAF7FA] px-2.5 py-0.5 rounded-full border border-[#103F4A]/20">
-                {activeDetails.stat}
+              {/* Cellular Callout Pills */}
+              {/* 1. Alpha Cell (Glucagon) */}
+              <div
+                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-amber-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200"
+                style={{ left: '95%', top: '63%' }}
+              >
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                <span>{isHindi ? 'अल्फा कोशिका (ग्लूकागन)' : 'Alpha Cell (glucagon)'}</span>
+              </div>
+
+              {/* 2. Beta Cell (Insulin) */}
+              <div
+                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-fuchsia-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200"
+                style={{ left: '96%', top: '72%' }}
+              >
+                <span className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
+                <span>{isHindi ? 'बीटा कोशिका (इंसुलिन)' : 'Beta Cell (insulin)'}</span>
+              </div>
+
+              {/* 3. Delta Cell (Somatostatin) */}
+              <div
+                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-cyan-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200"
+                style={{ left: '95%', top: '81%' }}
+              >
+                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <span>{isHindi ? 'डेल्टा कोशिका (सोमाटोस्टैटिन)' : 'Delta Cell (somatostatin)'}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Idle Hint Badge */}
+          {!hasInteracted && !activePartId && (
+            <div className="absolute top-4 left-4 z-10 pointer-events-none animate-pulse">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0B2E3A]/90 text-white text-xs font-semibold border border-[#65D9D0]/60 shadow-md backdrop-blur-sm">
+                <Compass className="w-3.5 h-3.5 text-[#65D9D0]" />
+                <span>
+                  {isHindi
+                    ? 'अंगों को समझने के लिए कर्सर ले जाएं या टैप करें'
+                    : 'Hover or tap a part to explore'}
+                </span>
               </span>
             </div>
+          )}
+        </div>
 
-            {/* Scientific Explanation */}
-            <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed m-0 line-clamp-2">
-              {isHindi && activeDetails.descriptionHi ? activeDetails.descriptionHi : activeDetails.description}
-            </p>
+        {/* Small Bottom Caption: "Illustrative anatomy, for patient education." */}
+        <div className="px-4 py-2 bg-slate-50/90 border-t border-[#D7E5E6] flex items-center justify-between text-[11px] text-[#4F6470] w-full">
+          <span>
+            {isHindi
+              ? 'मरीज स्वास्थ्य शिक्षा हेतु दृष्टांत शारीरिक रचना।'
+              : 'Illustrative anatomy, for patient education.'}
+          </span>
+          <span className="font-mono text-[10px] text-[#0E5A6B] font-semibold">
+            {isHindi ? 'विर्सुंग वाहिनी एवं लैंगरहेंस द्वीप' : 'Duct of Wirsung & Islets'}
+          </span>
+        </div>
+      </div>
 
-            {/* Clinical Marker & Interaction Tip */}
-            <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100">
-              <div className="flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-800 font-semibold">
-                <Sparkles className="w-3 h-3 text-emerald-600 shrink-0" />
-                <span>Clinical Marker: {activeDetails.clinicalMarker}</span>
+      {/* Mobile Scrollable Chip Row for Under-768px Screens */}
+      <div className="w-full mt-3 flex items-center gap-1.5 overflow-x-auto pb-1.5 sm:hidden no-scrollbar">
+        {HOTSPOT_LIST.map((id) => {
+          const part = PANCREAS_DATA[id];
+          const isSelected = activePartId === id;
+          const chipLabel =
+            id === 'duct'
+              ? isHindi
+                ? 'पैन्क्रियाटिक डक्ट'
+                : 'Pancreatic Duct'
+              : id === 'islets'
+              ? isHindi
+                ? 'लैंगरहेंस द्वीप'
+                : 'Islets Inset'
+              : isHindi
+              ? part.nameHi
+              : part.name;
+          return (
+            <button
+              key={`mob-chip-${id}`}
+              type="button"
+              onClick={() => handlePartSelect(id)}
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                isSelected
+                  ? 'bg-[#0E5A6B] text-white border-[#0E5A6B] shadow-xs'
+                  : 'bg-white text-[#1B2B34] border-[#D7E5E6] hover:border-[#0E5A6B]/50'
+              }`}
+            >
+              {chipLabel}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Anatomical Details Card (Desktop overlay / Mobile docked below) */}
+      {showDetailsCard && activePartInfo && (
+        <div className="w-full mt-4 sm:mt-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#D7E5E6] shadow-[0_8px_24px_rgba(11,46,58,0.08)] relative">
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedPart(null);
+                setHoveredPart(null);
+              }}
+              className="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-700 p-1 rounded-full hover:bg-slate-100 transition-colors"
+              aria-label="Close details"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2 border-b border-[#D7E5E6]/70">
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-base sm:text-lg font-bold text-[#1B2B34]">
+                    {isHindi ? activePartInfo.nameHi : activePartInfo.name}
+                  </h3>
+                  <span className="text-xs italic text-[#4F6470] font-serif">
+                    ({activePartInfo.scientificName})
+                  </span>
+                </div>
               </div>
-              <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">
-                {isHindi ? 'विवरण देखने के लिए टैप करें' : 'Hover / Tap to inspect'}
-              </span>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[11px] font-bold text-[#0E5A6B] bg-[#E8F5F4] px-2.5 py-0.5 rounded-full border border-[#D7E5E6] w-fit">
+                  {activePartInfo.badge}
+                </span>
+                <span className="text-[11px] font-bold text-[#0B2E3A] bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200 w-fit">
+                  {activePartInfo.stat}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-3 space-y-2 text-xs sm:text-sm">
+              {/* One-Line Physiological Function */}
+              <div>
+                <strong className="text-[#1B2B34] font-semibold block text-xs">
+                  {isHindi ? 'शारीरिक कार्य:' : 'Physiological Function:'}
+                </strong>
+                <p className="text-[#4F6470] leading-relaxed">
+                  {isHindi ? activePartInfo.oneLineFunctionHi : activePartInfo.oneLineFunction}
+                </p>
+              </div>
+
+              {/* Clinical Diabetology Note */}
+              <div className="p-2.5 rounded-xl bg-[#E8F5F4]/60 border border-[#D7E5E6] text-xs">
+                <strong className="text-[#0E5A6B] font-bold flex items-center justify-between flex-wrap gap-1 mb-0.5">
+                  <span className="flex items-center gap-1.5">
+                    <Activity className="w-3.5 h-3.5 text-[#0E5A6B]" />
+                    <span>{isHindi ? 'क्लिनिकल महत्व:' : 'Clinical Importance:'}</span>
+                  </span>
+                  <span className="text-[10.5px] font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    Marker: {activePartInfo.clinicalMarker}
+                  </span>
+                </strong>
+                <p className="text-[#1B2B34] leading-relaxed">
+                  {isHindi ? activePartInfo.clinicalNoteHi : activePartInfo.clinicalNote}
+                </p>
+              </div>
             </div>
           </div>
         </div>
