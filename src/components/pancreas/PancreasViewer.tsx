@@ -519,7 +519,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
                   transform: 'scale(1.15)',
                 }}
               >
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-[#0B2E3A]/90 text-white text-[10px] font-bold border border-[#65D9D0]/60 tracking-wider uppercase">
+                <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-[#0B2E3A]/95 text-white text-[10px] font-bold border border-[#65D9D0]/70 tracking-wider uppercase shadow-md whitespace-nowrap">
                   HISTOLOGY (1000x)
                 </div>
               </div>
@@ -527,8 +527,8 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               {/* Cellular Callout Pills */}
               {/* 1. Alpha Cell (Glucagon) */}
               <div
-                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-amber-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200"
-                style={{ left: '95%', top: '63%' }}
+                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-amber-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
+                style={{ left: '96%', top: '59%' }}
               >
                 <span className="w-2 h-2 rounded-full bg-amber-400" />
                 <span>{isHindi ? 'अल्फा कोशिका (ग्लूकागन)' : 'Alpha Cell (glucagon)'}</span>
@@ -536,8 +536,8 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
 
               {/* 2. Beta Cell (Insulin) */}
               <div
-                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-fuchsia-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200"
-                style={{ left: '96%', top: '72%' }}
+                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-fuchsia-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
+                style={{ left: '96%', top: '70%' }}
               >
                 <span className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
                 <span>{isHindi ? 'बीटा कोशिका (इंसुलिन)' : 'Beta Cell (insulin)'}</span>
@@ -545,8 +545,8 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
 
               {/* 3. Delta Cell (Somatostatin) */}
               <div
-                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-cyan-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200"
-                style={{ left: '95%', top: '81%' }}
+                className="absolute flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0B2E3A]/95 text-white border border-cyan-400 text-[11px] font-bold shadow-md -translate-x-full animate-in fade-in duration-200 whitespace-nowrap"
+                style={{ left: '96%', top: '81%' }}
               >
                 <span className="w-2 h-2 rounded-full bg-cyan-400" />
                 <span>{isHindi ? 'डेल्टा कोशिका (सोमाटोस्टैटिन)' : 'Delta Cell (somatostatin)'}</span>
