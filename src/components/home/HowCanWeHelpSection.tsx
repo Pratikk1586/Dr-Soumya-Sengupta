@@ -13,6 +13,7 @@ interface ClinicalFocusArea {
   icon: React.FC<{ className?: string }>;
   link: string;
   badge: { en: string; hi: string };
+  cta: { en: string; hi: string };
 }
 
 const FOCUS_AREAS: ClinicalFocusArea[] = [
@@ -26,6 +27,7 @@ const FOCUS_AREAS: ClinicalFocusArea[] = [
     icon: Activity,
     link: '/conditions/diabetes',
     badge: { en: 'Primary Focus', hi: 'मुख्य फोकस' },
+    cta: { en: 'Explore Diabetes Care', hi: 'डायबिटीज केयर देखें' },
   },
   {
     id: 'thyroid',
@@ -37,6 +39,7 @@ const FOCUS_AREAS: ClinicalFocusArea[] = [
     icon: Flame,
     link: '/conditions/thyroid',
     badge: { en: 'Hormones', hi: 'हार्मोन' },
+    cta: { en: 'View Thyroid Guide', hi: 'थायरॉयड गाइड देखें' },
   },
   {
     id: 'weight-management',
@@ -48,6 +51,7 @@ const FOCUS_AREAS: ClinicalFocusArea[] = [
     icon: Scale,
     link: '/conditions/weight-management',
     badge: { en: 'Metabolic Care', hi: 'मेटाबोलिक' },
+    cta: { en: 'View Weight Program', hi: 'वजन प्रबंधन योजना देखें' },
   },
   {
     id: 'metabolic-health',
@@ -59,6 +63,7 @@ const FOCUS_AREAS: ClinicalFocusArea[] = [
     icon: HeartPulse,
     link: '/conditions/metabolic-health',
     badge: { en: 'Circulation', hi: 'धमनियां' },
+    cta: { en: 'View Heart & Lipid Care', hi: 'हृदय व लिपिड केयर देखें' },
   },
 ];
 
@@ -76,7 +81,7 @@ export const HowCanWeHelpSection: React.FC = () => {
           : 'Patient-friendly, evidence-based care for diabetes, thyroid, and metabolic vitality.'
       }
       containerSize="xl"
-      className="bg-white border-b border-slate-200/80 py-10 sm:py-14"
+      className="bg-gradient-to-b from-[#FCFEFF] via-[#F8FCFD] to-[#F3F9FA] border-b border-slate-200/70 py-10 sm:py-14 relative"
     >
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {FOCUS_AREAS.map((area) => {
@@ -86,20 +91,20 @@ export const HowCanWeHelpSection: React.FC = () => {
               key={area.id}
               hoverable
               padding="sm"
-              className="p-4 sm:p-5 flex flex-col justify-between border-slate-200/90 shadow-2xs hover:shadow-sm transition-all duration-200 group"
+              className="p-4 sm:p-5 flex flex-col justify-between bg-white/95 border-slate-200/85 hover:border-[#65D9D0]/70 shadow-2xs hover:shadow-md hover:shadow-[#103F4A]/5 transition-all duration-200 group relative backdrop-blur-xs"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-lg bg-teal-50 text-[#0f3d4a] flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <IconComponent className="w-4 h-4 text-[#0f3d4a]" aria-hidden="true" />
+                  <div className="w-9 h-9 rounded-lg bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center group-hover:scale-105 transition-transform border border-[#65D9D0]/30">
+                    <IconComponent className="w-4 h-4 text-[#103F4A]" aria-hidden="true" />
                   </div>
-                  <span className="text-[10px] font-semibold text-teal-800 bg-teal-50/80 px-2 py-0.5 rounded border border-teal-200/60">
+                  <span className="text-[10px] font-bold text-[#103F4A] bg-[#E7F8F2] px-2 py-0.5 rounded border border-[#65D9D0]/40">
                     {area.badge[langKey]}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-[#0f3d4a] transition-colors">
+                  <h3 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-[#103F4A] transition-colors">
                     {area.title[langKey]}
                   </h3>
                   <p className="mt-1 text-xs text-slate-600 leading-relaxed font-normal">
@@ -111,10 +116,10 @@ export const HowCanWeHelpSection: React.FC = () => {
               <div className="pt-3 mt-3 border-t border-slate-100">
                 <Link
                   to={area.link}
-                  className="w-full flex items-center justify-between px-3 py-1.5 rounded-md bg-teal-50/70 text-[#0f3d4a] border border-teal-200/80 group-hover:bg-[#0f3d4a] group-hover:text-white group-hover:border-[#0f3d4a] transition-all duration-200 text-xs font-semibold"
+                  className="w-full flex items-center justify-between px-3 py-1.5 rounded-md bg-[#EAF7FA]/80 text-[#103F4A] border border-[#65D9D0]/50 group-hover:bg-[#103F4A] group-hover:text-white group-hover:border-[#103F4A] transition-all duration-200 text-xs font-semibold"
                 >
-                  <span>{isHindi ? 'अधिक जानें' : 'Learn More'}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <span>{area.cta[langKey]}</span>
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </div>
             </Card>
@@ -125,7 +130,7 @@ export const HowCanWeHelpSection: React.FC = () => {
       {/* Redirection button to Conditions section */}
       <div className="mt-6 text-center">
         <Link to="/conditions">
-          <Button variant="outline" size="sm" className="border-[#0f3d4a]/30 hover:bg-[#0f3d4a] hover:text-white transition-all text-xs">
+          <Button variant="outline" size="sm" className="border-[#103F4A]/30 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all text-xs">
             <span>{isHindi ? 'सभी स्थितियां व विषय देखें' : 'View All Conditions & Health Topics'}</span>
             <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
           </Button>
