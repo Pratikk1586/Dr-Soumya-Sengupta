@@ -7,6 +7,7 @@ import { KnowYourProblemSection } from '../components/home/KnowYourProblemSectio
 import { CareJourneySection } from '../components/home/CareJourneySection';
 import { PatientReviewsSection } from '../components/home/PatientReviewsSection';
 import { ClinicInfoSection } from '../components/home/ClinicInfoSection';
+import { HomeFaqSection } from '../components/home/HomeFaqSection';
 import { AppointmentTeaserSection } from '../components/home/AppointmentTeaserSection';
 
 export const HomePage: React.FC = () => {
@@ -39,7 +40,10 @@ export const HomePage: React.FC = () => {
       {/* 7. Clinic Info (New section merging Showcase, Photos, Location, Map & Directions) */}
       <ClinicInfoSection />
 
-      {/* 8. Book Appointment Module (1-step scheduling & WhatsApp confirmation) */}
+      {/* 8. FAQ Accordion (Frequently asked clinical & appointment questions with FAQPage schema) */}
+      <HomeFaqSection />
+
+      {/* 9. Book Appointment Module (1-step scheduling & WhatsApp confirmation) */}
       <AppointmentTeaserSection />
     </>
   );
