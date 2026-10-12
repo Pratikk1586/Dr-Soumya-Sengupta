@@ -21,7 +21,7 @@ export const FacilitiesPage: React.FC = () => {
         canonicalPath="/clinic/facilities"
       />
 
-      <div className="bg-[#faf9f6] border-b border-slate-200">
+      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
         <Container size="xl">
           <Breadcrumb
             items={[
@@ -44,9 +44,9 @@ export const FacilitiesPage: React.FC = () => {
       <Container size="xl" className="py-12 space-y-8">
         <div className="grid md:grid-cols-3 gap-6">
           {clinic?.facilities.map((fac) => (
-            <Card key={fac.id} padding="lg" className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-[#dff0f4] text-[#0a252f] flex items-center justify-center">
-                <Stethoscope className="w-5 h-5 text-[#0f3d4a]" />
+            <Card key={fac.id} hoverable padding="lg" className="space-y-4">
+              <div className="w-10 h-10 rounded-xl bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center border border-[#65D9D0]/30">
+                <Stethoscope className="w-5 h-5 text-[#103F4A]" />
               </div>
               <h2 className="text-base font-bold text-slate-900">{localize(fac.name)}</h2>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">

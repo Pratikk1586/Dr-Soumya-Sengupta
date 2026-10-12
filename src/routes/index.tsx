@@ -94,9 +94,9 @@ const NotFoundPage = lazy(() =>
 );
 
 const PageFallback: React.FC = () => (
-  <div className="min-h-[60vh] flex items-center justify-center bg-[#faf9f6]">
-    <div className="flex items-center gap-3 text-[#0f3d4a] text-xs font-semibold">
-      <div className="w-5 h-5 border-2 border-[#0f3d4a] border-t-transparent rounded-full animate-spin" />
+  <div className="min-h-[60vh] flex items-center justify-center bg-[#FCFEFF]">
+    <div className="flex items-center gap-3 text-[#103F4A] text-xs font-semibold">
+      <div className="w-5 h-5 border-2 border-[#103F4A] border-t-transparent rounded-full animate-spin" />
       <span>Loading clinical section...</span>
     </div>
   </div>

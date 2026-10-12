@@ -26,7 +26,7 @@ export const DirectionsButton: React.FC<DirectionsButtonProps> = ({
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center gap-2 rounded-xl font-semibold bg-[#0f3d4a] hover:bg-[#082229] text-white shadow-xs hover:shadow-md transition-all active:scale-98 ${
+      className={`inline-flex items-center justify-center gap-2 rounded-xl font-semibold bg-[#103F4A] hover:bg-[#0C323B] text-white shadow-xs hover:shadow-md transition-all active:scale-98 ${
         size === 'sm' ? 'px-3 py-1.5 text-xs' : size === 'lg' ? 'px-6 py-3 text-base' : 'px-4 py-2.5 text-sm'
       } ${className}`}
     >

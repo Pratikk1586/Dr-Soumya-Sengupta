@@ -18,7 +18,7 @@ export const HeroStaticVisual: React.FC<HeroStaticVisualProps> = ({
 }) => {
   return (
     <div
-      className={`relative w-full aspect-square max-w-[480px] lg:max-w-[540px] mx-auto flex items-center justify-center rounded-3xl bg-gradient-to-br from-[#0a252f] via-[#0f3d4a] to-[#081e26] p-6 sm:p-8 shadow-2xl border border-teal-500/20 overflow-hidden select-none ${className}`}
+      className={`relative w-full aspect-square max-w-[480px] lg:max-w-[540px] mx-auto flex items-center justify-center rounded-3xl bg-gradient-to-br from-[#0a252f] via-[#103F4A] to-[#081e26] p-6 sm:p-8 shadow-2xl border border-teal-500/20 overflow-hidden select-none ${className}`}
       aria-label="Scientific anatomical visualization of pancreatic islet beta-cell endocrine signaling"
       role="img"
     >
@@ -47,7 +47,7 @@ export const HeroStaticVisual: React.FC<HeroStaticVisualProps> = ({
           <linearGradient id="pancreasGrad" x1="80" y1="200" x2="420" y2="300" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.85" />
             <stop offset="50%" stopColor="#2ba3b6" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#0f3d4a" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="#103F4A" stopOpacity="0.95" />
           </linearGradient>
 
           <linearGradient id="ductGrad" x1="100" y1="240" x2="380" y2="230" gradientUnits="userSpaceOnUse">

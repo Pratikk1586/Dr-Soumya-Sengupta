@@ -1,6 +1,7 @@
 import type { Doctor } from '../types';
 import { ACHIEVEMENTS_DATA } from './achievements';
 import { CERTIFICATIONS_DATA } from './certifications';
+import { CLINIC_IMAGES } from '../config/images';
 
 export const DOCTOR_DATA: Doctor = {
   id: 'dr-soumya-sengupta',
@@ -90,6 +91,7 @@ export const DOCTOR_DATA: Doctor = {
   ],
   registrationNumber: 'Practicing Physician (Reg. since 2007)',
   registrationStatus: 'verified',
+  photoUrl: CLINIC_IMAGES.doctorProfile,
   achievements: ACHIEVEMENTS_DATA,
   certifications: CERTIFICATIONS_DATA,
   socialLinks: [

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X, ChevronDown, Stethoscope, Phone, MessageCircle, Bell } from 'lucide-react';
+import { X, ChevronDown, Phone, MessageCircle, Bell } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
 import { NAVIGATION_ITEMS } from '../../config/navigation';
 import { LanguageSwitcher } from '../common/LanguageSwitcher';
 import { Button } from '../common/Button';
 import { ENV, getSafePhoneHref, getSafeWhatsAppHref } from '../../config/env';
+import { CLINIC_IMAGES } from '../../config/images';
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -53,11 +54,15 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onO
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drawer Header */}
-        <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-[#faf9f6]">
+        <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-[#FCFEFF]">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#0f3d4a] text-white flex items-center justify-center">
-              <Stethoscope className="w-4 h-4 text-[#dff0f4]" aria-hidden="true" />
-            </div>
+            <img
+              src={CLINIC_IMAGES.logo}
+              alt="Cardio Diabetic Clinic Logo"
+              className="h-8 w-auto max-w-[70px] object-contain shrink-0"
+              width={64}
+              height={32}
+            />
             <div>
               <p className="text-sm font-bold text-slate-900 leading-tight">Dr. Soumya Sengupta</p>
               <p className="text-[11px] text-slate-500">Diabetologist</p>
@@ -74,17 +79,17 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onO
         </div>
 
         {/* Clinic Notices Quick Action */}
-        <div className="p-3 bg-teal-50/70 border-b border-teal-100/80">
+        <div className="p-3 bg-[#EAF7FA]/80 border-b border-[#65D9D0]/40">
           <button
             type="button"
             onClick={() => {
               onClose();
               onOpenNotices?.();
             }}
-            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white border border-teal-200/80 text-xs font-bold text-[#0f3d4a] shadow-2xs hover:bg-teal-50 transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white border border-[#65D9D0]/60 text-xs font-bold text-[#103F4A] shadow-2xs hover:bg-[#EAF7FA] transition-colors cursor-pointer"
           >
             <span className="flex items-center gap-2">
-              <Bell className="w-3.5 h-3.5 text-teal-600" />
+              <Bell className="w-3.5 h-3.5 text-[#103F4A]" />
               <span>{isHindi ? 'क्लिनिक सूचनाएं एवं समाचार' : 'Clinic Announcements & Notices'}</span>
             </span>
             <span className="relative flex h-2 w-2">
@@ -106,7 +111,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onO
                   <Link
                     to={item.href}
                     onClick={onClose}
-                    className="block text-sm font-semibold text-slate-800 hover:text-[#0f3d4a] transition-colors py-1"
+                    className="block text-sm font-semibold text-slate-800 hover:text-[#103F4A] transition-colors py-1"
                   >
                     {localize(item.name)}
                   </Link>
@@ -120,31 +125,31 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onO
                   <Link
                     to={item.href}
                     onClick={onClose}
-                    className="text-sm font-semibold text-slate-800 hover:text-[#0f3d4a] transition-colors flex-1"
+                    className="text-sm font-semibold text-slate-800 hover:text-[#103F4A] transition-colors flex-1"
                   >
                     {localize(item.name)}
                   </Link>
                   <button
                     type="button"
                     onClick={() => toggleSection(item.id)}
-                    className="p-1.5 text-slate-400 hover:text-[#0f3d4a] transition-colors cursor-pointer"
+                    className="p-1.5 text-slate-400 hover:text-[#103F4A] transition-colors cursor-pointer"
                     aria-label={`Toggle ${localize(item.name)} menu`}
                     aria-expanded={isExpanded}
                   >
                     <ChevronDown
                       className={`w-4 h-4 transition-transform duration-200 ${
-                        isExpanded ? 'rotate-180 text-[#0f3d4a]' : ''
+                        isExpanded ? 'rotate-180 text-[#103F4A]' : ''
                       }`}
                     />
                   </button>
                 </div>
 
                 {isExpanded && (
-                  <div className="mt-2 pl-3 border-l-2 border-[#0f3d4a]/20 space-y-2 animate-in fade-in duration-150">
+                  <div className="mt-2 pl-3 border-l-2 border-[#103F4A]/30 space-y-2 animate-in fade-in duration-150">
                     <Link
                       to={item.href}
                       onClick={onClose}
-                      className="block text-xs font-semibold text-[#0f3d4a] hover:underline py-1"
+                      className="block text-xs font-semibold text-[#103F4A] hover:underline py-1"
                     >
                       {localize(item.name)} — Overview
                     </Link>
@@ -153,7 +158,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onO
                         key={child.href}
                         to={child.href}
                         onClick={onClose}
-                        className="block text-xs text-slate-600 hover:text-[#0f3d4a] py-1"
+                        className="block text-xs text-slate-600 hover:text-[#103F4A] py-1"
                       >
                         {localize(child.name)}
                       </Link>
@@ -166,7 +171,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onO
         </nav>
 
         {/* Drawer Footer Actions */}
-        <div className="p-4 border-t border-slate-200 bg-[#faf9f6] space-y-3">
+        <div className="p-4 border-t border-slate-200 bg-[#FCFEFF] space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-slate-200">
             <span className="text-xs font-semibold text-slate-500">Language / भाषा:</span>
             <LanguageSwitcher variant="compact" />
@@ -185,7 +190,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onO
                   href={phoneHref}
                   className="inline-flex items-center justify-center gap-1.5 p-2 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
                 >
-                  <Phone className="w-3.5 h-3.5 text-[#0f3d4a]" />
+                  <Phone className="w-3.5 h-3.5 text-[#103F4A]" />
                   <span>Call</span>
                 </a>
               )}

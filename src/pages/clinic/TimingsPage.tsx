@@ -23,7 +23,7 @@ export const TimingsPage: React.FC = () => {
         canonicalPath="/clinic/timings"
       />
 
-      <div className="bg-[#faf9f6] border-b border-slate-200">
+      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
         <Container size="xl">
           <Breadcrumb
             items={[
@@ -56,7 +56,7 @@ export const TimingsPage: React.FC = () => {
         <Card padding="lg" className="space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-slate-200">
             <div className="flex items-center gap-3">
-              <CalendarCheck className="w-5 h-5 text-[#0f3d4a]" />
+              <CalendarCheck className="w-5 h-5 text-[#103F4A]" />
               <h2 className="text-lg font-bold text-slate-900">Weekly Consultation Slots</h2>
             </div>
             <VerificationBadge note="Timings to be reconfirmed with clinic desk" />

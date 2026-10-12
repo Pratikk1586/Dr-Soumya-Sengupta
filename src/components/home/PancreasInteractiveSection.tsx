@@ -17,15 +17,15 @@ export const PancreasInteractiveSection: React.FC = () => {
       <div
         className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none opacity-40 blur-3xl"
         style={{
-          background: 'radial-gradient(circle, rgba(20, 184, 166, 0.15) 0%, rgba(15, 61, 74, 0.05) 50%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(101, 217, 208, 0.15) 0%, rgba(16, 63, 74, 0.05) 50%, transparent 70%)',
         }}
       />
 
       <Container size="xl" className="relative z-10">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dff0f4] text-[#0f3d4a] text-xs font-bold border border-[#0f3d4a]/20">
-            <Activity className="w-3.5 h-3.5 text-[#0f3d4a]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF7FA] text-[#103F4A] text-xs font-bold border border-[#65D9D0]/40">
+            <Activity className="w-3.5 h-3.5 text-[#103F4A]" />
             <span>{isHindi ? '3D इंटरएक्टिव अग्न्याशय मॉडल' : 'Interactive 3D Anatomy'}</span>
           </div>
 

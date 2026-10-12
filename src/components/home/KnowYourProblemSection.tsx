@@ -74,18 +74,18 @@ export const KnowYourProblemSection: React.FC = () => {
           : 'Simple, educational guides to help you understand your symptoms and routine lab measurements.'
       }
       containerSize="xl"
-      className="bg-[#faf9f6] border-b border-slate-200/80 py-10 sm:py-14"
+      className="bg-gradient-to-b from-[#FCFEFF] via-[#F8FCFD] to-[#F3F9FA] border-b border-slate-200/80 py-10 sm:py-14 relative"
     >
       <div className="grid md:grid-cols-2 gap-5 sm:gap-6">
         {/* Card 1: Know Your Problem (Symptoms) */}
         <Card
           padding="md"
-          className="p-5 sm:p-6 flex flex-col justify-between bg-white border-slate-200/90 shadow-2xs hover:shadow-xs transition-all"
+          className="p-5 sm:p-6 flex flex-col justify-between bg-white/95 border-slate-200/85 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-xs transition-all backdrop-blur-xs"
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200/60 inline-flex items-center gap-1">
-                <HelpCircle className="w-3 h-3" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#103F4A] bg-[#E7F8F2] px-2 py-0.5 rounded border border-[#65D9D0]/50 inline-flex items-center gap-1">
+                <HelpCircle className="w-3 h-3 text-[#103F4A]" />
                 <span>{isHindi ? 'लक्षण मार्गदर्शिका' : 'Symptoms Guide'}</span>
               </span>
               <span className="text-[11px] text-slate-500 font-medium">Part 1</span>
@@ -111,8 +111,8 @@ export const KnowYourProblemSection: React.FC = () => {
                     className="p-2.5 rounded-lg bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-3"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-md bg-teal-50 text-[#0f3d4a] flex items-center justify-center shrink-0">
-                        <ItemIcon className="w-3.5 h-3.5" />
+                      <div className="w-7 h-7 rounded-md bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center shrink-0 border border-[#65D9D0]/30">
+                        <ItemIcon className="w-3.5 h-3.5 text-[#103F4A]" />
                       </div>
                       <div className="min-w-0">
                         <span className="font-semibold text-xs text-slate-900 block truncate">
@@ -134,7 +134,7 @@ export const KnowYourProblemSection: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full justify-between border-[#0f3d4a]/30 hover:bg-[#0f3d4a] hover:text-white transition-all text-xs"
+                className="w-full justify-between border-[#103F4A]/30 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all text-xs"
               >
                 <span>{isHindi ? 'सभी लक्षण व समस्याएं विस्तार से देखें' : 'Explore All Symptoms & Concerns'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -146,12 +146,12 @@ export const KnowYourProblemSection: React.FC = () => {
         {/* Card 2: Understand Your Numbers (Reports) */}
         <Card
           padding="md"
-          className="p-5 sm:p-6 flex flex-col justify-between bg-white border-slate-200/90 shadow-2xs hover:shadow-xs transition-all"
+          className="p-5 sm:p-6 flex flex-col justify-between bg-white/95 border-slate-200/85 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-xs transition-all backdrop-blur-xs"
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200/60 inline-flex items-center gap-1">
-                <LineChart className="w-3 h-3" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#103F4A] bg-[#E7F8F2] px-2 py-0.5 rounded border border-[#65D9D0]/50 inline-flex items-center gap-1">
+                <LineChart className="w-3 h-3 text-[#103F4A]" />
                 <span>{isHindi ? 'लैब रिपोर्ट्स' : 'Lab Biomarkers'}</span>
               </span>
               <span className="text-[11px] text-slate-500 font-medium">Part 2</span>
@@ -177,8 +177,8 @@ export const KnowYourProblemSection: React.FC = () => {
                     className="p-2.5 rounded-lg bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-3"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-md bg-teal-50 text-[#0f3d4a] flex items-center justify-center shrink-0">
-                        <ItemIcon className="w-3.5 h-3.5" />
+                      <div className="w-7 h-7 rounded-md bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center shrink-0 border border-[#65D9D0]/30">
+                        <ItemIcon className="w-3.5 h-3.5 text-[#103F4A]" />
                       </div>
                       <div className="min-w-0">
                         <span className="font-semibold text-xs text-slate-900 block truncate">
@@ -200,7 +200,7 @@ export const KnowYourProblemSection: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full justify-between border-[#0f3d4a]/30 hover:bg-[#0f3d4a] hover:text-white transition-all text-xs"
+                className="w-full justify-between border-[#103F4A]/30 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all text-xs"
               >
                 <span>{isHindi ? 'सभी लैब रिपोर्ट्स विस्तार से समझें' : 'Understand All Lab Reports in Detail'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />

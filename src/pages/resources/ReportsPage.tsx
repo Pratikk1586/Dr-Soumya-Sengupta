@@ -114,8 +114,9 @@ export const ReportsPage: React.FC = () => {
       />
 
       {/* Header */}
-      <div className="bg-[#faf9f6] border-b border-slate-200">
-        <Container size="xl">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+        <Container size="xl" className="relative z-10">
           <Breadcrumb
             items={[
               { label: isHindi ? 'रोगी संसाधन' : 'Patient Resources', href: '/patient-resources' },
@@ -123,11 +124,11 @@ export const ReportsPage: React.FC = () => {
             ]}
           />
           <div className="py-8 sm:py-12 max-w-3xl space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0f3d4a]/10 text-[#0f3d4a] border border-[#0f3d4a]/20">
-              <FileCheck2 className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 shadow-xs">
+              <FileCheck2 className="w-3.5 h-3.5 text-[#103F4A]" />
               <span>{isHindi ? 'लैब रिपोर्ट मार्गदर्शिका' : 'LAB REPORT LITERACY'}</span>
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#103F4A] tracking-tight leading-tight">
               {isHindi ? 'अपनी क्लिनिकल लैब रिपोर्ट समझें' : 'Understand Your Lab Reports'}
             </h1>
             <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
@@ -160,24 +161,24 @@ export const ReportsPage: React.FC = () => {
         {/* 5 Structured Biomarker Cards */}
         <div className="space-y-8 max-w-4xl">
           {REPORT_GUIDES.map((rep) => (
-            <Card key={rep.id} padding="lg" className="bg-white border-slate-200 shadow-2xs space-y-5">
+            <Card key={rep.id} padding="lg" className="bg-white border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/50 transition-all duration-200 space-y-5">
               {/* Card Header */}
               <div className="flex items-start justify-between flex-wrap gap-3 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-[#dff0f4] text-[#0f3d4a] flex items-center justify-center shrink-0">
-                    <FileCheck2 className="w-5 h-5 text-[#0f3d4a]" />
+                  <div className="w-12 h-12 rounded-xl bg-[#EAF7FA] border border-[#65D9D0]/30 text-[#103F4A] flex items-center justify-center shrink-0 shadow-xs">
+                    <FileCheck2 className="w-5 h-5 text-[#103F4A]" />
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-slate-900">
+                    <h2 className="text-lg sm:text-xl font-bold text-[#103F4A]">
                       {isHindi ? rep.nameHi : rep.nameEn}
                     </h2>
-                    <span className="text-xs font-semibold text-[#0f3d4a] block mt-0.5">
+                    <span className="text-xs font-semibold text-[#103F4A]/80 block mt-0.5">
                       {rep.testCode}
                     </span>
                   </div>
                 </div>
 
-                <Badge variant="neutral" size="sm">
+                <Badge variant="mint" size="sm">
                   {isHindi ? 'शैक्षणिक व्याख्या' : 'Educational Guide'}
                 </Badge>
               </div>
@@ -185,8 +186,8 @@ export const ReportsPage: React.FC = () => {
               {/* 4 Required Structured Sections */}
               <div className="grid sm:grid-cols-2 gap-4 text-xs sm:text-sm">
                 {/* 1. WHAT IS IT? */}
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#0f3d4a] block">
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5 hover:border-[#65D9D0]/30 transition-all">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#103F4A] block">
                     {isHindi ? '1. यह क्या है?' : 'WHAT IS IT?'}
                   </span>
                   <p className="text-slate-700 leading-relaxed font-normal">
@@ -195,8 +196,8 @@ export const ReportsPage: React.FC = () => {
                 </div>
 
                 {/* 2. WHY IS IT CHECKED? */}
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#0f3d4a] block">
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5 hover:border-[#65D9D0]/30 transition-all">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#103F4A] block">
                     {isHindi ? '2. इसकी जांच क्यों होती है?' : 'WHY IS IT CHECKED?'}
                   </span>
                   <p className="text-slate-700 leading-relaxed font-normal">
@@ -205,8 +206,8 @@ export const ReportsPage: React.FC = () => {
                 </div>
 
                 {/* 3. WHAT DOES IT TELL YOU? */}
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#0f3d4a] block">
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5 hover:border-[#65D9D0]/30 transition-all">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#103F4A] block">
                     {isHindi ? '3. यह क्या दर्शाता है?' : 'WHAT DOES IT TELL YOU?'}
                   </span>
                   <p className="text-slate-700 leading-relaxed font-normal">
@@ -215,11 +216,11 @@ export const ReportsPage: React.FC = () => {
                 </div>
 
                 {/* 4. WHEN SHOULD YOU DISCUSS IT? */}
-                <div className="p-3.5 rounded-xl bg-teal-50/70 border border-teal-100 space-y-1.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-teal-800 block">
+                <div className="p-3.5 rounded-xl bg-[#EAF7FA]/60 border border-[#65D9D0]/40 space-y-1.5">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#103F4A] block">
                     {isHindi ? '4. डॉक्टर से कब चर्चा करें?' : 'WHEN SHOULD YOU DISCUSS IT?'}
                   </span>
-                  <p className="text-teal-950 leading-relaxed font-normal">
+                  <p className="text-slate-700 leading-relaxed font-normal">
                     {isHindi ? rep.whenToDiscussHi : rep.whenToDiscussEn}
                   </p>
                 </div>
@@ -229,9 +230,9 @@ export const ReportsPage: React.FC = () => {
         </div>
 
         {/* Doctor Consultation CTA */}
-        <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-[#06181f] via-[#0f3d4a] to-[#124b59] text-white flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md">
+        <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-[#103F4A] via-[#0A262D] to-[#103F4A] text-white flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md border border-[#103F4A]">
           <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#dff0f4]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#65D9D0]">
               {isHindi ? 'रिपोर्ट समीक्षा' : 'LAB REPORT REVIEW'}
             </span>
             <h3 className="text-xl sm:text-2xl font-bold text-white">
@@ -246,7 +247,7 @@ export const ReportsPage: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link to="/book-appointment">
-              <Button variant="primary" size="lg" className="bg-white text-[#0f3d4a] hover:bg-[#dff0f4]">
+              <Button variant="primary" size="lg" className="bg-[#65D9D0] text-[#103F4A] hover:bg-white font-semibold">
                 <Calendar className="w-4 h-4 mr-2" />
                 <span>{t('cta.bookAppointment')}</span>
               </Button>

@@ -34,6 +34,7 @@ import { clinicService, noticeService, galleryService } from '../../services';
 import { ENV, getSafePhoneHref, getSafeWhatsAppHref } from '../../config/env';
 import { VERIFIED_GOOGLE_MAPS_URL } from '../../lib/maps';
 import { formatDateInIST } from '../../utils/date';
+import { CLINIC_IMAGES } from '../../config/images';
 import type { GalleryItem } from '../../data/gallery';
 
 export const ClinicOverviewPage: React.FC = () => {
@@ -108,14 +109,14 @@ export const ClinicOverviewPage: React.FC = () => {
   const getFacilityIcon = (index: number) => {
     switch (index % 4) {
       case 0:
-        return <Activity className="w-5 h-5 text-[#0f3d4a]" />;
+        return <Activity className="w-5 h-5 text-[#103F4A]" />;
       case 1:
-        return <HeartPulse className="w-5 h-5 text-[#0f3d4a]" />;
+        return <HeartPulse className="w-5 h-5 text-[#103F4A]" />;
       case 2:
-        return <Stethoscope className="w-5 h-5 text-[#0f3d4a]" />;
+        return <Stethoscope className="w-5 h-5 text-[#103F4A]" />;
       case 3:
       default:
-        return <ShieldCheck className="w-5 h-5 text-[#0f3d4a]" />;
+        return <ShieldCheck className="w-5 h-5 text-[#103F4A]" />;
     }
   };
 
@@ -128,26 +129,37 @@ export const ClinicOverviewPage: React.FC = () => {
       />
 
       {/* 1. HERO / INTRODUCTION SECTION */}
-      <section className="relative bg-gradient-to-b from-[#f0f7f9] via-[#faf9f6] to-white border-b border-slate-200/80 pt-6 pb-12 sm:pb-16 overflow-hidden">
+      <section className="relative bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 pt-6 pb-12 sm:pb-16 overflow-hidden">
         {/* Subtle decorative background glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#dff0f4]/40 rounded-full blur-3xl pointer-events-none -z-0" />
-        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-[#e0f2fe]/30 rounded-full blur-2xl pointer-events-none -z-0" />
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/15 rounded-full blur-3xl pointer-events-none -z-0" />
+        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-[#EAF7FA]/70 rounded-full blur-2xl pointer-events-none -z-0" />
 
         <Container size="xl" className="relative z-10">
           <Breadcrumb items={[{ label: t('nav.clinic') }]} />
 
           <div className="mt-4 max-w-4xl space-y-4">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0f3d4a]/10 text-[#0f3d4a] border border-[#0f3d4a]/20">
-                <Building2 className="w-3.5 h-3.5" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40">
+                <Building2 className="w-3.5 h-3.5 text-[#103F4A]" />
                 <span>{isHindi ? 'क्लिनिक परिचय' : 'OUR CLINIC'}</span>
               </span>
               <VerificationBadge note={isHindi ? 'सत्यापित क्लिनिक विवरण' : 'Verified Clinical Practice'} />
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
-              {clinic ? localize(clinic.name) : 'Cardio Diabetic Clinic'}
-            </h1>
+            <div className="flex items-center gap-3.5 sm:gap-4 pt-1">
+              <div className="h-12 sm:h-14 w-auto flex items-center shrink-0 bg-white px-2 py-1 rounded-xl border border-slate-200/80 shadow-2xs">
+                <img
+                  src={CLINIC_IMAGES.logo}
+                  alt="Cardio Diabetic Clinic Logo"
+                  className="h-8 sm:h-10 w-auto max-w-[80px] sm:max-w-[100px] object-contain"
+                  width={80}
+                  height={40}
+                />
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
+                {clinic ? localize(clinic.name) : 'Cardio Diabetic Clinic'}
+              </h1>
+            </div>
 
             <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal max-w-3xl">
               {isHindi
@@ -162,7 +174,7 @@ export const ClinicOverviewPage: React.FC = () => {
                 <span>{isHindi ? 'सातों दिन खुला (Open 7 Days)' : 'Open All 7 Days'}</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
-                <MapPin className="w-4 h-4 text-[#0f3d4a] shrink-0" />
+                <MapPin className="w-4 h-4 text-[#103F4A] shrink-0" />
                 <span>{isHindi ? 'अमलाटोला, चाईबासा' : 'Amlatola, Chaibasa'}</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
@@ -175,7 +187,7 @@ export const ClinicOverviewPage: React.FC = () => {
             <div className="pt-4 flex flex-wrap items-center gap-3">
               <Link
                 to="/book-appointment"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-[#0f3d4a] hover:bg-[#09252d] text-white shadow-sm hover:shadow-md transition-all active:scale-98"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-[#103F4A] hover:bg-[#0a252f] text-white shadow-sm hover:shadow-md transition-all active:scale-98"
               >
                 <Calendar className="w-4 h-4" />
                 <span>{isHindi ? 'अपॉइंटमेंट बुक करें' : 'Book Appointment'}</span>
@@ -187,7 +199,7 @@ export const ClinicOverviewPage: React.FC = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-2xs transition-all active:scale-98"
               >
-                <Navigation className="w-4 h-4 text-[#0f3d4a]" />
+                <Navigation className="w-4 h-4 text-[#103F4A]" />
                 <span>{isHindi ? 'रास्ता देखें (Google Maps)' : 'Get Directions'}</span>
               </a>
 
@@ -223,7 +235,7 @@ export const ClinicOverviewPage: React.FC = () => {
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left: Real Clinic Photograph / Visual Presentation */}
             <div className="lg:col-span-5 space-y-4">
-              <div className="relative rounded-2xl overflow-hidden border border-slate-200/90 shadow-md bg-gradient-to-br from-slate-100 via-slate-50 to-[#dff0f4]/30 group">
+              <div className="relative rounded-2xl overflow-hidden border border-slate-200/90 shadow-md bg-gradient-to-br from-slate-100 via-slate-50 to-[#EAF7FA]/50 group">
                 {/* Visual Image Presentation */}
                 <div className="relative aspect-4/3 w-full overflow-hidden">
                   <img
@@ -238,7 +250,7 @@ export const ClinicOverviewPage: React.FC = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#0f3d4a]/90 text-[11px] font-bold uppercase tracking-wider mb-1">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#103F4A]/90 text-[11px] font-bold uppercase tracking-wider mb-1">
                       {isHindi ? 'परामर्श कक्ष' : 'Consultation Chamber'}
                     </span>
                     <p className="text-sm font-semibold leading-tight text-white/95">
@@ -266,22 +278,22 @@ export const ClinicOverviewPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <Link
                   to="/clinic/timings"
-                  className="p-3 rounded-xl bg-slate-50 hover:bg-[#dff0f4]/40 border border-slate-200 hover:border-[#0f3d4a]/30 transition-all flex items-center justify-between group"
+                  className="p-3 rounded-xl bg-slate-50 hover:bg-[#EAF7FA]/60 border border-slate-200 hover:border-[#103F4A]/30 transition-all flex items-center justify-between group"
                 >
-                  <span className="font-semibold text-slate-800 group-hover:text-[#0f3d4a]">
+                  <span className="font-semibold text-slate-800 group-hover:text-[#103F4A]">
                     {isHindi ? 'समय सारणी विवरण' : 'OPD Timings Details'}
                   </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0f3d4a] group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#103F4A] group-hover:translate-x-0.5 transition-transform" />
                 </Link>
 
                 <Link
                   to="/clinic/facilities"
-                  className="p-3 rounded-xl bg-slate-50 hover:bg-[#dff0f4]/40 border border-slate-200 hover:border-[#0f3d4a]/30 transition-all flex items-center justify-between group"
+                  className="p-3 rounded-xl bg-slate-50 hover:bg-[#EAF7FA]/60 border border-slate-200 hover:border-[#103F4A]/30 transition-all flex items-center justify-between group"
                 >
-                  <span className="font-semibold text-slate-800 group-hover:text-[#0f3d4a]">
+                  <span className="font-semibold text-slate-800 group-hover:text-[#103F4A]">
                     {isHindi ? 'ऑन-साइट सुविधाएं' : 'Diagnostic Facilities'}
                   </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0f3d4a] group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#103F4A] group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>
@@ -289,7 +301,7 @@ export const ClinicOverviewPage: React.FC = () => {
             {/* Right: “About Our Clinic” Details */}
             <div className="lg:col-span-7 space-y-5">
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
                   {isHindi ? 'क्लिनिक का परिचय' : 'About Our Clinic'}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-[#06181f] tracking-tight">
@@ -345,10 +357,10 @@ export const ClinicOverviewPage: React.FC = () => {
       </section>
 
       {/* 3. CLINIC FACILITIES SECTION */}
-      <section className="py-12 sm:py-16 bg-[#faf9f6] border-b border-slate-200/80">
+      <section className="py-12 sm:py-16 bg-[#FCFEFF] border-b border-slate-200/80">
         <Container size="xl">
           <div className="max-w-3xl space-y-2 mb-10">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
               {isHindi ? 'नैदानिक सुविधाएं' : 'Clinical Facilities'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#06181f] tracking-tight">
@@ -366,10 +378,10 @@ export const ClinicOverviewPage: React.FC = () => {
               <Card
                 key={facility.id}
                 padding="md"
-                className="bg-white border-slate-200/90 hover:border-[#0f3d4a]/40 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
+                className="bg-white border-slate-200/90 hover:border-[#65D9D0]/60 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 <div className="space-y-3">
-                  <div className="w-11 h-11 rounded-xl bg-[#dff0f4] text-[#0f3d4a] flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <div className="w-11 h-11 rounded-xl bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center group-hover:scale-105 transition-transform">
                     {getFacilityIcon(idx)}
                   </div>
                   <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
@@ -387,7 +399,7 @@ export const ClinicOverviewPage: React.FC = () => {
                   </span>
                   <Link
                     to="/clinic/facilities"
-                    className="text-slate-400 group-hover:text-[#0f3d4a] transition-colors"
+                    className="text-slate-400 group-hover:text-[#103F4A] transition-colors"
                     aria-label="View facilities detail"
                   >
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -435,7 +447,7 @@ export const ClinicOverviewPage: React.FC = () => {
                   key={idx}
                   className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
                     isWeekend
-                      ? 'bg-gradient-to-b from-[#dff0f4]/25 to-white border-[#0f3d4a]/25 shadow-2xs'
+                      ? 'bg-gradient-to-b from-[#EAF7FA]/40 to-white border-[#103F4A]/25 shadow-2xs'
                       : 'bg-white border-slate-200 hover:border-slate-300 shadow-2xs'
                   }`}
                 >
@@ -493,10 +505,10 @@ export const ClinicOverviewPage: React.FC = () => {
       </section>
 
       {/* 5. LOCATION & DIRECTIONS (FIND OUR CLINIC) */}
-      <section id="location" className="py-12 sm:py-16 bg-[#faf9f6] border-b border-slate-200/80">
+      <section id="location" className="py-12 sm:py-16 bg-[#FCFEFF] border-b border-slate-200/80">
         <Container size="xl">
           <div className="max-w-3xl space-y-2 mb-10">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
               {isHindi ? 'स्थान एवं दिशा-निर्देश' : 'FIND OUR CLINIC'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#06181f] tracking-tight">
@@ -534,7 +546,7 @@ export const ClinicOverviewPage: React.FC = () => {
 
                   <div className="mt-4 space-y-3.5 text-xs sm:text-sm">
                     <div className="flex items-start gap-3">
-                      <MapPin className="w-5 h-5 text-[#0f3d4a] shrink-0 mt-0.5" />
+                      <MapPin className="w-5 h-5 text-[#103F4A] shrink-0 mt-0.5" />
                       <div>
                         <strong className="block text-slate-900 font-semibold mb-0.5">
                           {clinic ? localize(clinic.name) : 'Cardio Diabetic Clinic'}
@@ -571,7 +583,7 @@ export const ClinicOverviewPage: React.FC = () => {
                     href={mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-[#0f3d4a] hover:bg-[#082229] text-white shadow-xs hover:shadow-md transition-all active:scale-98"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-[#103F4A] hover:bg-[#0a252f] text-white shadow-xs hover:shadow-md transition-all active:scale-98"
                   >
                     <Navigation className="w-4 h-4" />
                     <span>{isHindi ? 'रास्ता देखें (Get Directions)' : 'Get Directions'}</span>
@@ -611,7 +623,7 @@ export const ClinicOverviewPage: React.FC = () => {
           <Container size="xl">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
               <div className="max-w-2xl space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
                   {isHindi ? 'फोटो गैलरी' : 'CLINIC PHOTO GALLERY'}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-[#06181f] tracking-tight">
@@ -626,7 +638,7 @@ export const ClinicOverviewPage: React.FC = () => {
 
               <Link
                 to="/clinic/photos"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#0f3d4a] hover:text-[#082229] transition-colors shrink-0"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#103F4A] hover:text-[#0a252f] transition-colors shrink-0"
               >
                 <span>{isHindi ? 'सभी मीडिया देखें →' : 'View Full Media Gallery →'}</span>
               </Link>
@@ -672,7 +684,7 @@ export const ClinicOverviewPage: React.FC = () => {
                   </div>
 
                   <div className="p-4 space-y-1.5 bg-white">
-                    <span className="text-[11px] font-bold text-[#0f3d4a] uppercase tracking-wider block">
+                    <span className="text-[11px] font-bold text-[#103F4A] uppercase tracking-wider block">
                       {item.category.replace('_', ' ')}
                     </span>
                     <h3 className="font-bold text-slate-900 text-sm line-clamp-1">
@@ -690,10 +702,10 @@ export const ClinicOverviewPage: React.FC = () => {
       )}
 
       {/* 7. PATIENT VISIT EXPERIENCE (YOUR VISIT TO THE CLINIC) */}
-      <section className="py-12 sm:py-16 bg-[#faf9f6] border-b border-slate-200/80">
+      <section className="py-12 sm:py-16 bg-[#FCFEFF] border-b border-slate-200/80">
         <Container size="xl">
           <div className="max-w-3xl space-y-2 mb-10 text-center mx-auto">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
               {isHindi ? 'परामर्श प्रक्रिया' : 'YOUR VISIT TO THE CLINIC'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#06181f] tracking-tight">
@@ -742,7 +754,7 @@ export const ClinicOverviewPage: React.FC = () => {
                 className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3 relative overflow-hidden flex flex-col justify-between"
               >
                 <div className="space-y-2.5">
-                  <span className="text-2xl font-black text-[#0f3d4a]/25 block font-mono">
+                  <span className="text-2xl font-black text-[#103F4A]/25 block font-mono">
                     {st.step}
                   </span>
                   <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
@@ -752,7 +764,7 @@ export const ClinicOverviewPage: React.FC = () => {
                     {isHindi ? st.descHi : st.descEn}
                   </p>
                 </div>
-                <div className="pt-3 border-t border-slate-100 text-[11px] font-semibold text-[#0f3d4a]">
+                <div className="pt-3 border-t border-slate-100 text-[11px] font-semibold text-[#103F4A]">
                   {isHindi ? `चरण ${i + 1}` : `Step ${i + 1}`}
                 </div>
               </div>
@@ -788,7 +800,7 @@ export const ClinicOverviewPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsNoticesModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-800 hover:text-[#0f3d4a] border border-amber-200 shadow-2xs hover:shadow-xs transition-all shrink-0 self-start sm:self-auto cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-800 hover:text-[#103F4A] border border-amber-200 shadow-2xs hover:shadow-xs transition-all shrink-0 self-start sm:self-auto cursor-pointer"
               >
                 <span>{isHindi ? 'सभी सूचनाएं देखें →' : 'View All Notices →'}</span>
               </button>
@@ -798,10 +810,10 @@ export const ClinicOverviewPage: React.FC = () => {
       )}
 
       {/* 9. FINAL CTA: PLAN YOUR VISIT */}
-      <section className="py-14 sm:py-20 bg-gradient-to-br from-[#06181f] via-[#0f3d4a] to-[#134e5e] text-white">
+      <section className="py-14 sm:py-20 bg-gradient-to-br from-[#06181f] via-[#103F4A] to-[#145466] text-white">
         <Container size="xl" className="text-center max-w-3xl space-y-6">
           <div className="space-y-2">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#dff0f4] border border-white/15">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#EAF7FA] border border-white/15">
               {isHindi ? 'यात्रा की योजना बनाएं' : 'PLAN YOUR VISIT'}
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
@@ -817,7 +829,7 @@ export const ClinicOverviewPage: React.FC = () => {
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <Link
               to="/book-appointment"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-white text-[#0f3d4a] hover:bg-[#dff0f4] shadow-md transition-all active:scale-98"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-white text-[#103F4A] hover:bg-[#EAF7FA] shadow-md transition-all active:scale-98"
             >
               <Calendar className="w-4 h-4" />
               <span>{isHindi ? 'अपॉइंटमेंट बुक करें' : 'Book an Appointment'}</span>
@@ -896,7 +908,7 @@ export const ClinicOverviewPage: React.FC = () => {
 
             <div className="p-4 sm:p-6 bg-slate-900 text-white border-t border-slate-800 space-y-2">
               <div className="flex items-center justify-between text-xs text-slate-400">
-                <span className="uppercase tracking-wider font-semibold text-[#dff0f4]">
+                <span className="uppercase tracking-wider font-semibold text-[#EAF7FA]">
                   {activePhoto.category.replace('_', ' ')}
                 </span>
                 <span>

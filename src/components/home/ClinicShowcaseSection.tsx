@@ -70,7 +70,7 @@ export const ClinicShowcaseSection: React.FC = () => {
             <div className="p-5 pt-0">
               <Link
                 to="/clinic/facilities"
-                className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1"
+                className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center gap-1"
               >
                 <span>View Facility Specifications</span>
                 <ArrowRight className="w-3.5 h-3.5" />

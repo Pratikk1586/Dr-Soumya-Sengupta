@@ -13,7 +13,6 @@ import { SEO } from '../../components/common/SEO';
 import { Container } from '../../components/common/Container';
 import { Breadcrumb } from '../../components/common/Breadcrumb';
 import { Card } from '../../components/common/Card';
-import { Badge } from '../../components/common/Badge';
 import { Button } from '../../components/common/Button';
 import { EmptyState } from '../../components/common/EmptyState';
 import { MedicalDisclaimerBanner } from '../../components/common/MedicalDisclaimerBanner';
@@ -45,7 +44,7 @@ export const ArticleDetailPage: React.FC = () => {
   if (isLoading) {
     return (
       <Container size="xl" className="py-20 text-center">
-        <div className="w-6 h-6 border-2 border-[#0f3d4a] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+        <div className="w-6 h-6 border-2 border-[#103F4A] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
         <p className="text-xs text-slate-500">Loading medical article...</p>
       </Container>
     );
@@ -109,8 +108,9 @@ export const ArticleDetailPage: React.FC = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
-      <div className="bg-[#faf9f6] border-b border-slate-200">
-        <Container size="xl">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+        <Container size="xl" className="relative z-10">
           <Breadcrumb
             items={[
               { label: t('nav.patientResources'), href: '/patient-resources' },
@@ -120,15 +120,15 @@ export const ArticleDetailPage: React.FC = () => {
           />
           <div className="py-6 sm:py-10 max-w-3xl space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="primary" size="sm">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 shadow-xs">
                 {localize(article.category)}
-              </Badge>
+              </span>
               <span className="text-[11px] font-semibold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded border border-amber-200/60">
-                Educational Draft
+                Educational Article
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#06181f] tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#103F4A] tracking-tight leading-tight">
               {localize(article.title)}
             </h1>
 
@@ -143,7 +143,7 @@ export const ArticleDetailPage: React.FC = () => {
               </span>
               <button
                 onClick={handleShare}
-                className="inline-flex items-center gap-1 text-[#0f3d4a] hover:underline font-semibold cursor-pointer"
+                className="inline-flex items-center gap-1 text-[#103F4A] hover:underline font-semibold cursor-pointer"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
                 <span>{copied ? 'Link Copied!' : 'Share Article'}</span>
@@ -160,7 +160,7 @@ export const ArticleDetailPage: React.FC = () => {
           {/* Main Article Content */}
           <div className="lg:col-span-8 space-y-8">
             <div className="prose max-w-none text-slate-700 space-y-5 leading-relaxed text-sm sm:text-base">
-              <p className="text-base sm:text-lg font-medium text-slate-900 leading-snug border-l-4 border-teal-600 pl-4 py-1 italic">
+              <p className="text-base sm:text-lg font-medium text-slate-900 leading-snug border-l-4 border-[#65D9D0] bg-[#EAF7FA]/40 p-4 rounded-r-xl italic">
                 {localize(article.excerpt)}
               </p>
 
@@ -172,15 +172,15 @@ export const ArticleDetailPage: React.FC = () => {
             </div>
 
             {/* Key Clinical Takeaways Box */}
-            <Card padding="lg" className="bg-teal-50/50 border-teal-200/80 space-y-3">
-              <h3 className="font-bold text-[#0f3d4a] text-sm uppercase tracking-wider flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-teal-600" />
+            <Card padding="lg" className="bg-gradient-to-br from-[#EAF7FA]/60 to-white border-[#65D9D0]/40 shadow-2xs space-y-3">
+              <h3 className="font-bold text-[#103F4A] text-sm uppercase tracking-wider flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#103F4A]" />
                 <span>Key Clinical Takeaways:</span>
               </h3>
               <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                 {article.keyTakeaways.map((takeaway, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="text-teal-600 font-bold shrink-0">•</span>
+                    <span className="text-[#103F4A] font-bold shrink-0">•</span>
                     <span>{localize(takeaway)}</span>
                   </li>
                 ))}
@@ -191,7 +191,7 @@ export const ArticleDetailPage: React.FC = () => {
             <div className="pt-4 flex items-center justify-between border-t border-slate-200">
               <Link
                 to="/patient-resources/articles"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0f3d4a] hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#103F4A] hover:underline"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to all clinical articles</span>
@@ -201,8 +201,8 @@ export const ArticleDetailPage: React.FC = () => {
 
           {/* Right Column: Related Articles & CTA */}
           <div className="lg:col-span-4 space-y-6">
-            <Card padding="lg" className="space-y-4 bg-white border-slate-200/90 shadow-2xs">
-              <h4 className="font-bold text-slate-900 text-sm uppercase tracking-wider">
+            <Card padding="lg" className="space-y-4 bg-white border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/40 transition-all">
+              <h4 className="font-bold text-[#103F4A] text-sm uppercase tracking-wider">
                 Related Articles
               </h4>
               <div className="space-y-3">
@@ -210,12 +210,12 @@ export const ArticleDetailPage: React.FC = () => {
                   <Link
                     key={rel.id}
                     to={`/patient-resources/articles/${rel.slug}`}
-                    className="block group p-2.5 rounded-lg hover:bg-slate-50 transition-colors"
+                    className="block group p-2.5 rounded-lg hover:bg-[#EAF7FA]/50 transition-colors"
                   >
-                    <span className="text-[10px] font-bold text-teal-800 uppercase block mb-0.5">
+                    <span className="text-[10px] font-bold text-[#103F4A] uppercase block mb-0.5">
                       {localize(rel.category)}
                     </span>
-                    <h5 className="font-semibold text-xs text-slate-900 group-hover:text-[#0f3d4a] line-clamp-2">
+                    <h5 className="font-semibold text-xs text-slate-900 group-hover:text-[#103F4A] line-clamp-2">
                       {localize(rel.title)}
                     </h5>
                   </Link>
@@ -224,13 +224,16 @@ export const ArticleDetailPage: React.FC = () => {
             </Card>
 
             {/* Clinical Consultation Card */}
-            <Card padding="lg" className="bg-[#0f3d4a] text-white space-y-4">
+            <Card padding="lg" className="bg-gradient-to-b from-[#103F4A] to-[#0A262D] text-white shadow-lg border border-[#103F4A] space-y-4">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#65D9D0]">
+                CONSULTATION
+              </span>
               <h4 className="font-bold text-white text-base">Personalized Evaluation</h4>
-              <p className="text-xs text-teal-100 leading-relaxed">
+              <p className="text-xs text-slate-200 leading-relaxed">
                 Educational reading provides general background. For your unique glycemic and lab report targets, schedule an appointment.
               </p>
               <Link to="/book-appointment" className="block w-full">
-                <Button variant="secondary" size="sm" className="w-full text-xs font-semibold">
+                <Button variant="primary" size="sm" className="w-full text-xs font-semibold bg-[#65D9D0] text-[#103F4A] hover:bg-white">
                   <span>{t('cta.bookAppointment')}</span>
                 </Button>
               </Link>

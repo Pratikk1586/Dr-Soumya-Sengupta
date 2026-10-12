@@ -32,7 +32,7 @@ export const PancreasScene: React.FC<PancreasSceneProps> = ({
   return (
     <group ref={cameraGroupRef}>
       {/* Scientific Studio Lighting */}
-      <ambientLight intensity={0.7} color="#dff0f4" />
+      <ambientLight intensity={0.7} color="#EAF7FA" />
       
       {/* Primary Key Light: Clinical Teal */}
       <directionalLight

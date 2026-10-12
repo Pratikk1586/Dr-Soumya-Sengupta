@@ -40,16 +40,16 @@ export const KnowYourNumbersSection: React.FC = () => {
       heading="Know Your Numbers"
       lede="Understanding key metabolic biomarkers empowers you to recognize glycemic trends, communicate effectively with your physician, and protect your vital organs."
       containerSize="xl"
-      className="bg-[#faf9f6] border-b border-slate-200/80"
+      className="bg-[#FCFEFF] border-b border-slate-200/80"
     >
       {/* Standing Medical Literacy Notice */}
-      <div className="mb-8 p-4 rounded-xl bg-teal-50/70 border border-teal-200/80 text-[#0f3d4a] text-xs sm:text-sm flex items-start gap-3">
-        <Info className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+      <div className="mb-8 p-4 rounded-xl bg-[#EAF7FA]/70 border border-[#65D9D0]/40 text-[#103F4A] text-xs sm:text-sm flex items-start gap-3">
+        <Info className="w-5 h-5 text-[#103F4A] shrink-0 mt-0.5" />
         <div className="space-y-0.5">
-          <p className="font-semibold text-teal-950">
+          <p className="font-semibold text-[#103F4A]">
             Laboratory Baseline Notice:
           </p>
-          <p className="text-teal-800 leading-relaxed font-normal">
+          <p className="text-slate-700 leading-relaxed font-normal">
             Normal reference ranges vary by testing laboratory, assay methodology, and personal clinical history.
             Target numbers must always be individualized by Dr. Sengupta according to your cardiovascular and endocrine health.
           </p>
@@ -71,8 +71,8 @@ export const KnowYourNumbersSection: React.FC = () => {
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0f3d4a] flex items-center justify-center">
-                      <IconComp className="w-5 h-5 text-[#0f3d4a]" aria-hidden="true" />
+                    <div className="w-10 h-10 rounded-xl bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/30 flex items-center justify-center">
+                      <IconComp className="w-5 h-5 text-[#103F4A]" aria-hidden="true" />
                     </div>
                     {report.referenceRangeGuideline?.standardRange.includes('VERIFIED') && (
                       <VerificationBadge note="Reference range awaiting clinic confirmation" />
@@ -83,7 +83,7 @@ export const KnowYourNumbersSection: React.FC = () => {
                     <h3 className="font-bold text-slate-900 text-base leading-snug">
                       {localize(report.title)}
                     </h3>
-                    <span className="text-xs font-semibold text-[#0f3d4a] block mt-0.5">
+                    <span className="text-xs font-semibold text-[#103F4A] block mt-0.5">
                       {localize(report.testName)}
                     </span>
                   </div>
@@ -106,7 +106,7 @@ export const KnowYourNumbersSection: React.FC = () => {
                 <div className="pt-4 mt-4 border-t border-slate-100">
                   <Link
                     to="/patient-resources/reports"
-                    className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center justify-between group"
+                    className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center justify-between group"
                   >
                     <span>Understand This Report</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -119,7 +119,7 @@ export const KnowYourNumbersSection: React.FC = () => {
           {/* Bonus card linking to complete reports hub */}
           <Card
             padding="lg"
-            className="flex flex-col justify-between bg-gradient-to-br from-[#0f3d4a] to-[#071f26] text-white border-0 shadow-md"
+            className="flex flex-col justify-between bg-gradient-to-br from-[#103F4A] to-[#0A262D] text-white border-0 shadow-md"
           >
             <div className="space-y-4">
               <div className="w-10 h-10 rounded-xl bg-white/10 text-teal-200 flex items-center justify-center">

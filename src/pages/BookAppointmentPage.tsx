@@ -20,7 +20,6 @@ import { SEO } from '../components/common/SEO';
 import { Container } from '../components/common/Container';
 import { Breadcrumb } from '../components/common/Breadcrumb';
 import { Card } from '../components/common/Card';
-import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { MedicalDisclaimerBanner } from '../components/common/MedicalDisclaimerBanner';
 import { CallButton } from '../components/common/CallButton';
@@ -188,12 +187,16 @@ export const BookAppointmentPage: React.FC = () => {
       />
 
       {/* Header Banner */}
-      <div className="bg-[#faf9f6] border-b border-slate-200">
-        <Container size="xl">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+        <Container size="xl" className="relative z-10">
           <Breadcrumb items={[{ label: isHindi ? 'अपॉइंटमेंट अनुरोध' : 'Book Appointment' }]} />
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
-            <Badge variant="primary">{isHindi ? 'ओपीडी स्लॉट अनुरोध' : 'Chamber Scheduling'}</Badge>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#06181f] tracking-tight">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 shadow-xs">
+              <Calendar className="w-3.5 h-3.5 text-[#103F4A]" />
+              <span>{isHindi ? 'ओपीडी स्लॉट अनुरोध' : 'Chamber Scheduling'}</span>
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#103F4A] tracking-tight">
               {isHindi ? 'परामर्श समय आरक्षित करें' : 'Book an Appointment'}
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
@@ -237,7 +240,7 @@ export const BookAppointmentPage: React.FC = () => {
             {referenceId && (
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 font-mono text-xs font-bold text-slate-800 shadow-2xs">
                 <span className="text-slate-500">{isHindi ? 'अनुरोध संदर्भ:' : 'Reference ID:'}</span>
-                <span className="text-[#0f3d4a] text-sm">{referenceId}</span>
+                <span className="text-[#103F4A] text-sm">{referenceId}</span>
               </div>
             )}
 
@@ -344,7 +347,7 @@ export const BookAppointmentPage: React.FC = () => {
                     autoComplete="name"
                     {...register('patientName')}
                     placeholder={isHindi ? 'उदा. अमित कुमार' : 'e.g. Ramesh Chandra Mukherjee'}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#103F4A]/20 focus:border-[#103F4A] transition-all"
                   />
                   {errors.patientName && (
                     <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
@@ -370,7 +373,7 @@ export const BookAppointmentPage: React.FC = () => {
                     autoComplete="tel"
                     {...register('phone')}
                     placeholder="+91 98300 XXXXX"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#103F4A]/20 focus:border-[#103F4A] transition-all"
                   />
                   {errors.phone && (
                     <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
@@ -393,7 +396,7 @@ export const BookAppointmentPage: React.FC = () => {
                     inputMode="numeric"
                     {...register('age')}
                     placeholder={isHindi ? 'उदा. 45' : 'e.g. 45'}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#103F4A]/20 focus:border-[#103F4A] transition-all"
                   />
                   {errors.age && (
                     <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
@@ -417,7 +420,7 @@ export const BookAppointmentPage: React.FC = () => {
                     type="date"
                     min={minDateStr}
                     {...register('preferredDate')}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#103F4A]/20 focus:border-[#103F4A] transition-all"
                   />
                   {errors.preferredDate && (
                     <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
@@ -439,7 +442,7 @@ export const BookAppointmentPage: React.FC = () => {
                   <select
                     id="preferredTime"
                     {...register('preferredTime')}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#103F4A]/20 focus:border-[#103F4A] transition-all"
                   >
                     <option value="Evening OPD (5:00 PM – 8:00 PM)">
                       {isHindi ? 'संध्या ओपीडी (5:00 PM – 8:00 PM)' : 'Evening OPD (5:00 PM – 8:00 PM)'}
@@ -481,7 +484,7 @@ export const BookAppointmentPage: React.FC = () => {
                         ? 'उदा. उच्च फास्टिंग शुगर, HbA1c समीक्षा या मधुमेह परामर्श।'
                         : 'e.g. High fasting blood sugar, HbA1c report review, diabetes management...'
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0f3d4a]/20 focus:border-[#0f3d4a] transition-all resize-y"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50/30 hover:bg-white focus:bg-white text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#103F4A]/20 focus:border-[#103F4A] transition-all resize-y"
                   />
                   {errors.reasonForVisit && (
                     <p className="text-xs text-rose-600 mt-1 flex items-center gap-1" role="alert">
@@ -494,7 +497,7 @@ export const BookAppointmentPage: React.FC = () => {
 
               {/* Timing Notice */}
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
-                <Clock className="w-4 h-4 text-[#0f3d4a] shrink-0 mt-0.5" />
+                <Clock className="w-4 h-4 text-[#103F4A] shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
                   {isHindi
                     ? 'क्लिनिक समय: सोमवार से शनिवार शाम 5:00 से 8:00 बजे। व्हाट्सएप पर भेजने के बाद क्लिनिक डेस्क आपको पुष्टि के लिए संपर्क करेगा।'
@@ -507,7 +510,7 @@ export const BookAppointmentPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-bold text-white bg-[#0f3d4a] hover:bg-[#0c2f39] active:bg-[#09232a] shadow-md shadow-[#0f3d4a]/20 transition-all text-sm sm:text-base cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-bold text-white bg-[#103F4A] hover:bg-[#0C323B] active:bg-[#09262D] shadow-md shadow-[#103F4A]/20 transition-all text-sm sm:text-base cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <MessageSquare className="w-4 h-4 text-[#25D366] fill-[#25D366]" />
                   <span>{isHindi ? 'व्हाट्सएप पर अपॉइंटमेंट बुक करें' : 'Book Appointment via WhatsApp'}</span>

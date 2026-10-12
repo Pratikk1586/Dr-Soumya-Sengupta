@@ -276,7 +276,7 @@ export const DoctorSocialLinks: React.FC<DoctorSocialLinksProps> = ({
                   <SocialIcon platform={link.platform} className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 group-hover:text-[#0f3d4a] transition-colors leading-tight">
+                  <h4 className="text-sm font-bold text-slate-900 group-hover:text-[#103F4A] transition-colors leading-tight">
                     {labelText}
                   </h4>
                   {link.handle && (
@@ -295,7 +295,7 @@ export const DoctorSocialLinks: React.FC<DoctorSocialLinksProps> = ({
               </p>
             )}
 
-            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-[#0f3d4a]">
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-[#103F4A]">
               <span>{isHindi ? 'प्रोफाइल देखें' : 'Visit Profile'}</span>
               <span className="text-slate-400 group-hover:translate-x-0.5 transition-transform">
                 &rarr;

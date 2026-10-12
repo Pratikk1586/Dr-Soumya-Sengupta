@@ -26,7 +26,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
   return (
     <div className={`rounded-2xl border border-slate-200/90 overflow-hidden bg-white shadow-xs ${className}`}>
       {/* Video Container / Facade */}
-      <div className="relative aspect-video bg-gradient-to-br from-[#06181f] via-[#0f3d4a] to-[#041217] flex items-center justify-center overflow-hidden select-none">
+      <div className="relative aspect-video bg-gradient-to-br from-[#06181f] via-[#103F4A] to-[#041217] flex items-center justify-center overflow-hidden select-none">
         {isPlaying && hasVideoUrl ? (
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0`}
@@ -51,7 +51,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
             <button
               onClick={() => setIsPlaying(true)}
               aria-label={`Play educational video: ${title}`}
-              className="relative z-10 w-16 h-16 rounded-full bg-white/90 hover:bg-white text-[#0f3d4a] flex items-center justify-center shadow-2xl transition-transform hover:scale-110 cursor-pointer focus:outline-none focus:ring-4 focus:ring-teal-400"
+              className="relative z-10 w-16 h-16 rounded-full bg-white/90 hover:bg-white text-[#103F4A] flex items-center justify-center shadow-2xl transition-transform hover:scale-110 cursor-pointer focus:outline-none focus:ring-4 focus:ring-teal-400"
             >
               <Play className="w-7 h-7 ml-1 fill-current" />
             </button>
@@ -96,7 +96,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
           <div className="pt-2 border-t border-slate-100">
             <button
               onClick={() => setShowTranscript((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0f3d4a] hover:underline cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#103F4A] hover:underline cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5" />
               <span>{showTranscript ? 'Hide Educational Transcript' : 'View Educational Transcript'}</span>

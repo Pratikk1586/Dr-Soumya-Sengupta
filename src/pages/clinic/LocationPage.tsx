@@ -45,7 +45,7 @@ export const LocationPage: React.FC = () => {
         structuredData={locationJsonLd}
       />
 
-      <div className="bg-[#faf9f6] border-b border-slate-200">
+      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
         <Container size="xl">
           <Breadcrumb
             items={[
@@ -86,7 +86,7 @@ export const LocationPage: React.FC = () => {
 
               <div className="space-y-4 text-xs sm:text-sm text-slate-700">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#0f3d4a] shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-[#103F4A] shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-slate-900 block font-semibold">
                       {isHindi ? 'पूर्ण डाक पता:' : 'Complete Postal Address:'}
@@ -131,7 +131,7 @@ export const LocationPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-3 pt-2 border-t border-slate-100">
-                  <Clock className="w-5 h-5 text-[#0f3d4a] shrink-0 mt-0.5" />
+                  <Clock className="w-5 h-5 text-[#103F4A] shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-slate-900 block font-semibold">
                       {isHindi ? 'परामर्श घंटे:' : 'Consultation Timings:'}

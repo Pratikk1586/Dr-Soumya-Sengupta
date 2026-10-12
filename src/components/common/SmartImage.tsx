@@ -4,7 +4,7 @@ import { ImageOff } from 'lucide-react';
 
 export interface SmartImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   alt: string; // Required for WCAG 2.2 accessibility
-  aspectRatio?: '16/9' | '4/3' | '1/1' | '3/2';
+  aspectRatio?: '16/9' | '4/3' | '1/1' | '3/2' | '3/4';
   fallbackSrc?: string;
 }
 
@@ -25,6 +25,7 @@ export const SmartImage: React.FC<SmartImageProps> = ({
     '4/3': 'aspect-4/3',
     '1/1': 'aspect-square',
     '3/2': 'aspect-3/2',
+    '3/4': 'aspect-[3/4]',
   };
 
   return (

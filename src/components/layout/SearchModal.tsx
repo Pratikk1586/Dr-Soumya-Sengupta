@@ -298,7 +298,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                         key={rec}
                         type="button"
                         onClick={() => setQuery(rec)}
-                        className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#dff0f4]/50 hover:text-[#0f3d4a] text-xs sm:text-sm text-slate-700 transition-colors cursor-pointer flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#EAF7FA] hover:text-[#103F4A] text-xs sm:text-sm text-slate-700 transition-colors cursor-pointer flex items-center gap-1.5"
                       >
                         <Clock className="w-3 h-3 text-slate-400" />
                         <span>{rec}</span>
@@ -318,10 +318,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                       key={item}
                       type="button"
                       onClick={() => setQuery(item)}
-                      className="flex items-center justify-between p-2.5 rounded-lg text-left text-xs sm:text-sm font-medium text-slate-700 bg-slate-50 hover:bg-[#dff0f4]/50 hover:text-[#0f3d4a] transition-colors group cursor-pointer border border-slate-100"
+                      className="flex items-center justify-between p-2.5 rounded-lg text-left text-xs sm:text-sm font-medium text-slate-700 bg-slate-50 hover:bg-[#EAF7FA] hover:text-[#103F4A] transition-colors group cursor-pointer border border-slate-100"
                     >
                       <span>{item}</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0f3d4a] group-hover:translate-x-0.5 transition-transform" />
+                      <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#103F4A] group-hover:translate-x-0.5 transition-transform" />
                     </button>
                   ))}
                 </div>
@@ -349,7 +349,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                     key={sugg}
                     type="button"
                     onClick={() => setQuery(sugg)}
-                    className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#dff0f4]/50 text-xs font-medium text-slate-700 hover:text-[#0f3d4a] transition-colors cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#EAF7FA] text-xs font-medium text-slate-700 hover:text-[#103F4A] transition-colors cursor-pointer"
                   >
                     {sugg}
                   </button>
@@ -378,7 +378,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                 const IconComponent = CATEGORY_ICONS[group.category] || Activity;
                 return (
                   <div key={group.category} className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#0f3d4a] uppercase tracking-wider">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#103F4A] uppercase tracking-wider">
                       <IconComponent className="w-3.5 h-3.5" />
                       <span>{group.label}</span>
                       <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full font-semibold">
@@ -402,7 +402,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                             }}
                             className={`p-3 rounded-xl transition-all cursor-pointer border text-left ${
                               isSelected
-                                ? 'bg-[#dff0f4]/50 border-[#0f3d4a]/30 shadow-xs'
+                                ? 'bg-[#EAF7FA] border-[#103F4A]/30 shadow-xs'
                                 : 'bg-white hover:bg-slate-50 border-slate-100'
                             }`}
                           >
@@ -420,7 +420,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
                               <ArrowRight
                                 className={`w-4 h-4 shrink-0 transition-transform mt-0.5 ${
                                   isSelected
-                                    ? 'text-[#0f3d4a] translate-x-1'
+                                    ? 'text-[#103F4A] translate-x-1'
                                     : 'text-slate-400'
                                 }`}
                               />

@@ -39,7 +39,7 @@ export const NoticeTabs: React.FC<NoticeTabsProps> = ({
             onClick={() => onTabChange('recent')}
             className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               activeTab === 'recent'
-                ? 'bg-white text-[#0f3d4a] shadow-sm'
+                ? 'bg-white text-[#103F4A] shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -61,7 +61,7 @@ export const NoticeTabs: React.FC<NoticeTabsProps> = ({
             onClick={() => onTabChange('all')}
             className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
               activeTab === 'all'
-                ? 'bg-white text-[#0f3d4a] shadow-sm'
+                ? 'bg-white text-[#103F4A] shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -86,7 +86,7 @@ export const NoticeTabs: React.FC<NoticeTabsProps> = ({
               onClick={() => onCategoryChange(cat.id)}
               className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
                 selectedCategory === cat.id
-                  ? 'bg-[#0f3d4a] text-white shadow-xs'
+                  ? 'bg-[#103F4A] text-white shadow-xs'
                   : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/80'
               }`}
             >

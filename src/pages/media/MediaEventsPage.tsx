@@ -20,8 +20,9 @@ export const MediaEventsPage: React.FC = () => {
       />
 
       {/* Header */}
-      <div className="bg-[#faf9f6] border-b border-slate-200">
-        <Container size="xl">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+        <Container size="xl" className="relative z-10">
           <Breadcrumb
             items={[
               { label: isHindi ? 'मीडिया' : 'Media', href: '/media' },
@@ -29,11 +30,11 @@ export const MediaEventsPage: React.FC = () => {
             ]}
           />
           <div className="py-8 sm:py-12 max-w-3xl space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0f3d4a]/10 text-[#0f3d4a] border border-[#0f3d4a]/20">
-              <Calendar className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 shadow-xs">
+              <Calendar className="w-3.5 h-3.5 text-[#103F4A]" />
               <span>{isHindi ? 'क्लिनिक गतिविधियां' : 'CLINIC EVENTS & INITIATIVES'}</span>
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#103F4A] tracking-tight leading-tight">
               {isHindi ? 'आयोजन, स्वास्थ्य शिविर एवं सम्मेलन' : 'Events, Health Camps & Conferences'}
             </h1>
             <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
@@ -48,10 +49,10 @@ export const MediaEventsPage: React.FC = () => {
       <Container size="xl" className="py-12 space-y-12">
         <div className="space-y-8 max-w-4xl">
           {EVENTS_DATA.map((event) => (
-            <Card key={event.id} padding="lg" className="bg-white border-slate-200 shadow-2xs space-y-6">
+            <Card key={event.id} padding="lg" className="bg-white border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/50 transition-all duration-200 space-y-6">
               <div className="grid md:grid-cols-12 gap-6 items-start">
                 {/* Event Image */}
-                <div className="md:col-span-5 relative rounded-xl overflow-hidden aspect-4/3 bg-slate-100 group">
+                <div className="md:col-span-5 relative rounded-xl overflow-hidden aspect-4/3 bg-slate-100 group border border-slate-100">
                   <img
                     src={event.image}
                     alt={localize(event.title)}
@@ -72,7 +73,7 @@ export const MediaEventsPage: React.FC = () => {
                 <div className="md:col-span-7 space-y-4">
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-semibold">
-                      <span className="inline-flex items-center gap-1 text-[#0f3d4a]">
+                      <span className="inline-flex items-center gap-1 text-[#103F4A]">
                         <Calendar className="w-3.5 h-3.5" />
                         <span>{event.date}</span>
                       </span>
@@ -83,7 +84,7 @@ export const MediaEventsPage: React.FC = () => {
                       </span>
                     </div>
 
-                    <h2 className="text-xl font-bold text-slate-900 leading-snug">
+                    <h2 className="text-xl font-bold text-[#103F4A] leading-snug">
                       {localize(event.title)}
                     </h2>
                   </div>
@@ -93,13 +94,13 @@ export const MediaEventsPage: React.FC = () => {
                   </p>
 
                   <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#103F4A]/80 block">
                       {isHindi ? 'मुख्य झलकियां:' : 'Key Highlights:'}
                     </span>
                     <div className="space-y-1 text-xs text-slate-700">
                       {event.keyHighlights.map((hl, i) => (
                         <div key={i} className="flex items-start gap-1.5">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#103F4A] shrink-0 mt-0.5" />
                           <span>{localize(hl)}</span>
                         </div>
                       ))}

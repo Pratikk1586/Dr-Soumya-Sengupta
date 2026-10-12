@@ -63,7 +63,7 @@ export const WhyChooseSection: React.FC = () => {
       heading="Our Clinical Approach"
       lede="Positioned around medical integrity, patient empowerment, and proactive chronic disease prevention."
       containerSize="xl"
-      className="bg-[#faf9f6] border-b border-slate-200/80"
+      className="bg-[#FCFEFF] border-b border-slate-200/80"
     >
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {APPROACH_PILLARS.map((pillar, idx) => {
@@ -76,8 +76,8 @@ export const WhyChooseSection: React.FC = () => {
               className="border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0f3d4a] flex items-center justify-center">
-                  <PillarIcon className="w-5 h-5 text-[#0f3d4a]" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-xl bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/30 flex items-center justify-center">
+                  <PillarIcon className="w-5 h-5 text-[#103F4A]" aria-hidden="true" />
                 </div>
 
                 <h3 className="font-bold text-slate-900 text-base leading-snug">

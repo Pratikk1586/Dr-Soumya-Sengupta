@@ -1,4 +1,5 @@
 import type { LocalizedString } from '../types';
+import { CLINIC_IMAGES } from '../config/images';
 
 export type GalleryCategory =
   | 'all'
@@ -23,6 +24,46 @@ export interface GalleryItem {
 }
 
 export const GALLERY_ITEMS: GalleryItem[] = [
+  {
+    id: 'gal-ccdsi-conference-speaker',
+    title: {
+      en: 'CCDSI Conference Presentation',
+      hi: 'सीसीडीएसआई सम्मेलन प्रस्तुति',
+    },
+    caption: {
+      en: 'Conference Speaker on Stage',
+      hi: 'सम्मेलन वक्ता के रूप में मंच पर व्याख्यान',
+    },
+    altText: {
+      en: 'Dr. Soumya Sengupta addressing the audience as a conference speaker on stage at CCDSI',
+      hi: 'सीसीडीएसआई सम्मेलन में मंच पर व्याख्यान देते डॉ. सौम्य सेनगुप्ता',
+    },
+    category: 'events',
+    thumbnailUrl: CLINIC_IMAGES.ccdsiConference,
+    fullUrl: CLINIC_IMAGES.ccdsiConference,
+    aspectRatio: '4/3',
+    date: '2026',
+  },
+  {
+    id: 'gal-rssdi-jhcon-2026-presentation',
+    title: {
+      en: 'RSSDI JHCON 2026 Presentation',
+      hi: 'आरएसएसडीआई झारखण्ड 2026 प्रस्तुति',
+    },
+    caption: {
+      en: 'Award presentation photograph at RSSDI JHCON 2026 conference.',
+      hi: 'आरएसएसडीआई झारखण्ड 2026 सम्मेलन में मंच प्रस्तुति।',
+    },
+    altText: {
+      en: 'Dr. Soumya Sengupta at RSSDI JHCON 2026 stage presentation ceremony',
+      hi: 'आरएसएसडीआई झारखण्ड 2026 मंच प्रस्तुति के दौरान डॉ. सौम्य सेनगुप्ता',
+    },
+    category: 'events',
+    thumbnailUrl: CLINIC_IMAGES.rssdiJhconAward,
+    fullUrl: CLINIC_IMAGES.rssdiJhconAward,
+    aspectRatio: '4/3',
+    date: '2026',
+  },
   {
     id: 'gal-consultation-desk',
     title: {

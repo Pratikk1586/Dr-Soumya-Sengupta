@@ -103,7 +103,7 @@ export const PhotosPage: React.FC = () => {
       />
 
       {/* Header */}
-      <div className="bg-[#faf9f6] border-b border-slate-200">
+      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
         <Container size="xl">
           <Breadcrumb
             items={[
@@ -146,8 +146,8 @@ export const PhotosPage: React.FC = () => {
                 }}
                 className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-[#0f3d4a] text-white shadow-xs'
-                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                    ? 'bg-[#103F4A] text-white shadow-xs'
+                    : 'bg-white text-slate-700 hover:bg-[#EAF7FA]/50 hover:text-[#103F4A] border border-slate-200'
                 }`}
               >
                 <span>{isHindi ? cat.labelHi : cat.labelEn}</span>
@@ -182,7 +182,7 @@ export const PhotosPage: React.FC = () => {
                 <Card
                   key={item.id}
                   padding="none"
-                  className="overflow-hidden border-slate-200 hover:border-[#0f3d4a]/40 shadow-xs hover:shadow-md transition-all group flex flex-col justify-between cursor-pointer"
+                  className="overflow-hidden border-slate-200 hover:border-[#65D9D0]/60 shadow-xs hover:shadow-md hover:shadow-[#103F4A]/5 transition-all group flex flex-col justify-between cursor-pointer"
                   onClick={() => setActiveLightboxIndex(index)}
                   tabIndex={0}
                   role="button"
@@ -198,16 +198,28 @@ export const PhotosPage: React.FC = () => {
                     <div
                       className={`relative w-full ${
                         item.aspectRatio === '16/9' ? 'aspect-16/9' : 'aspect-4/3'
-                      } bg-gradient-to-br from-slate-100 via-slate-50 to-[#dff0f4]/20 flex items-center justify-center overflow-hidden border-b border-slate-100`}
+                      } bg-gradient-to-br from-slate-100 via-slate-50 to-[#EAF7FA]/40 flex items-center justify-center overflow-hidden border-b border-slate-100`}
                     >
-                      {/* Stylized Visual Mock/Placeholder */}
-                      <div className="p-6 text-center select-none">
+                      {item.thumbnailUrl && !isVideo ? (
+                        <img
+                          src={item.thumbnailUrl}
+                          alt={localize(item.altText)}
+                          className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500"
+                          loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      ) : null}
+
+                      {/* Stylized Visual Mock/Placeholder (shows if video or image fallback) */}
+                      <div className={`p-6 text-center select-none ${item.thumbnailUrl && !isVideo ? 'hidden' : 'block'}`}>
                         {isVideo ? (
-                          <div className="w-12 h-12 rounded-full bg-[#0f3d4a] text-white flex items-center justify-center mx-auto shadow-md group-hover:scale-110 transition-transform">
-                            <VideoIcon className="w-6 h-6 text-[#dff0f4]" />
+                          <div className="w-12 h-12 rounded-full bg-[#103F4A] text-white flex items-center justify-center mx-auto shadow-md group-hover:scale-110 transition-transform">
+                            <VideoIcon className="w-6 h-6 text-[#EAF7FA]" />
                           </div>
                         ) : (
-                          <div className="w-12 h-12 rounded-xl bg-white/80 text-[#0f3d4a] flex items-center justify-center mx-auto shadow-xs border border-slate-200 group-hover:scale-105 transition-transform">
+                          <div className="w-12 h-12 rounded-xl bg-white/80 text-[#103F4A] flex items-center justify-center mx-auto shadow-xs border border-slate-200 group-hover:scale-105 transition-transform">
                             <ImageIcon className="w-6 h-6" />
                           </div>
                         )}
@@ -227,7 +239,7 @@ export const PhotosPage: React.FC = () => {
 
                     {/* Metadata Content */}
                     <div className="p-4 space-y-1.5">
-                      <div className="flex items-center gap-2 text-[11px] font-bold text-[#0f3d4a] uppercase tracking-wider">
+                      <div className="flex items-center gap-2 text-[11px] font-bold text-[#103F4A] uppercase tracking-wider">
                         <Tag className="w-3 h-3" />
                         <span>{item.category.replace('_', ' ')}</span>
                       </div>
@@ -307,10 +319,21 @@ export const PhotosPage: React.FC = () => {
                     description={localize(activeItem.caption)}
                   />
                 </div>
+              ) : activeItem.fullUrl ? (
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <img
+                    src={activeItem.fullUrl}
+                    alt={localize(activeItem.altText)}
+                    className="max-h-[58vh] max-w-full w-auto object-contain rounded-lg shadow-lg"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
               ) : (
                 <div className="text-center p-8 text-white space-y-4">
                   <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mx-auto">
-                    <Camera className="w-8 h-8 text-[#dff0f4]" />
+                    <Camera className="w-8 h-8 text-[#EAF7FA]" />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold">{localize(activeItem.title)}</h3>

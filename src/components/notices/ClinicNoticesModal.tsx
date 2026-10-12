@@ -101,11 +101,11 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between px-5 sm:px-7 py-4 sm:py-5 border-b border-slate-200 bg-white shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#0f3d4a] text-white flex items-center justify-center shadow-xs shrink-0">
-              <Bell className="w-5 h-5 text-teal-300" />
+            <div className="w-10 h-10 rounded-xl bg-[#103F4A] text-white flex items-center justify-center shadow-xs shrink-0">
+              <Bell className="w-5 h-5 text-[#65D9D0]" />
             </div>
             <div>
-              <h2 id="notices-modal-title" className="text-lg sm:text-xl font-extrabold text-slate-950">
+              <h2 id="notices-modal-title" className="text-lg sm:text-xl font-extrabold text-[#103F4A]">
                 {isHindi ? 'क्लिनिक सूचनाएं एवं समाचार' : 'Clinic Notices & News'}
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -135,8 +135,8 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
               className={cn(
                 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer',
                 filterType === 'latest'
-                  ? 'bg-[#0f3d4a] text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-[#103F4A] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-[#103F4A] hover:bg-[#EAF7FA]/50'
               )}
             >
               {isHindi ? 'ताज़ा समाचार (3 दिन)' : 'Latest news'}
@@ -148,8 +148,8 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
               className={cn(
                 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer',
                 filterType === 'all'
-                  ? 'bg-[#0f3d4a] text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-[#103F4A] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-[#103F4A] hover:bg-[#EAF7FA]/50'
               )}
             >
               {isHindi ? 'सभी समाचार' : 'All news'}
@@ -181,7 +181,7 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
                 <div
                   key={n.id}
                   onClick={() => setPopupNotice(n)}
-                  className="group p-4 sm:p-5 rounded-2xl bg-white hover:bg-white border border-slate-200/90 hover:border-[#0f3d4a]/40 shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer text-left relative overflow-hidden"
+                  className="group p-4 sm:p-5 rounded-2xl bg-white hover:bg-white border border-slate-200/90 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-md transition-all duration-200 cursor-pointer text-left relative overflow-hidden"
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
@@ -194,20 +194,20 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
                 >
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 font-medium">
-                      <Clock className="w-3.5 h-3.5 text-teal-700 shrink-0" />
+                      <Clock className="w-3.5 h-3.5 text-[#103F4A] shrink-0" />
                       <span>{formatDateInIST(n.effectiveDate)}</span>
                     </div>
 
                     {isRecent && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
-                        <Sparkles className="w-2.5 h-2.5 text-amber-700" />
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/50">
+                        <Sparkles className="w-2.5 h-2.5 text-[#103F4A]" />
                         <span>{isHindi ? 'नया' : 'Recent'}</span>
                       </span>
                     )}
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#0f3d4a] transition-colors leading-snug">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#103F4A] transition-colors leading-snug">
                     {localize(n.title)}
                   </h3>
 
@@ -217,7 +217,7 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
                   </p>
 
                   {/* Click affordance */}
-                  <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0f3d4a] group-hover:text-teal-800">
+                  <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#103F4A] group-hover:text-[#103F4A]">
                     <span className="inline-flex items-center gap-1">
                       <span>{isHindi ? 'पूरी सूचना देखें' : 'View full notice'}</span>
                       <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
@@ -260,9 +260,9 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
               className="relative w-full max-w-lg max-h-[85vh] bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
             >
               {/* Popup Header */}
-              <div className="px-5 sm:px-6 py-4 bg-gradient-to-r from-[#0f3d4a] to-[#1a5363] text-white flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-2 text-xs font-semibold text-teal-200">
-                  <Calendar className="w-4 h-4 text-teal-300" />
+              <div className="px-5 sm:px-6 py-4 bg-gradient-to-r from-[#103F4A] to-[#0A262D] text-white flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#65D9D0]">
+                  <Calendar className="w-4 h-4 text-[#65D9D0]" />
                   <span>{formatDateInIST(popupNotice.effectiveDate)}</span>
                 </div>
 

@@ -23,8 +23,8 @@ export const QuickClinicInfo: React.FC = () => {
           <Card hoverable padding="md" className="flex flex-col justify-between border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0f3d4a] flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-[#0f3d4a]" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-xl bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/30 flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-[#103F4A]" aria-hidden="true" />
                 </div>
                 <VerificationBadge note="Chamber location details" />
               </div>
@@ -44,7 +44,7 @@ export const QuickClinicInfo: React.FC = () => {
                   href={ENV.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1"
+                  className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center gap-1"
                 >
                   <span>Google Maps</span>
                   <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -52,7 +52,7 @@ export const QuickClinicInfo: React.FC = () => {
               ) : (
                 <Link
                   to="/clinic/location"
-                  className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1"
+                  className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center gap-1"
                 >
                   <span>Directions & Landmark</span>
                   <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -65,8 +65,8 @@ export const QuickClinicInfo: React.FC = () => {
           <Card hoverable padding="md" className="flex flex-col justify-between border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0f3d4a] flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-[#0f3d4a]" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-xl bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/30 flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-[#103F4A]" aria-hidden="true" />
                 </div>
                 <VerificationBadge note="Timing slots" />
               </div>
@@ -84,7 +84,7 @@ export const QuickClinicInfo: React.FC = () => {
             <div className="pt-4 mt-2 border-t border-slate-100">
               <Link
                 to="/clinic/timings"
-                className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1"
+                className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center gap-1"
               >
                 <span>Full Weekly Schedule</span>
                 <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -96,8 +96,8 @@ export const QuickClinicInfo: React.FC = () => {
           <Card hoverable padding="md" className="flex flex-col justify-between border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0f3d4a] flex items-center justify-center">
-                  <Phone className="w-5 h-5 text-[#0f3d4a]" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-xl bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/30 flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-[#103F4A]" aria-hidden="true" />
                 </div>
                 <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
                   During OPD Hours
@@ -113,7 +113,7 @@ export const QuickClinicInfo: React.FC = () => {
               {ENV.hasPhone && phoneHref ? (
                 <a
                   href={phoneHref}
-                  className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1"
+                  className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center gap-1"
                 >
                   <Phone className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>{ENV.clinicPhone || t('cta.callNow')}</span>
@@ -121,7 +121,7 @@ export const QuickClinicInfo: React.FC = () => {
               ) : (
                 <Link
                   to="/contact"
-                  className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1"
+                  className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center gap-1"
                 >
                   <span>Chamber Contact Details</span>
                   <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -131,7 +131,7 @@ export const QuickClinicInfo: React.FC = () => {
           </Card>
 
           {/* Card 4: Prior Appointment Booking */}
-          <Card hoverable padding="md" className="flex flex-col justify-between bg-gradient-to-br from-[#0f3d4a] to-[#08232c] text-white border-0 shadow-md">
+          <Card hoverable padding="md" className="flex flex-col justify-between bg-gradient-to-br from-[#103F4A] to-[#0A262D] text-white border-0 shadow-md">
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-xl bg-white/10 text-teal-200 flex items-center justify-center">
                 <Calendar className="w-5 h-5 text-teal-300" aria-hidden="true" />

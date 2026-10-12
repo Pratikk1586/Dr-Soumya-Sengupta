@@ -1,4 +1,5 @@
 import type { LocalizedString } from '../types';
+import { CLINIC_IMAGES } from '../config/images';
 
 export interface ClinicEvent {
   id: string;
@@ -41,10 +42,36 @@ export const EVENTS_DATA: ClinicEvent[] = [
     ],
   },
   {
+    id: 'event-ccdsi-speaker',
+    title: {
+      en: 'CCDSI Conference — Speaker on Stage',
+      hi: 'सीसीडीएसआई सम्मेलन — मंच पर मुख्य वक्ता',
+    },
+    date: '2026-02-20',
+    location: {
+      en: 'CCDSI National Diabetology Forum',
+      hi: 'सीसीडीएसआई राष्ट्रीय मंच',
+    },
+    category: 'conference',
+    description: {
+      en: 'Dr. Soumya Sengupta addressing clinicians and delegates as an invited conference speaker on stage at CCDSI.',
+      hi: 'सीसीडीएसआई सम्मेलन में आमंत्रित वक्ता के रूप में मंच से विशेषज्ञ व्याख्यान देते हुए डॉ. सौम्य सेनगुप्ता।',
+    },
+    keyHighlights: [
+      { en: 'Clinical address on advances in cardiometabolic medicine', hi: 'कार्डियोमेटाबोलिक चिकित्सा में नवीन प्रगति पर व्याख्यान' },
+      { en: 'Early diagnosis protocols for microvascular complications', hi: 'माइक्रोवैस्कुलर जटिलताओं की शुरुआती पहचान' },
+      { en: 'Interactive academic session with regional physicians', hi: 'चिकित्सकों के साथ शैक्षणिक संवाद' },
+    ],
+    image: CLINIC_IMAGES.ccdsiConference,
+    galleryImages: [
+      CLINIC_IMAGES.ccdsiConference,
+    ],
+  },
+  {
     id: 'event-rssdi-keynote',
     title: {
-      en: 'RSSDI Regional Diabetology Keynote & Academic Lecture',
-      hi: 'आरएसएसडीआई क्षेत्रीय संगोष्ठी मुख्य व्याख्यान',
+      en: 'RSSDI JHCON 2026 Presentation & Academic Lecture',
+      hi: 'आरएसएसडीआई झारखण्ड 2026 प्रस्तुति एवं व्याख्यान',
     },
     date: '2026-01-18',
     location: {
@@ -59,12 +86,12 @@ export const EVENTS_DATA: ClinicEvent[] = [
     keyHighlights: [
       { en: 'Discussion on early kidney protection protocols', hi: 'गुर्दे की शुरुआती सुरक्षा प्रोटोकॉल पर चर्चा' },
       { en: 'Review of Time in Range (TIR) from continuous glucose monitoring', hi: 'कंटीन्यूअस ग्लूकोज मॉनिटरिंग के लाभ' },
-      { en: 'Collaboration with fellow physicians across eastern India', hi: 'पूर्वी भारत के साथी चिकित्सकों के साथ विचार-विमर्श' },
+      { en: 'Stage presentation and academic felicitation ceremony', hi: 'मंच प्रस्तुति एवं अकादमिक सम्मान' },
     ],
-    image: '/assets/achievements/cert-rssdi.webp',
+    image: CLINIC_IMAGES.rssdiJhconAward,
     galleryImages: [
-      '/assets/achievements/cert-rssdi.webp',
-      '/assets/achievements/cert-cardio.webp',
+      CLINIC_IMAGES.rssdiJhconAward,
+      CLINIC_IMAGES.ccdsiConference,
     ],
   },
   {

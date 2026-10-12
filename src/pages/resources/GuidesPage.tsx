@@ -57,8 +57,9 @@ export const GuidesPage: React.FC = () => {
         canonicalPath="/patient-resources/guides"
       />
 
-      <div className="bg-[#faf9f6] border-b border-slate-200">
-        <Container size="xl">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+        <Container size="xl" className="relative z-10">
           <Breadcrumb
             items={[
               { label: t('nav.patientResources'), href: '/patient-resources' },
@@ -66,8 +67,11 @@ export const GuidesPage: React.FC = () => {
             ]}
           />
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
-            <Badge variant="primary">Self-Care Protocols</Badge>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#06181f] tracking-tight">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 shadow-xs">
+              <FileText className="w-3.5 h-3.5 text-[#103F4A]" />
+              <span>Self-Care Protocols</span>
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#103F4A] tracking-tight">
               Patient Self-Care & Preparation Guides
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
@@ -81,14 +85,14 @@ export const GuidesPage: React.FC = () => {
         <MedicalDisclaimerBanner />
 
         {downloadNotice && (
-          <div className="p-4 rounded-xl bg-teal-50 border border-teal-200/80 text-[#0f3d4a] text-xs sm:text-sm flex items-start justify-between gap-3 shadow-xs">
+          <div className="p-4 rounded-xl bg-[#EAF7FA] border border-[#65D9D0]/50 text-[#103F4A] text-xs sm:text-sm flex items-start justify-between gap-3 shadow-xs">
             <div className="flex items-start gap-2.5">
-              <Info className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+              <Info className="w-5 h-5 text-[#103F4A] shrink-0 mt-0.5" />
               <span>{downloadNotice}</span>
             </div>
             <button
               onClick={() => setDownloadNotice(null)}
-              className="text-xs font-bold text-teal-800 hover:underline shrink-0"
+              className="text-xs font-bold text-[#103F4A] hover:underline shrink-0"
             >
               Dismiss
             </button>
@@ -105,20 +109,20 @@ export const GuidesPage: React.FC = () => {
               <Card
                 key={guide.id}
                 padding="lg"
-                className="flex flex-col justify-between border-slate-200/90 shadow-sm bg-white space-y-6"
+                className="flex flex-col justify-between border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/60 hover:shadow-lg hover:shadow-[#103F4A]/5 transition-all duration-200 bg-white space-y-6"
               >
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0f3d4a] flex items-center justify-center shrink-0">
-                      <FileText className="w-5 h-5 text-[#0f3d4a]" />
+                    <div className="w-11 h-11 rounded-xl bg-[#EAF7FA] border border-[#65D9D0]/30 text-[#103F4A] flex items-center justify-center shrink-0 shadow-xs">
+                      <FileText className="w-5 h-5 text-[#103F4A]" />
                     </div>
-                    <Badge variant="neutral" size="sm">
+                    <Badge variant="mint" size="sm">
                       Clinical Guide
                     </Badge>
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-bold text-slate-900 leading-snug">
+                    <h2 className="text-lg font-bold text-[#103F4A] leading-snug">
                       {localize(guide.title)}
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
@@ -128,13 +132,13 @@ export const GuidesPage: React.FC = () => {
 
                   {/* Steps Checklist */}
                   <div className="space-y-2 pt-2">
-                    <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider block">
+                    <span className="text-[11px] font-bold text-[#103F4A] uppercase tracking-wider block">
                       Recommended Steps:
                     </span>
                     <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                       {guide.steps.map((st, sIdx) => (
-                        <li key={sIdx} className="flex items-start gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <li key={sIdx} className="flex items-start gap-2 p-2 rounded-lg bg-slate-50/70 border border-slate-100/80">
+                          <CheckCircle2 className="w-4 h-4 text-[#103F4A] shrink-0 mt-0.5" />
                           <span>{localize(st)}</span>
                         </li>
                       ))}
@@ -143,7 +147,7 @@ export const GuidesPage: React.FC = () => {
 
                   {/* Emergency Warning */}
                   {guide.emergencyWarning && (
-                    <div className="p-3 rounded-lg bg-amber-50 border border-amber-200/80 text-xs text-amber-900 flex items-start gap-2">
+                    <div className="p-3 rounded-xl bg-amber-50/90 border border-amber-200/80 text-xs text-amber-900 flex items-start gap-2">
                       <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                       <span>{localize(guide.emergencyWarning)}</span>
                     </div>
@@ -151,12 +155,12 @@ export const GuidesPage: React.FC = () => {
                 </div>
 
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-600 font-medium">PDF printable format</span>
+                  <span className="text-[11px] text-slate-500 font-medium">PDF printable format</span>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleDownload(localize(guide.title), guide.downloadUrl)}
-                    className="gap-1.5"
+                    className="gap-1.5 border-[#65D9D0]/50 text-[#103F4A] hover:bg-[#EAF7FA]"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Download Guide (PDF)</span>
@@ -168,17 +172,20 @@ export const GuidesPage: React.FC = () => {
         )}
 
         {/* Clinical Appointment CTA */}
-        <div className="p-8 rounded-2xl bg-gradient-to-r from-[#0f3d4a] to-[#08222a] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
+        <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-[#103F4A] via-[#0A262D] to-[#103F4A] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-md border border-[#103F4A]">
           <div className="space-y-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#65D9D0]">
+              INDIVIDUALIZED CARE
+            </span>
             <h3 className="text-xl sm:text-2xl font-bold text-white">
               Need Personal Self-Care Guidance?
             </h3>
-            <p className="text-xs sm:text-sm text-teal-100 max-w-xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-200 max-w-xl leading-relaxed">
               Dr. Soumya Sengupta provides personalized education on insulin injection technique, sensor reading, and emergency hypoglycemia protocols during consultations.
             </p>
           </div>
           <Link to="/book-appointment" className="shrink-0">
-            <Button variant="secondary" size="lg" className="w-full sm:w-auto shadow-md">
+            <Button variant="primary" size="lg" className="w-full sm:w-auto bg-[#65D9D0] text-[#103F4A] hover:bg-white font-semibold">
               <Calendar className="w-4 h-4 mr-2" />
               <span>{t('cta.bookAppointment')}</span>
             </Button>

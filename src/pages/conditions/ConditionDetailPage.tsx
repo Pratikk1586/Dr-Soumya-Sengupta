@@ -307,16 +307,16 @@ export const ConditionDetailPage: React.FC = () => {
   const getConditionIcon = () => {
     switch (condition.slug) {
       case 'thyroid':
-        return <Stethoscope className="w-5 h-5 text-[#0f3d4a]" />;
+        return <Stethoscope className="w-5 h-5 text-[#103F4A]" />;
       case 'weight-management':
-        return <Scale className="w-5 h-5 text-[#0f3d4a]" />;
+        return <Scale className="w-5 h-5 text-[#103F4A]" />;
       case 'metabolic-health':
-        return <HeartPulse className="w-5 h-5 text-[#0f3d4a]" />;
+        return <HeartPulse className="w-5 h-5 text-[#103F4A]" />;
       case 'other':
-        return <ShieldAlert className="w-5 h-5 text-[#0f3d4a]" />;
+        return <ShieldAlert className="w-5 h-5 text-[#103F4A]" />;
       case 'diabetes':
       default:
-        return <Activity className="w-5 h-5 text-[#0f3d4a]" />;
+        return <Activity className="w-5 h-5 text-[#103F4A]" />;
     }
   };
 
@@ -329,7 +329,7 @@ export const ConditionDetailPage: React.FC = () => {
       />
 
       {/* Header */}
-      <div className="bg-[#faf9f6] border-b border-slate-200">
+      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
         <Container size="xl">
           <Breadcrumb
             items={[
@@ -339,10 +339,10 @@ export const ConditionDetailPage: React.FC = () => {
           />
           <div className="py-8 sm:py-12 max-w-3xl space-y-3">
             <div className="flex items-center gap-2">
-              <span className="w-8 h-8 rounded-lg bg-[#dff0f4] flex items-center justify-center">
+              <span className="w-8 h-8 rounded-lg bg-[#EAF7FA] flex items-center justify-center border border-[#65D9D0]/30">
                 {getConditionIcon()}
               </span>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
                 {isHindi ? condition.categoryHi : condition.categoryEn}
               </span>
             </div>
@@ -440,8 +440,8 @@ export const ConditionDetailPage: React.FC = () => {
             {/* Sidebar Column: Cross-Links */}
             <div className="lg:col-span-4 space-y-6">
               {/* Appointment Card */}
-              <Card padding="lg" className="bg-gradient-to-b from-[#0f3d4a] to-[#09252d] text-white shadow-md space-y-4">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#dff0f4]">
+              <Card padding="lg" className="bg-gradient-to-b from-[#103F4A] to-[#0A262C] text-white shadow-md space-y-4">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#65D9D0]">
                   {isHindi ? 'डॉक्टर परामर्श' : 'CLINICAL APPOINTMENT'}
                 </span>
                 <h3 className="text-lg font-bold text-white leading-snug">
@@ -455,7 +455,7 @@ export const ConditionDetailPage: React.FC = () => {
                     : 'In-person consultations available at Cardio Diabetic Clinic, Amlatola, Chaibasa.'}
                 </p>
                 <Link to="/book-appointment" className="block w-full">
-                  <Button variant="primary" size="md" className="w-full bg-white text-[#0f3d4a] hover:bg-[#dff0f4]">
+                  <Button variant="primary" size="md" className="w-full bg-white text-[#103F4A] hover:bg-[#EAF7FA]">
                     <Calendar className="w-4 h-4 mr-2" />
                     <span>{t('cta.bookAppointment')}</span>
                   </Button>
@@ -470,42 +470,42 @@ export const ConditionDetailPage: React.FC = () => {
                 <div className="space-y-2 text-xs">
                   <Link
                     to="/diabetes-care"
-                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#dff0f4]/50 border border-slate-100 hover:border-[#0f3d4a]/20 transition-all flex items-center justify-between group"
+                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#EAF7FA]/50 border border-slate-100 hover:border-[#103F4A]/20 transition-all flex items-center justify-between group"
                   >
-                    <span className="font-semibold text-slate-800 group-hover:text-[#0f3d4a]">
+                    <span className="font-semibold text-slate-800 group-hover:text-[#103F4A]">
                       {isHindi ? 'डायबिटीज केयर' : 'Diabetes Care Programs'}
                     </span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0f3d4a]" />
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#103F4A]" />
                   </Link>
 
                   <Link
                     to="/patient-resources/understand-your-reports"
-                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#dff0f4]/50 border border-slate-100 hover:border-[#0f3d4a]/20 transition-all flex items-center justify-between group"
+                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#EAF7FA]/50 border border-slate-100 hover:border-[#103F4A]/20 transition-all flex items-center justify-between group"
                   >
-                    <span className="font-semibold text-slate-800 group-hover:text-[#0f3d4a]">
+                    <span className="font-semibold text-slate-800 group-hover:text-[#103F4A]">
                       {isHindi ? 'अपनी रिपोर्ट समझें' : 'Understand Your Reports'}
                     </span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0f3d4a]" />
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#103F4A]" />
                   </Link>
 
                   <Link
                     to="/patient-resources/articles"
-                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#dff0f4]/50 border border-slate-100 hover:border-[#0f3d4a]/20 transition-all flex items-center justify-between group"
+                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#EAF7FA]/50 border border-slate-100 hover:border-[#103F4A]/20 transition-all flex items-center justify-between group"
                   >
-                    <span className="font-semibold text-slate-800 group-hover:text-[#0f3d4a]">
+                    <span className="font-semibold text-slate-800 group-hover:text-[#103F4A]">
                       {isHindi ? 'चिकित्सीय लेख' : 'Helpful Articles'}
                     </span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0f3d4a]" />
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#103F4A]" />
                   </Link>
 
                   <Link
                     to="/patient-resources/faqs"
-                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#dff0f4]/50 border border-slate-100 hover:border-[#0f3d4a]/20 transition-all flex items-center justify-between group"
+                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#EAF7FA]/50 border border-slate-100 hover:border-[#103F4A]/20 transition-all flex items-center justify-between group"
                   >
-                    <span className="font-semibold text-slate-800 group-hover:text-[#0f3d4a]">
+                    <span className="font-semibold text-slate-800 group-hover:text-[#103F4A]">
                       {isHindi ? 'अक्सर पूछे जाने वाले सवाल' : 'Patient FAQs'}
                     </span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0f3d4a]" />
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#103F4A]" />
                   </Link>
                 </div>
               </Card>
@@ -514,7 +514,7 @@ export const ConditionDetailPage: React.FC = () => {
               <div className="text-center">
                 <Link
                   to="/conditions"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0f3d4a] hover:underline"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#103F4A] hover:underline"
                 >
                   <span>{isHindi ? '← सभी स्थितियां देखें' : '← Back to All Conditions'}</span>
                 </Link>

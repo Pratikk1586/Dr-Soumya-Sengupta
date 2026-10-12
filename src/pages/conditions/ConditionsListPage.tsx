@@ -74,12 +74,12 @@ export const ConditionsListPage: React.FC = () => {
         canonicalPath="/conditions"
       />
 
-      <div className="bg-[#faf9f6] border-b border-slate-200">
+      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
         <Container size="xl">
           <Breadcrumb items={[{ label: isHindi ? 'रोग एवं समस्याएं' : 'Conditions' }]} />
           <div className="py-8 sm:py-12 max-w-3xl space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0f3d4a]/10 text-[#0f3d4a] border border-[#0f3d4a]/20">
-              <Stethoscope className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40">
+              <Stethoscope className="w-3.5 h-3.5 text-[#103F4A]" />
               <span>{isHindi ? 'मरीज स्वास्थ्य मार्गदर्शिका' : 'HEALTH CONDITIONS GUIDE'}</span>
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
@@ -106,12 +106,12 @@ export const ConditionsListPage: React.FC = () => {
                 key={cond.slug}
                 hoverable
                 padding="lg"
-                className="bg-white border-slate-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group"
+                className="bg-white/95 border-slate-200/85 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group backdrop-blur-xs"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="w-11 h-11 rounded-xl bg-[#dff0f4] text-[#0f3d4a] flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Icon className="w-5 h-5 text-[#0f3d4a]" />
+                    <div className="w-11 h-11 rounded-xl bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center group-hover:scale-105 transition-transform border border-[#65D9D0]/30">
+                      <Icon className="w-5 h-5 text-[#103F4A]" />
                     </div>
                     <Badge variant="neutral" size="sm">
                       {isHindi ? cond.categoryHi : cond.categoryEn}
@@ -119,7 +119,7 @@ export const ConditionsListPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-bold text-slate-900 group-hover:text-[#0f3d4a] transition-colors">
+                    <h2 className="text-lg font-bold text-slate-900 group-hover:text-[#103F4A] transition-colors">
                       {isHindi ? cond.titleHi : cond.titleEn}
                     </h2>
                     <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
@@ -131,12 +131,12 @@ export const ConditionsListPage: React.FC = () => {
                 <div className="pt-5 mt-5 border-t border-slate-100">
                   <Link
                     to={`/conditions/${cond.slug}`}
-                    className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-teal-50/70 text-[#0f3d4a] border border-teal-200/80 group-hover:bg-[#0f3d4a] group-hover:text-white group-hover:border-[#0f3d4a] shadow-2xs group-hover:shadow-md transition-all duration-200"
+                    className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-[#EAF7FA]/80 text-[#103F4A] border border-[#65D9D0]/60 group-hover:bg-[#103F4A] group-hover:text-white group-hover:border-[#103F4A] shadow-2xs group-hover:shadow-md transition-all duration-200"
                   >
                     <span className="font-semibold text-xs sm:text-sm tracking-wide">
                       {isHindi ? 'अधिक जानें' : 'Learn More'}
                     </span>
-                    <span className="w-6 h-6 rounded-full bg-white text-[#0f3d4a] group-hover:bg-white/20 group-hover:text-white border border-teal-200/60 group-hover:border-white/30 flex items-center justify-center transition-all duration-200 group-hover:translate-x-1 shadow-2xs shrink-0">
+                    <span className="w-6 h-6 rounded-full bg-white text-[#103F4A] group-hover:bg-white/20 group-hover:text-white border border-[#65D9D0]/40 group-hover:border-white/30 flex items-center justify-center transition-all duration-200 group-hover:translate-x-1 shadow-2xs shrink-0">
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </Link>
@@ -147,9 +147,9 @@ export const ConditionsListPage: React.FC = () => {
         </div>
 
         {/* Clinical Consultation CTA */}
-        <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-[#06181f] via-[#0f3d4a] to-[#124b59] text-white flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md">
+        <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-[#06181f] via-[#103F4A] to-[#124b59] text-white flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md">
           <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#dff0f4]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#EAF7FA]">
               {isHindi ? 'विशेषज्ञ परामर्श' : 'CLINICAL EVALUATION'}
             </span>
             <h3 className="text-xl sm:text-2xl font-bold text-white">
@@ -164,7 +164,7 @@ export const ConditionsListPage: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link to="/book-appointment">
-              <Button variant="primary" size="lg" className="bg-white text-[#0f3d4a] hover:bg-[#dff0f4]">
+              <Button variant="primary" size="lg" className="bg-white text-[#103F4A] hover:bg-[#EAF7FA]">
                 <Calendar className="w-4 h-4 mr-2" />
                 <span>{t('cta.bookAppointment')}</span>
               </Button>

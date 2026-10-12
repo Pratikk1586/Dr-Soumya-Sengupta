@@ -79,7 +79,7 @@ export const KnowledgeHubSection: React.FC = () => {
                     </span>
                     <Link
                       to={`/patient-resources/articles/${featuredArticle.slug}`}
-                      className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1"
+                      className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center gap-1"
                     >
                       <span>Read Full Guide</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -120,7 +120,7 @@ export const KnowledgeHubSection: React.FC = () => {
                   <div className="pt-3 mt-2 border-t border-slate-100 flex justify-end">
                     <Link
                       to={`/patient-resources/articles/${art.slug}`}
-                      className="text-xs font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1"
+                      className="text-xs font-semibold text-[#103F4A] hover:underline flex items-center gap-1"
                     >
                       <span>Read Guide</span>
                       <ArrowRight className="w-3 h-3" />

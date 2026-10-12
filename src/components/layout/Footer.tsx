@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Stethoscope, Phone, MessageCircle, MapPin, ShieldAlert, ArrowUpRight, Navigation } from 'lucide-react';
+import { Phone, MessageCircle, MapPin, ShieldAlert, ArrowUpRight, Navigation } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
 import { clinicService } from '../../services';
@@ -10,6 +10,7 @@ import { VerificationBadge } from '../common/VerificationBadge';
 import { DoctorSocialLinks } from '../doctor/DoctorSocialLinks';
 import { getDirectionsUrl } from '../../lib/maps';
 import { ENV, getSafePhoneHref, getSafeWhatsAppHref } from '../../config/env';
+import { CLINIC_IMAGES } from '../../config/images';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -21,7 +22,7 @@ export const Footer: React.FC = () => {
   const whatsappHref = getSafeWhatsAppHref('Hello Dr. Sengupta chamber reception, I would like to make an inquiry.');
 
   return (
-    <footer className="bg-[#0a252f] text-slate-300 pt-16 pb-24 md:pb-16 border-t border-[#0f3d4a] relative overflow-hidden">
+    <footer className="bg-[#0a252f] text-slate-300 pt-16 pb-24 md:pb-16 border-t border-[#103F4A] relative overflow-hidden">
       {/* Emergency Disclaimer Banner */}
       <Container size="xl" className="mb-12">
         <div className="bg-[#06181f] border border-amber-500/30 rounded-xl p-4 sm:p-5 flex items-start gap-3.5 shadow-sm">
@@ -40,14 +41,21 @@ export const Footer: React.FC = () => {
           {/* Identity & Mission */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0f3d4a] text-white flex items-center justify-center border border-[#1b6c83]/40">
-                <Stethoscope className="w-5 h-5 text-[#dff0f4]" aria-hidden="true" />
+              <div className="h-11 w-auto px-2 py-1 rounded-xl bg-white flex items-center justify-center border border-[#1b6c83]/40 shadow-xs shrink-0">
+                <img
+                  src={CLINIC_IMAGES.logo}
+                  alt="Cardio Diabetic Clinic Logo"
+                  className="h-8 sm:h-9 w-auto max-w-[80px] object-contain"
+                  width={72}
+                  height={36}
+                  loading="lazy"
+                />
               </div>
               <div>
                 <h3 className="text-base font-bold text-white tracking-tight">
                   Dr. Soumya Sengupta
                 </h3>
-                <p className="text-xs text-[#dff0f4]/80">
+                <p className="text-xs text-[#EAF7FA]/80">
                   Consultant Diabetologist & Metabolic Physician
                 </p>
               </div>
@@ -163,7 +171,7 @@ export const Footer: React.FC = () => {
                     href={clinic.mapsUrl || getDirectionsUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#0f3d4a] hover:bg-[#155466] border border-[#1b6c83]/70 text-white font-semibold text-xs shadow-xs hover:shadow-md transition-all group active:scale-98"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#103F4A] hover:bg-[#145466] border border-[#1b6c83]/70 text-white font-semibold text-xs shadow-xs hover:shadow-md transition-all group active:scale-98"
                   >
                     <Navigation className="w-3.5 h-3.5 text-[#38bdf8] group-hover:rotate-12 transition-transform" />
                     <span>{t({ en: 'Direct Map & Directions', hi: 'गूगल मैप्स पर रास्ता देखें' })}</span>

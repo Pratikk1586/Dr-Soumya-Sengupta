@@ -15,7 +15,7 @@ export const NotFoundPage: React.FC = () => {
       />
 
       <Container size="md" className="py-24 text-center space-y-6">
-        <div className="w-16 h-16 rounded-2xl bg-[#dff0f4] text-[#0f3d4a] flex items-center justify-center mx-auto shadow-sm">
+        <div className="w-16 h-16 rounded-2xl bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/30 flex items-center justify-center mx-auto shadow-sm">
           <Stethoscope className="w-8 h-8" />
         </div>
 

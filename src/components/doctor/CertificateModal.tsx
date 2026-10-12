@@ -42,7 +42,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({ certificate,
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-[#0f3d4a] to-[#08222a] text-white flex items-start justify-between gap-4">
+        <div className="p-4 sm:p-5 bg-gradient-to-r from-[#103F4A] to-[#08222a] text-white flex items-start justify-between gap-4">
           <div className="space-y-1 min-w-0">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[11px] font-semibold uppercase tracking-wider border border-teal-400/30">
               <ShieldCheck className="w-3.5 h-3.5 text-teal-300" />
@@ -81,8 +81,8 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({ certificate,
           ) : (
             /* Elegant Credential Parchment Frame */
             <div className="relative rounded-2xl border-2 border-dashed border-teal-300/80 bg-gradient-to-b from-amber-50/40 via-white to-teal-50/30 p-6 sm:p-8 text-center space-y-4 shadow-inner">
-              <div className="w-16 h-16 rounded-full bg-[#0f3d4a]/10 border border-[#0f3d4a]/20 text-[#0f3d4a] flex items-center justify-center mx-auto shadow-sm">
-                <Award className="w-8 h-8 text-[#0f3d4a]" />
+              <div className="w-16 h-16 rounded-full bg-[#103F4A]/10 border border-[#103F4A]/20 text-[#103F4A] flex items-center justify-center mx-auto shadow-sm">
+                <Award className="w-8 h-8 text-[#103F4A]" />
               </div>
 
               <div className="space-y-1.5 max-w-lg mx-auto">
@@ -127,7 +127,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({ certificate,
           )}
 
           {certificate.description && !certificate.image && (
-            <div className="p-3.5 rounded-xl bg-teal-50/60 border border-teal-100 text-xs text-[#0f3d4a]">
+            <div className="p-3.5 rounded-xl bg-teal-50/60 border border-teal-100 text-xs text-[#103F4A]">
               <span className="font-semibold block mb-0.5">
                 {isHindi ? 'क्लिनिकल विवरण:' : 'Clinical Competency Scope:'}
               </span>
@@ -144,7 +144,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({ certificate,
           <button
             type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-[#0f3d4a] hover:bg-[#0c2f39] text-white transition-colors cursor-pointer shadow-xs ml-auto"
+            className="w-full sm:w-auto px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-[#103F4A] hover:bg-[#0C323B] text-white transition-colors cursor-pointer shadow-xs ml-auto"
           >
             {isHindi ? 'बंद करें' : 'Close Viewer'}
           </button>

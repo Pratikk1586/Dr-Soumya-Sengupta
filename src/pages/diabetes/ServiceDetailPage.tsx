@@ -295,16 +295,16 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
   const getTopicIcon = () => {
     switch (slug) {
       case 'prediabetes':
-        return <Sparkles className="w-5 h-5 text-[#0f3d4a]" />;
+        return <Sparkles className="w-5 h-5 text-[#103F4A]" />;
       case 'education':
-        return <BookOpen className="w-5 h-5 text-[#0f3d4a]" />;
+        return <BookOpen className="w-5 h-5 text-[#103F4A]" />;
       case 'lifestyle':
-        return <Heart className="w-5 h-5 text-[#0f3d4a]" />;
+        return <Heart className="w-5 h-5 text-[#103F4A]" />;
       case 'complications':
-        return <AlertTriangle className="w-5 h-5 text-[#0f3d4a]" />;
+        return <AlertTriangle className="w-5 h-5 text-[#103F4A]" />;
       case 'management':
       default:
-        return <Activity className="w-5 h-5 text-[#0f3d4a]" />;
+        return <Activity className="w-5 h-5 text-[#103F4A]" />;
     }
   };
 
@@ -317,8 +317,9 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
       />
 
       {/* Header */}
-      <div className="bg-[#faf9f6] border-b border-slate-200">
-        <Container size="xl">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+        <Container size="xl" className="relative z-10">
           <Breadcrumb
             items={[
               { label: isHindi ? 'डायबिटीज केयर' : 'Diabetes Care', href: '/diabetes-care' },
@@ -326,15 +327,15 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
             ]}
           />
           <div className="py-8 sm:py-12 max-w-3xl space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="w-8 h-8 rounded-lg bg-[#dff0f4] flex items-center justify-center">
+            <div className="flex items-center gap-2.5">
+              <span className="w-9 h-9 rounded-xl bg-[#EAF7FA] border border-[#65D9D0]/40 flex items-center justify-center shadow-xs">
                 {getTopicIcon()}
               </span>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
                 {isHindi ? 'मरीज मार्गदर्शिका' : 'Patient Guide'}
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#103F4A] tracking-tight leading-tight">
               {isHindi ? content.titleHi : content.titleEn}
             </h1>
             <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
@@ -351,16 +352,16 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
           {/* Main Content Column */}
           <div className="lg:col-span-8 space-y-8">
             {/* Section 1: What It Involves */}
-            <Card padding="lg" className="bg-white border-slate-200 shadow-2xs space-y-5">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2.5">
-                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
+            <Card padding="lg" className="bg-white border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/50 transition-all duration-200 space-y-5">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#103F4A] flex items-center gap-2.5">
+                <CheckCircle2 className="w-6 h-6 text-[#103F4A] shrink-0" />
                 <span>{isHindi ? content.whatItInvolvesTitleHi : content.whatItInvolvesTitleEn}</span>
               </h2>
 
               <div className="space-y-3 text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
                 {(isHindi ? content.whatItInvolvesHi : content.whatItInvolvesEn).map((point, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/80 border border-slate-100">
-                    <span className="w-6 h-6 rounded-full bg-[#0f3d4a]/10 text-[#0f3d4a] text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 hover:border-[#65D9D0]/30 transition-all">
+                    <span className="w-6 h-6 rounded-full bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
                     <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
@@ -372,9 +373,9 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
             </Card>
 
             {/* Section 2: Why Follow-up Matters */}
-            <Card padding="lg" className="bg-white border-slate-200 shadow-2xs space-y-4">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-[#0f3d4a] shrink-0" />
+            <Card padding="lg" className="bg-white border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/50 transition-all duration-200 space-y-4">
+              <h3 className="text-lg sm:text-xl font-bold text-[#103F4A] flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-[#103F4A] shrink-0" />
                 <span>{isHindi ? content.whyFollowUpMattersTitleHi : content.whyFollowUpMattersTitleEn}</span>
               </h3>
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
@@ -383,12 +384,12 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
             </Card>
 
             {/* Section 3: Questions to Ask Doctor */}
-            <Card padding="lg" className="bg-gradient-to-br from-teal-50/60 to-white border-teal-100 shadow-2xs space-y-4">
+            <Card padding="lg" className="bg-gradient-to-br from-[#EAF7FA]/50 to-white border-[#65D9D0]/40 shadow-2xs space-y-4">
               <div className="space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
                   {isHindi ? 'परामर्श की तैयारी' : 'PREPARE FOR YOUR VISIT'}
                 </span>
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+                <h3 className="text-lg sm:text-xl font-bold text-[#103F4A]">
                   {isHindi ? 'डॉक्टर से पूछने योग्य महत्वपूर्ण सवाल' : 'Helpful Questions to Discuss With Your Doctor'}
                 </h3>
                 <p className="text-xs text-slate-500">
@@ -400,8 +401,8 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
 
               <div className="space-y-2.5">
                 {(isHindi ? content.questionsForDoctorHi : content.questionsForDoctorEn).map((q, i) => (
-                  <div key={i} className="flex items-start gap-2.5 p-3 rounded-lg bg-white border border-teal-200/80 text-xs sm:text-sm text-slate-800">
-                    <HelpCircle className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
+                  <div key={i} className="flex items-start gap-2.5 p-3 rounded-lg bg-white border border-[#65D9D0]/30 text-xs sm:text-sm text-slate-800 shadow-2xs">
+                    <HelpCircle className="w-4 h-4 text-[#103F4A] shrink-0 mt-0.5" />
                     <span className="font-medium">{q}</span>
                   </div>
                 ))}
@@ -412,8 +413,8 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
           {/* Sidebar Column */}
           <div className="lg:col-span-4 space-y-6">
             {/* Booking Box */}
-            <Card padding="lg" className="bg-gradient-to-b from-[#0f3d4a] to-[#09252d] text-white shadow-md space-y-4">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#dff0f4]">
+            <Card padding="lg" className="bg-gradient-to-b from-[#103F4A] to-[#0A262D] text-white shadow-lg border border-[#103F4A] space-y-4">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#65D9D0]">
                 {isHindi ? 'डॉक्टर परामर्श' : 'CLINICAL APPOINTMENT'}
               </span>
               <h3 className="text-lg font-bold text-white leading-snug">
@@ -425,7 +426,7 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
                   : 'Schedule an in-person consultation with Dr. Soumya Sengupta at Cardio Diabetic Clinic in Chaibasa.'}
               </p>
               <Link to="/book-appointment" className="block w-full">
-                <Button variant="primary" size="md" className="w-full bg-white text-[#0f3d4a] hover:bg-[#dff0f4]">
+                <Button variant="primary" size="md" className="w-full bg-[#65D9D0] text-[#103F4A] hover:bg-white font-semibold">
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>{t('cta.bookAppointment')}</span>
                 </Button>
@@ -433,8 +434,8 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
             </Card>
 
             {/* Related Patient Links */}
-            <Card padding="md" className="bg-white border-slate-200 space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            <Card padding="md" className="bg-white border-slate-200/90 shadow-2xs space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
                 {isHindi ? 'संबंधित विषय एवं मार्गदर्शिकाएं' : 'Related Resources'}
               </h4>
               <div className="space-y-2 text-xs">
@@ -442,12 +443,12 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
                   <Link
                     key={idx}
                     to={link.url}
-                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#dff0f4]/50 border border-slate-100 hover:border-[#0f3d4a]/20 transition-all flex items-center justify-between group"
+                    className="p-2.5 rounded-lg bg-slate-50 hover:bg-[#EAF7FA] border border-slate-100 hover:border-[#65D9D0]/50 transition-all flex items-center justify-between group"
                   >
-                    <span className="font-semibold text-slate-800 group-hover:text-[#0f3d4a]">
+                    <span className="font-semibold text-slate-800 group-hover:text-[#103F4A]">
                       {isHindi ? link.titleHi : link.titleEn}
                     </span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0f3d4a]" />
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#103F4A] group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 ))}
               </div>
@@ -457,7 +458,7 @@ export const ServiceDetailPage: React.FC<{ explicitSlug?: string }> = ({ explici
             <div className="text-center">
               <Link
                 to="/diabetes-care"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0f3d4a] hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#103F4A] hover:underline"
               >
                 <span>{isHindi ? '← सभी डायबिटीज केयर विषय देखें' : '← Back to All Diabetes Care Topics'}</span>
               </Link>

@@ -32,12 +32,14 @@ import { useService } from '../hooks/useService';
 import { doctorService } from '../services';
 import { ACHIEVEMENTS_DATA } from '../data/achievements';
 import { CERTIFICATIONS_DATA } from '../data/certifications';
+import { CLINIC_IMAGES } from '../config/images';
 import type { DoctorCertification } from '../types';
 
 export const AboutPage: React.FC = () => {
   const { localize, isHindi, t } = useLanguage();
   const { data: doctor } = useService(() => doctorService.getProfile(), []);
   const [selectedCertificate, setSelectedCertificate] = useState<DoctorCertification | null>(null);
+  const [portraitError, setPortraitError] = useState(false);
 
   const achievements = doctor?.achievements || ACHIEVEMENTS_DATA;
   const certifications = doctor?.certifications || CERTIFICATIONS_DATA;
@@ -51,18 +53,18 @@ export const AboutPage: React.FC = () => {
       />
 
       {/* Header Banner */}
-      <div className="bg-[#faf9f6] border-b border-slate-200">
+      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
         <Container size="xl">
           <Breadcrumb items={[{ label: isHindi ? 'डॉक्टर परिचय' : 'Know Your Doctor' }]} />
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0f3d4a]/10 text-[#0f3d4a] text-xs font-bold uppercase tracking-wider">
-              <Shield className="w-3.5 h-3.5 text-[#0f3d4a]" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#103F4A]/10 text-[#103F4A] text-xs font-bold uppercase tracking-wider border border-[#65D9D0]/30">
+              <Shield className="w-3.5 h-3.5 text-[#103F4A]" />
               {isHindi ? 'वरिष्ठ चिकित्सक परिचय एवं साख' : 'Physician Profile & Credentials'}
             </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#06181f] tracking-tight">
               {doctor ? localize(doctor.name) : 'Dr. Soumya Sengupta'}
             </h1>
-            <p className="text-base sm:text-xl text-[#0f3d4a] font-semibold">
+            <p className="text-base sm:text-xl text-[#103F4A] font-semibold">
               {doctor ? localize(doctor.title) : 'Consultant Diabetologist & Metabolic Physician'}
             </p>
             <p className="text-xs sm:text-sm text-slate-600 font-medium pt-1">
@@ -82,32 +84,32 @@ export const AboutPage: React.FC = () => {
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
             {/* Left Column: Portrait Treatment & Clinical Factsheet */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="relative rounded-2xl bg-gradient-to-b from-[#0f3d4a] to-[#08222a] p-1.5 shadow-xl">
-                <div className="relative rounded-xl overflow-hidden bg-slate-100 aspect-4/3 sm:aspect-square flex flex-col items-center justify-center text-center p-6 border border-white/20">
-                  {/* Doctor Portrait Image with Graceful Monogram Fallback */}
-                  <img
-                    src="/assets/images/doctor-portrait.webp"
-                    alt="Dr. Soumya Sengupta, Consultant Diabetologist"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLElement).style.display = 'none';
-                    }}
-                  />
-
-                  {/* Elegant Fallback Avatar Seal */}
-                  <div className="relative z-10 flex flex-col items-center justify-center space-y-3">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#0f3d4a] to-[#185363] text-white flex items-center justify-center shadow-lg border border-teal-300/30">
-                      <Stethoscope className="w-10 h-10 text-[#dff0f4]" />
+              <div className="relative rounded-2xl bg-gradient-to-b from-[#103F4A] to-[#08222a] p-1.5 shadow-xl">
+                <div className="relative rounded-xl overflow-hidden bg-slate-100 aspect-3/4 sm:aspect-square flex flex-col items-center justify-center text-center border border-white/20">
+                  {!portraitError ? (
+                    <img
+                      src={CLINIC_IMAGES.doctorProfile}
+                      alt="Dr. Soumya Sengupta, Consultant Diabetologist & Metabolic Physician"
+                      className="w-full h-full object-cover object-top"
+                      loading="lazy"
+                      onError={() => setPortraitError(true)}
+                    />
+                  ) : (
+                    /* Fallback Avatar Seal shown ONLY when image fails */
+                    <div className="flex flex-col items-center justify-center space-y-3 p-6">
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#103F4A] to-[#185363] text-white flex items-center justify-center shadow-lg border border-teal-300/30">
+                        <Stethoscope className="w-10 h-10 text-[#EAF7FA]" />
+                      </div>
+                      <div className="space-y-1">
+                        <span className="font-bold text-slate-800 text-lg block">
+                          Dr. Soumya Sengupta
+                        </span>
+                        <span className="text-xs text-slate-600 font-medium block">
+                          Cardio Diabetic Clinic, Chaibasa
+                        </span>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <span className="font-bold text-slate-800 text-lg block">
-                        Dr. Soumya Sengupta
-                      </span>
-                      <span className="text-xs text-slate-600 font-medium block">
-                        Cardio Diabetic Clinic, Chaibasa
-                      </span>
-                    </div>
-                  </div>
+                  )}
 
                   {/* Floating Experience Badge */}
                   <div className="absolute bottom-3 left-3 right-3 bg-[#06181f]/90 backdrop-blur-md border border-teal-500/30 rounded-xl px-3.5 py-2 text-white shadow-lg text-xs flex items-center justify-between z-20">
@@ -132,7 +134,7 @@ export const AboutPage: React.FC = () => {
                 <div className="space-y-3 text-xs sm:text-sm">
                   <div className="flex items-start justify-between gap-3">
                     <span className="text-slate-500 flex items-center gap-1.5 shrink-0">
-                      <FileCheck className="w-3.5 h-3.5 text-[#0f3d4a]" />
+                      <FileCheck className="w-3.5 h-3.5 text-[#103F4A]" />
                       {isHindi ? 'पंजीकरण:' : 'Medical Registry:'}
                     </span>
                     <span className="font-semibold text-slate-900 text-right font-mono text-xs">
@@ -142,7 +144,7 @@ export const AboutPage: React.FC = () => {
 
                   <div className="flex items-start justify-between gap-3">
                     <span className="text-slate-500 flex items-center gap-1.5 shrink-0">
-                      <Building2 className="w-3.5 h-3.5 text-[#0f3d4a]" />
+                      <Building2 className="w-3.5 h-3.5 text-[#103F4A]" />
                       {isHindi ? 'प्रमुख क्लिनिक:' : 'Chamber Location:'}
                     </span>
                     <span className="font-semibold text-slate-900 text-right text-xs">
@@ -152,7 +154,7 @@ export const AboutPage: React.FC = () => {
 
                   <div className="flex items-start justify-between gap-3">
                     <span className="text-slate-500 flex items-center gap-1.5 shrink-0">
-                      <Users className="w-3.5 h-3.5 text-[#0f3d4a]" />
+                      <Users className="w-3.5 h-3.5 text-[#103F4A]" />
                       {isHindi ? 'भाषाएं:' : 'Languages Spoken:'}
                     </span>
                     <span className="font-semibold text-slate-900 text-right text-xs">
@@ -174,7 +176,7 @@ export const AboutPage: React.FC = () => {
             {/* Right Column: Narrative, Mission, and Core Competencies */}
             <div className="lg:col-span-7 space-y-6">
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a] block">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A] block">
                   {isHindi ? 'डॉ. सौम्य सेनगुप्ता का परिचय' : 'About Dr. Soumya Sengupta'}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -185,7 +187,7 @@ export const AboutPage: React.FC = () => {
               </div>
 
               {/* Short Bio Highlight Callout */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-teal-50/70 border border-teal-200/80 text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#EAF7FA]/80 border border-[#65D9D0]/50 text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
                 {doctor ? localize(doctor.shortBio) : ''}
               </div>
 
@@ -199,21 +201,21 @@ export const AboutPage: React.FC = () => {
               {/* Key Practice Highlights Pills */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center space-y-0.5">
-                  <span className="block text-lg sm:text-xl font-bold text-[#0f3d4a]">19+ Yrs</span>
+                  <span className="block text-lg sm:text-xl font-bold text-[#103F4A]">19+ Yrs</span>
                   <span className="block text-[11px] text-slate-600 font-medium">
                     {isHindi ? 'डायबिटीज केयर में' : 'In Diabetes Care'}
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center space-y-0.5">
-                  <span className="block text-lg sm:text-xl font-bold text-[#0f3d4a]">2007</span>
+                  <span className="block text-lg sm:text-xl font-bold text-[#103F4A]">2007</span>
                   <span className="block text-[11px] text-slate-600 font-medium">
                     {isHindi ? 'क्लिनिक स्थापना वर्ष' : 'Established Practice'}
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center space-y-0.5 col-span-2 sm:col-span-1">
-                  <span className="block text-lg sm:text-xl font-bold text-[#0f3d4a]">Chaibasa</span>
+                  <span className="block text-lg sm:text-xl font-bold text-[#103F4A]">Chaibasa</span>
                   <span className="block text-[11px] text-slate-600 font-medium">
                     {isHindi ? 'पश्चिमी सिंहभूम, झारखंड' : 'West Singhbhum, JH'}
                   </span>
@@ -234,7 +236,7 @@ export const AboutPage: React.FC = () => {
                   </Button>
                 </Link>
                 <a href="#social-media">
-                  <Button variant="ghost" size="md" className="text-slate-600 hover:text-[#0f3d4a]">
+                  <Button variant="ghost" size="md" className="text-slate-600 hover:text-[#103F4A]">
                     <Share2 className="w-4 h-4 mr-1.5 text-teal-600" />
                     <span>{isHindi ? 'सोशल मीडिया' : 'Social Channels'}</span>
                   </Button>
@@ -250,8 +252,8 @@ export const AboutPage: React.FC = () => {
         <section id="qualifications" className="scroll-mt-28 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-200">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#0f3d4a]/10 text-[#0f3d4a] flex items-center justify-center">
-                <GraduationCap className="w-5 h-5 text-[#0f3d4a]" />
+              <div className="w-9 h-9 rounded-xl bg-[#103F4A]/10 text-[#103F4A] flex items-center justify-center">
+                <GraduationCap className="w-5 h-5 text-[#103F4A]" />
               </div>
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
@@ -268,10 +270,10 @@ export const AboutPage: React.FC = () => {
             {doctor?.qualifications.map((q) => (
               <div
                 key={q.id}
-                className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-[#0f3d4a]/40 transition-all space-y-3"
+                className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-[#65D9D0]/60 hover:shadow-md hover:shadow-[#103F4A]/5 transition-all space-y-3"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <span className="px-2.5 py-1 rounded-lg bg-teal-50 text-[#0f3d4a] text-xs font-bold border border-teal-200/60 font-mono">
+                  <span className="px-2.5 py-1 rounded-lg bg-[#EAF7FA] text-[#103F4A] text-xs font-bold border border-[#65D9D0]/40 font-mono">
                     {q.year || '2007'}
                   </span>
                   <VerificationBadge />
@@ -303,8 +305,8 @@ export const AboutPage: React.FC = () => {
         <section id="experience" className="scroll-mt-28 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-200">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#0f3d4a]/10 text-[#0f3d4a] flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-[#0f3d4a]" />
+              <div className="w-9 h-9 rounded-xl bg-[#103F4A]/10 text-[#103F4A] flex items-center justify-center">
+                <Briefcase className="w-5 h-5 text-[#103F4A]" />
               </div>
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
@@ -337,7 +339,7 @@ export const AboutPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-xs font-bold text-[#0f3d4a] bg-[#dff0f4] px-3 py-1.5 rounded-xl border border-teal-200/80">
+                  <span className="text-xs font-bold text-[#103F4A] bg-[#EAF7FA] px-3 py-1.5 rounded-xl border border-[#65D9D0]/40">
                     {localize(exp.period)}
                   </span>
                 </div>
@@ -352,8 +354,8 @@ export const AboutPage: React.FC = () => {
         <section id="expertise" className="scroll-mt-28 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-200">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#0f3d4a]/10 text-[#0f3d4a] flex items-center justify-center">
-                <Activity className="w-5 h-5 text-[#0f3d4a]" />
+              <div className="w-9 h-9 rounded-xl bg-[#103F4A]/10 text-[#103F4A] flex items-center justify-center">
+                <Activity className="w-5 h-5 text-[#103F4A]" />
               </div>
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
@@ -370,9 +372,9 @@ export const AboutPage: React.FC = () => {
             {doctor?.specialties.map((spec, i) => (
               <div
                 key={i}
-                className="p-4 sm:p-5 rounded-xl bg-white border border-slate-200 hover:border-[#0f3d4a]/40 text-slate-800 flex items-start gap-3 shadow-2xs transition-colors"
+                className="p-4 sm:p-5 rounded-xl bg-white border border-slate-200 hover:border-[#65D9D0]/60 hover:shadow-xs text-slate-800 flex items-start gap-3 shadow-2xs transition-all"
               >
-                <div className="w-2.5 h-2.5 rounded-full bg-[#0f3d4a] mt-1.5 shrink-0" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#103F4A] mt-1.5 shrink-0" />
                 <span className="text-xs sm:text-sm font-semibold leading-snug">
                   {localize(spec)}
                 </span>
@@ -426,7 +428,7 @@ export const AboutPage: React.FC = () => {
                   <h3 className="font-bold text-slate-900 text-base leading-snug">
                     {localize(ach.title)}
                   </h3>
-                  <p className="text-xs font-medium text-[#0f3d4a]">
+                  <p className="text-xs font-medium text-[#103F4A]">
                     {localize(ach.organization)}
                   </p>
                   {ach.description && (
@@ -442,6 +444,40 @@ export const AboutPage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Professional Presentation Spotlight */}
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900 to-[#0a252f] text-white border border-teal-500/20 shadow-md flex flex-col md:flex-row items-center gap-6">
+            <div className="w-full md:w-52 h-44 sm:h-48 rounded-xl overflow-hidden shrink-0 bg-slate-800 border border-white/10">
+              <img
+                src={CLINIC_IMAGES.rssdiJhconAward}
+                alt="RSSDI JHCON 2026 conference presentation photograph"
+                className="w-full h-full object-cover object-top"
+                loading="lazy"
+              />
+            </div>
+            <div className="space-y-2 flex-1">
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                Conference Presentation
+              </span>
+              <h3 className="text-lg font-bold text-white">
+                RSSDI JHCON 2026 Stage Presentation
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                {isHindi
+                  ? 'आरएसएसडीआई झारखण्ड 2026 राज्य सम्मेलन में मंच प्रस्तुति एवं अकादमिक सहभागिता।'
+                  : 'Stage presentation and academic participation at the RSSDI JHCON 2026 conference.'}
+              </p>
+              <div className="pt-1">
+                <Link
+                  to="/clinic/photos"
+                  className="inline-flex items-center gap-1.5 text-xs text-teal-300 hover:text-teal-200 font-semibold"
+                >
+                  <span>{isHindi ? 'सभी मीडिया एवं सम्मेलन फोटो देखें' : 'View all conference & clinic photographs in gallery'}</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -474,11 +510,11 @@ export const AboutPage: React.FC = () => {
             {certifications.map((cert) => (
               <div
                 key={cert.id}
-                className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-teal-400/60 hover:shadow-xs transition-all space-y-4 flex flex-col justify-between group"
+                className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-[#65D9D0]/60 hover:shadow-md hover:shadow-[#103F4A]/5 transition-all space-y-4 flex flex-col justify-between group"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="w-9 h-9 rounded-xl bg-[#0f3d4a]/10 text-[#0f3d4a] flex items-center justify-center group-hover:bg-[#0f3d4a] group-hover:text-white transition-colors">
+                    <span className="w-9 h-9 rounded-xl bg-[#103F4A]/10 text-[#103F4A] flex items-center justify-center group-hover:bg-[#103F4A] group-hover:text-white transition-colors">
                       <Award className="w-5 h-5" />
                     </span>
                     {cert.year && (
@@ -489,7 +525,7 @@ export const AboutPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-[#0f3d4a] transition-colors">
+                    <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-[#103F4A] transition-colors">
                       {localize(cert.title)}
                     </h3>
                     <p className="text-xs text-slate-600 font-medium mt-1">
@@ -511,7 +547,7 @@ export const AboutPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedCertificate(cert)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#0f3d4a] hover:bg-teal-50 border border-teal-200 transition-colors cursor-pointer shrink-0"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#103F4A] hover:bg-[#EAF7FA] border border-[#65D9D0]/40 transition-colors cursor-pointer shrink-0"
                     title={isHindi ? 'प्रमाण पत्र देखें' : 'View Certificate'}
                   >
                     <Eye className="w-3.5 h-3.5 text-teal-600" />
@@ -529,8 +565,8 @@ export const AboutPage: React.FC = () => {
         <section id="memberships" className="scroll-mt-28 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-200">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#0f3d4a]/10 text-[#0f3d4a] flex items-center justify-center">
-                <Award className="w-5 h-5 text-[#0f3d4a]" />
+              <div className="w-9 h-9 rounded-xl bg-[#103F4A]/10 text-[#103F4A] flex items-center justify-center">
+                <Award className="w-5 h-5 text-[#103F4A]" />
               </div>
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
@@ -550,7 +586,7 @@ export const AboutPage: React.FC = () => {
                 className="p-5 rounded-2xl bg-white border border-slate-200 flex flex-col justify-between gap-3 text-xs font-medium text-slate-800 shadow-2xs"
               >
                 <div className="flex items-start gap-2.5">
-                  <Building2 className="w-4 h-4 text-[#0f3d4a] shrink-0 mt-0.5" />
+                  <Building2 className="w-4 h-4 text-[#103F4A] shrink-0 mt-0.5" />
                   <span className="font-semibold text-slate-900 text-sm leading-snug">
                     {localize(m)}
                   </span>
@@ -570,9 +606,9 @@ export const AboutPage: React.FC = () => {
             SECTION 8: CLINICAL PHILOSOPHY / CARE BEYOND THE DIAGNOSIS
             ========================================================================= */}
         <section id="philosophy" className="scroll-mt-28 space-y-8">
-          <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#0f3d4a] via-[#0d343f] to-[#08222a] text-white shadow-xl space-y-6">
+          <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#103F4A] via-[#0d343f] to-[#08222a] text-white shadow-xl space-y-6">
             <div className="max-w-2xl space-y-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-teal-300">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#65D9D0]">
                 {isHindi ? 'उपचार दर्शन एवं दृष्टिकोण' : 'Care Beyond the Diagnosis'}
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
@@ -586,7 +622,7 @@ export const AboutPage: React.FC = () => {
 
             {/* 4 Pillars of Organ Health */}
             <div className="pt-4 border-t border-white/15">
-              <span className="text-xs uppercase tracking-wider text-teal-300 font-bold block mb-4">
+              <span className="text-xs uppercase tracking-wider text-[#65D9D0] font-bold block mb-4">
                 {isHindi ? 'अंग सुरक्षा के 4 मुख्य स्तंभ:' : 'Four Pillars of Organ Preservation:'}
               </span>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
@@ -625,15 +661,15 @@ export const AboutPage: React.FC = () => {
         <section id="social-media" className="scroll-mt-28 space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-200">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-teal-500/10 text-[#0f3d4a] flex items-center justify-center">
-                <Share2 className="w-5 h-5 text-teal-600" />
+              <div className="w-9 h-9 rounded-xl bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center border border-[#65D9D0]/30">
+                <Share2 className="w-5 h-5 text-[#103F4A]" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
                     {isHindi ? 'सोशल मीडिया एवं डिजिटल चैनल' : 'Connect & Follow Dr. Sengupta'}
                   </h2>
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-teal-100 text-[#0f3d4a]">
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#E7F8F2] text-[#103F4A] border border-emerald-200">
                     Verified Profiles
                   </span>
                 </div>
@@ -652,9 +688,9 @@ export const AboutPage: React.FC = () => {
         {/* =========================================================================
             SECTION 9: CONSULTATION CTA
             ========================================================================= */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
+        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-white via-[#FCFEFF] to-[#EAF7FA]/50 border border-slate-200/90 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
           <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#103F4A]">
               {isHindi ? 'अगला कदम उठाएं' : 'Ready to Take the Next Step?'}
             </span>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
