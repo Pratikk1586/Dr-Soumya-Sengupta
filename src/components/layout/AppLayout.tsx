@@ -9,7 +9,7 @@ import { ScrollRestoration } from './ScrollRestoration';
 
 export const AppLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FCFEFF] text-slate-900 font-sans antialiased selection:bg-[#EAF7FA] selection:text-[#103F4A]">
+    <div className="min-h-screen flex flex-col bg-[#FBF8F1] text-[#1B2A26] font-sans antialiased selection:bg-[#E8F2EE] selection:text-[#0F5C4A]">
       <SkipLink targetId="main-content" />
       <ScrollRestoration />
       <Navbar />

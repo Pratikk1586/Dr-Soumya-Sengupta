@@ -187,19 +187,19 @@ export const BookAppointmentPage: React.FC = () => {
       />
 
       {/* Header Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#E8F2EE]/70 via-[#FBF8F1] to-[#FBF8F1] border-b border-[#E8E2D5]">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0F5C4A]/5 rounded-full blur-3xl pointer-events-none" />
         <Container size="xl" className="relative z-10">
           <Breadcrumb items={[{ label: isHindi ? 'अपॉइंटमेंट अनुरोध' : 'Book Appointment' }]} />
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 shadow-xs">
-              <Calendar className="w-3.5 h-3.5 text-[#103F4A]" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E8F2EE] text-[#0F5C4A] border border-[#0F5C4A]/20 shadow-2xs">
+              <Calendar className="w-3.5 h-3.5 text-[#0F5C4A]" />
               <span>{isHindi ? 'ओपीडी स्लॉट अनुरोध' : 'Chamber Scheduling'}</span>
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#103F4A] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B2A26] tracking-tight">
               {isHindi ? 'परामर्श समय आरक्षित करें' : 'Book an Appointment'}
             </h1>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-[#4A5753] leading-relaxed font-normal">
               {isHindi
                 ? 'नीचे अपना विवरण भरें और बुक अपॉइंटमेंट पर क्लिक करें। आपका अनुरोध सीधे क्लिनिक के व्हाट्सएप चैट में खुल जाएगा, जहाँ सिर्फ सेंड बटन दबाकर आप विवरण भेज सकते हैं।'
                 : 'Fill in your details below. When you click Book Appointment, you will be redirected to the clinic WhatsApp chat with your details ready to send. The clinic will contact you for final confirmation.'}
@@ -328,7 +328,7 @@ export const BookAppointmentPage: React.FC = () => {
           </Card>
         ) : (
           /* SINGLE-PAGE ALL-IN-ONE APPOINTMENT FORM */
-          <Card padding="lg" className="border-slate-200 shadow-xl shadow-slate-900/5 rounded-2xl bg-white">
+          <Card padding="lg" className="border-[#E8E2D5] shadow-[0_16px_40px_rgba(27,42,38,0.06)] rounded-3xl bg-white">
             <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {/* 1. Patient Full Name */}
@@ -510,14 +510,14 @@ export const BookAppointmentPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-bold text-white bg-[#103F4A] hover:bg-[#0C323B] active:bg-[#09262D] shadow-md shadow-[#103F4A]/20 transition-all text-sm sm:text-base cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full font-bold text-white bg-[#0F5C4A] hover:bg-[#0B4636] active:bg-[#083327] shadow-md shadow-[#0F5C4A]/20 transition-all text-sm sm:text-base cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <MessageSquare className="w-4 h-4 text-[#25D366] fill-[#25D366]" />
                   <span>{isHindi ? 'व्हाट्सएप पर अपॉइंटमेंट बुक करें' : 'Book Appointment via WhatsApp'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
-                <p className="text-[11px] text-center text-slate-500 leading-normal">
+                <p className="text-[11px] text-center text-[#4A5753] leading-normal">
                   {isHindi
                     ? 'क्लिक करने पर आपका विवरण क्लिनिक के व्हाट्सएप चैट में खुल जाएगा। बस सेंड बटन दबाएं।'
                     : 'Clicking will open WhatsApp with your filled details. Just hit Send in the chat, and the clinic will reach out to confirm.'}

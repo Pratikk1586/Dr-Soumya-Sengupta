@@ -55,19 +55,19 @@ export const ContactPage: React.FC = () => {
         structuredData={clinicJsonLd}
       />
 
-      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#E8F2EE]/70 via-[#FBF8F1] to-[#FBF8F1] border-b border-[#E8E2D5]">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0F5C4A]/5 rounded-full blur-3xl pointer-events-none" />
         <Container size="xl" className="relative z-10">
           <Breadcrumb items={[{ label: t('nav.contact') }]} />
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 shadow-xs">
-              <Phone className="w-3.5 h-3.5 text-[#103F4A]" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E8F2EE] text-[#0F5C4A] border border-[#0F5C4A]/20 shadow-2xs">
+              <Phone className="w-3.5 h-3.5 text-[#0F5C4A]" />
               <span>{isHindi ? 'रिसेप्शन एवं संपर्क' : 'Reception & Inquiries'}</span>
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#103F4A] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B2A26] tracking-tight">
               {isHindi ? 'परामर्श चेंबर से संपर्क करें' : 'Contact the Consultation Chamber'}
             </h1>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-[#4A5753] leading-relaxed font-normal">
               {isHindi
                 ? 'चेंबर स्लॉट बुकिंग, निरंतर ग्लूकोज निगरानी (सीजीएम) पूछताछ और क्लिनिक विवरण के लिए हमारे सहायता डेस्क से संपर्क करें।'
                 : 'Reach our appointment desk for chamber bookings, continuous glucose sensor inquiries, and clinical visits.'}

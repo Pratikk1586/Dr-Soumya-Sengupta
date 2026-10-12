@@ -194,7 +194,7 @@ export const ClinicAssistant: React.FC = () => {
           {showHelpBubble && (
             <div
               onClick={handleOpenChat}
-              className="pointer-events-auto flex items-center gap-2 pl-3.5 pr-1.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-slate-800 text-xs sm:text-sm font-semibold shadow-lg border border-teal-200/90 hover:border-teal-400 hover:shadow-xl transition-all duration-200 cursor-pointer group animate-in fade-in slide-in-from-bottom-2"
+              className="pointer-events-auto flex items-center gap-2 pl-3.5 pr-1.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-[#1B2A26] text-xs sm:text-sm font-semibold shadow-lg border border-[#E8E2D5] hover:border-[#0F5C4A] hover:shadow-xl transition-all duration-200 cursor-pointer group animate-in fade-in slide-in-from-bottom-2"
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -206,16 +206,16 @@ export const ClinicAssistant: React.FC = () => {
               aria-label={isHindi ? 'सहायता चाहिए? क्लिनिक सहायक से पूछें' : 'Need Help? Ask AI Assistant'}
             >
               <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B8862B] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B8862B]" />
               </span>
-              <span className="group-hover:text-[#103F4A] transition-colors whitespace-nowrap">
+              <span className="group-hover:text-[#0F5C4A] transition-colors whitespace-nowrap">
                 {isHindi ? 'सहायता चाहिए?' : 'Need Help?'}
               </span>
               <button
                 type="button"
                 onClick={handleDismissBubble}
-                className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0 ml-1"
+                className="p-1 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors cursor-pointer shrink-0 ml-1"
                 title={isHindi ? 'हटाएं' : 'Dismiss'}
                 aria-label="Dismiss help bubble"
               >
@@ -228,15 +228,15 @@ export const ClinicAssistant: React.FC = () => {
           <button
             type="button"
             onClick={handleOpenChat}
-            className="pointer-events-auto relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-[#103F4A] to-[#145466] hover:from-[#0a252f] hover:to-[#103F4A] text-white rounded-full shadow-[0_4px_18px_rgba(16,63,74,0.35)] hover:shadow-[0_6px_22px_rgba(16,63,74,0.5)] ring-2 ring-teal-400/40 hover:ring-teal-400/80 ring-offset-2 ring-offset-white hover:scale-105 active:scale-95 transition-all duration-300 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#103F4A] cursor-pointer"
+            className="pointer-events-auto relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-[#0F5C4A] to-[#0B4636] hover:from-[#0B4636] hover:to-[#083327] text-white rounded-full shadow-[0_6px_20px_rgba(15,92,74,0.38)] hover:shadow-[0_8px_24px_rgba(15,92,74,0.5)] ring-2 ring-[#B8862B]/40 hover:ring-[#B8862B]/80 ring-offset-2 ring-offset-white hover:scale-105 active:scale-95 transition-all duration-300 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F5C4A] cursor-pointer"
             aria-label={isHindi ? 'क्लिनिक सहायक खोलें' : 'Open Clinic Assistant chat'}
           >
             <div className="relative shrink-0 flex items-center justify-center">
-              <Bot className="w-6 h-6 text-teal-100 group-hover:scale-110 transition-transform" aria-hidden="true" />
+              <Bot className="w-6 h-6 text-[#E8F2EE] group-hover:scale-110 transition-transform" aria-hidden="true" />
               {/* Subtle pulsing live indicator beacon */}
               <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 border border-[#0c3642]" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B8862B] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#B8862B] border border-[#0B4636]" />
               </span>
             </div>
           </button>
@@ -255,20 +255,20 @@ export const ClinicAssistant: React.FC = () => {
           <div
             ref={panelRef}
             onClick={(e) => e.stopPropagation()}
-            className="w-full md:w-96 md:fixed md:bottom-6 md:right-6 bg-white rounded-t-3xl md:rounded-2xl shadow-2xl border border-slate-200 flex flex-col h-[82dvh] md:h-[580px] max-h-[90dvh] overflow-hidden animate-in slide-in-from-bottom-4 duration-200"
+            className="w-full md:w-96 md:fixed md:bottom-6 md:right-6 bg-white rounded-t-3xl md:rounded-2xl shadow-[0_20px_60px_rgba(27,42,38,0.2)] border border-[#E8E2D5] flex flex-col h-[82dvh] md:h-[580px] max-h-[90dvh] overflow-hidden animate-in slide-in-from-bottom-4 duration-200"
           >
             {/* Header with Duo-lingo Language Switcher */}
-            <div className="px-4 py-3 bg-gradient-to-r from-[#103F4A] to-[#175664] text-white flex items-center justify-between shrink-0">
+            <div className="px-4 py-3 bg-gradient-to-r from-[#0F5C4A] to-[#0B4636] text-white flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#EAF7FA] shrink-0">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#E8F2EE] shrink-0">
                   <Bot className="w-5 h-5" />
                 </div>
                 <div className="truncate">
-                  <h3 className="text-sm font-bold tracking-tight truncate">
+                  <h3 className="text-sm font-serif font-bold tracking-tight truncate">
                     {isChatHindi ? 'डॉ. सेनगुप्ता क्लिनिक सहायक' : 'Dr. Sengupta Clinic Assistant'}
                   </h3>
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#EAF7FA]/80">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#E8F2EE]/80">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#B8862B] animate-pulse shrink-0" />
                     <span className="truncate">
                       {isChatHindi ? 'द्विभाषी सहायता (En / हिन्दी)' : 'Bilingual Guide (English & Hindi)'}
                     </span>
@@ -285,7 +285,7 @@ export const ClinicAssistant: React.FC = () => {
                   title={chatLanguage === 'en' ? 'हिंदी में बदलें (Switch to Hindi)' : 'Switch to English (अंग्रेज़ी)'}
                   aria-label={chatLanguage === 'en' ? 'Switch chat language to Hindi' : 'Switch chat language to English'}
                 >
-                  <Languages className="w-3.5 h-3.5 text-[#EAF7FA]" />
+                  <Languages className="w-3.5 h-3.5 text-[#E8F2EE]" />
                   <span>{chatLanguage === 'en' ? 'हि / En' : 'En / हि'}</span>
                 </button>
 
@@ -310,7 +310,7 @@ export const ClinicAssistant: React.FC = () => {
             </div>
 
             {/* Conversation Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70 text-xs sm:text-sm">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FBF8F1]/50 text-xs sm:text-sm">
               {displayMessages.map((msg) => {
                 const isAssistant = msg.sender === 'assistant';
                 return (
@@ -321,8 +321,8 @@ export const ClinicAssistant: React.FC = () => {
                     }`}
                   >
                     {isAssistant && (
-                      <div className="w-6 h-6 rounded-full bg-[#103F4A] text-white flex items-center justify-center shrink-0 text-xs mt-0.5">
-                        <Bot className="w-3.5 h-3.5 text-[#EAF7FA]" />
+                      <div className="w-6 h-6 rounded-full bg-[#0F5C4A] text-white flex items-center justify-center shrink-0 text-xs mt-0.5">
+                        <Bot className="w-3.5 h-3.5 text-[#E8F2EE]" />
                       </div>
                     )}
 
@@ -331,8 +331,8 @@ export const ClinicAssistant: React.FC = () => {
                         isAssistant
                           ? msg.isWarning
                             ? 'bg-rose-50 border border-rose-200 text-rose-950 font-medium'
-                            : 'bg-white border border-slate-200/80 text-slate-800'
-                          : 'bg-[#103F4A] text-white font-medium rounded-tr-xs'
+                            : 'bg-white border border-[#E8E2D5] text-[#1B2A26]'
+                          : 'bg-[#0F5C4A] text-white font-medium rounded-tr-xs'
                       }`}
                     >
                       {msg.isWarning && (
@@ -346,13 +346,13 @@ export const ClinicAssistant: React.FC = () => {
 
                       {/* Interactive Actions / Deep Links */}
                       {msg.actions && msg.actions.length > 0 && (
-                        <div className="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap gap-1.5">
+                        <div className="mt-3 pt-2.5 border-t border-[#E8E2D5]/70 flex flex-wrap gap-1.5">
                           {msg.actions.map((act) => (
                             <button
                               key={act.label}
                               type="button"
                               onClick={() => handleActionClick(act)}
-                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[#EAF7FA]/80 hover:bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 transition-colors cursor-pointer text-left"
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[#E8F2EE] hover:bg-[#D8ECE5] text-[#0F5C4A] border border-[#0F5C4A]/20 transition-colors cursor-pointer text-left"
                             >
                               <span>{act.label}</span>
                               {act.url && <ArrowRight className="w-3 h-3 shrink-0" />}
@@ -363,7 +363,7 @@ export const ClinicAssistant: React.FC = () => {
                     </div>
 
                     {!isAssistant && (
-                      <div className="w-6 h-6 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center shrink-0 text-xs mt-0.5">
+                      <div className="w-6 h-6 rounded-full bg-[#E8E2D5] text-[#1B2A26] flex items-center justify-center shrink-0 text-xs mt-0.5 font-bold">
                         <User className="w-3.5 h-3.5" />
                       </div>
                     )}
@@ -372,11 +372,11 @@ export const ClinicAssistant: React.FC = () => {
               })}
 
               {isTyping && (
-                <div className="flex items-center gap-2 text-slate-400 text-xs pl-8">
-                  <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" />
-                  <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.2s]" />
-                  <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.4s]" />
-                  <span className="text-[11px] font-medium text-slate-500">
+                <div className="flex items-center gap-2 text-[#4A5753] text-xs pl-8">
+                  <div className="w-2 h-2 rounded-full bg-[#0F5C4A] animate-bounce" />
+                  <div className="w-2 h-2 rounded-full bg-[#0F5C4A] animate-bounce [animation-delay:0.2s]" />
+                  <div className="w-2 h-2 rounded-full bg-[#0F5C4A] animate-bounce [animation-delay:0.4s]" />
+                  <span className="text-[11px] font-medium text-[#4A5753]">
                     {isChatHindi ? 'उत्तर आ रहा है...' : 'Thinking...'}
                   </span>
                 </div>
@@ -386,12 +386,12 @@ export const ClinicAssistant: React.FC = () => {
 
             {/* Quick Action Suggestions Drawer (If initial state) */}
             {displayMessages.length === 1 && (
-              <div className="p-2.5 bg-white border-t border-slate-100 shrink-0">
+              <div className="p-2.5 bg-white border-t border-[#E8E2D5] shrink-0">
                 <div className="flex items-center justify-between mb-1.5 px-1">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#4A5753]">
                     {isChatHindi ? 'त्वरित विकल्प' : 'Common Topics & Actions'}
                   </p>
-                  <span className="text-[10px] text-slate-400 font-medium">
+                  <span className="text-[10px] text-[#B8862B] font-semibold">
                     {isChatHindi ? 'टैप करें' : 'Tap to ask'}
                   </span>
                 </div>
@@ -401,7 +401,7 @@ export const ClinicAssistant: React.FC = () => {
                       key={act.label}
                       type="button"
                       onClick={() => handleActionClick(act)}
-                      className="px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-slate-100 hover:bg-[#EAF7FA] text-slate-700 hover:text-[#103F4A] transition-colors cursor-pointer border border-slate-200/60"
+                      className="px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-[#F5EFE6] hover:bg-[#E8F2EE] text-[#1B2A26] hover:text-[#0F5C4A] transition-colors cursor-pointer border border-[#E8E2D5]"
                     >
                       {act.label}
                     </button>
@@ -416,7 +416,7 @@ export const ClinicAssistant: React.FC = () => {
                 e.preventDefault();
                 handleSendMessage();
               }}
-              className="p-3 bg-white border-t border-slate-200 flex items-center gap-2 shrink-0"
+              className="p-3 bg-white border-t border-[#E8E2D5] flex items-center gap-2 shrink-0"
             >
               <input
                 ref={inputRef}
@@ -428,13 +428,13 @@ export const ClinicAssistant: React.FC = () => {
                     ? 'अपॉइंटमेंट, समीक्षा, पता, सूचना या सवाल पूछें...'
                     : 'Ask about appointments, reviews, address, or news...'
                 }
-                className="flex-1 px-3 py-2 text-xs sm:text-sm bg-slate-100 rounded-xl text-slate-800 placeholder-slate-400 outline-none focus:ring-2 focus:ring-[#103F4A]/20 font-sans"
+                className="flex-1 px-3 py-2 text-xs sm:text-sm bg-[#FBF8F1] rounded-xl text-[#1B2A26] placeholder-[#4A5753]/60 border border-[#E8E2D5] outline-none focus:ring-2 focus:ring-[#0F5C4A]/20 font-sans"
                 aria-label="Type message to clinic assistant"
               />
               <button
                 type="submit"
                 disabled={!inputText.trim() || isTyping}
-                className="p-2.5 rounded-xl bg-[#103F4A] text-white hover:bg-[#0a252f] disabled:bg-slate-200 disabled:text-slate-400 transition-colors cursor-pointer shrink-0"
+                className="p-2.5 rounded-xl bg-[#0F5C4A] text-white hover:bg-[#0B4636] disabled:bg-stone-200 disabled:text-stone-400 transition-colors cursor-pointer shrink-0 shadow-xs"
                 aria-label="Send message"
               >
                 <Send className="w-4 h-4" />
@@ -442,7 +442,7 @@ export const ClinicAssistant: React.FC = () => {
             </form>
 
             {/* Non-Diagnostic Standing Footer Disclaimer */}
-            <div className="px-3 py-1.5 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-400 text-center shrink-0">
+            <div className="px-3 py-1.5 bg-[#FBF8F1] border-t border-[#E8E2D5] text-[10px] text-[#4A5753] text-center shrink-0">
               <span>
                 {isChatHindi
                   ? 'द्विभाषी सहायक • सामान्य क्लिनिक जानकारी, चिकित्सीय सलाह नहीं।'

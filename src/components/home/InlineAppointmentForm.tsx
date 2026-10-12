@@ -187,17 +187,17 @@ export const InlineAppointmentForm: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-5 sm:p-7 border border-slate-200/90 shadow-sm space-y-4">
-      <div className="pb-3 border-b border-slate-100 flex items-center justify-between">
+    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E2D5] shadow-[0_12px_36px_rgba(27,42,38,0.06)] space-y-4">
+      <div className="pb-3 border-b border-[#E8E2D5]/70 flex items-center justify-between">
         <div>
-          <h4 className="text-base font-bold text-slate-900">
+          <h4 className="text-lg font-serif font-bold text-[#1B2A26]">
             {isHindi ? 'त्वरित अपॉइंटमेंट अनुरोध' : 'Quick Consultation Request'}
           </h4>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#4A5753]">
             {isHindi ? 'विवरण भरें — हमारा चेंबर फोन/व्हाट्सएप पर पुष्टि करेगा' : 'Fill details below — desk confirms via phone/WhatsApp'}
           </p>
         </div>
-        <span className="text-[11px] font-semibold text-[#103F4A] bg-[#EAF7FA] px-2.5 py-0.5 rounded-full border border-[#65D9D0]/50">
+        <span className="text-[11px] font-semibold text-[#0F5C4A] bg-[#E8F2EE] px-2.5 py-0.5 rounded-full border border-[#0F5C4A]/20">
           {isHindi ? 'प्रत्यक्ष बुकिंग' : 'Direct Booking'}
         </span>
       </div>
@@ -317,15 +317,15 @@ export const InlineAppointmentForm: React.FC = () => {
           {errors.concern && <p className="text-[11px] text-red-600 mt-1">{errors.concern.message}</p>}
         </div>
 
-        {/* 4. Single-row Action Buttons: Teal primary, Green WhatsApp, Outline Call */}
-        <div className="pt-3 border-t border-slate-100 flex flex-wrap sm:flex-nowrap items-center gap-2.5">
-          {/* Teal Primary Submit */}
+        {/* 4. Single-row Action Buttons: Deep green primary, Green WhatsApp, Outline Call */}
+        <div className="pt-3.5 border-t border-[#E8E2D5]/70 flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+          {/* Deep Green Primary Submit */}
           <Button
             type="submit"
             variant="primary"
             size="md"
             disabled={isSubmitting}
-            className="w-full sm:w-auto bg-[#103F4A] hover:bg-[#0C323B] text-white shrink-0 shadow-xs"
+            className="w-full sm:w-auto bg-[#0F5C4A] hover:bg-[#0B4636] text-white shrink-0 shadow-xs rounded-full"
           >
             <span>{isSubmitting ? (isHindi ? 'भेजा जा रहा है...' : 'Submitting...') : (isHindi ? 'अपॉइंटमेंट स्लॉट भेजें' : 'Request Slot')}</span>
             <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -335,7 +335,7 @@ export const InlineAppointmentForm: React.FC = () => {
           <WhatsAppButton
             variant="appointment"
             size="md"
-            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shrink-0 shadow-xs"
+            className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1EBE5D] text-white shrink-0 shadow-xs rounded-full"
           >
             <span>{isHindi ? 'व्हाट्सएप' : 'WhatsApp'}</span>
           </WhatsAppButton>
@@ -344,7 +344,7 @@ export const InlineAppointmentForm: React.FC = () => {
           <CallButton
             size="md"
             variant="outline"
-            className="w-full sm:w-auto shrink-0 border border-[#103F4A]/40 text-[#103F4A] hover:bg-[#103F4A] hover:text-white"
+            className="w-full sm:w-auto shrink-0 border border-[#0F5C4A]/40 text-[#0F5C4A] hover:bg-[#0F5C4A] hover:text-white rounded-full"
           >
             <span>{isHindi ? 'कॉल क्लिनिक' : 'Call Clinic'}</span>
           </CallButton>

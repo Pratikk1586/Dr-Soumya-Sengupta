@@ -2,8 +2,9 @@ import React from 'react';
 import { SEO } from '../components/common/SEO';
 import { SectionDivider } from '../components/common/SectionDivider';
 import { HeroSection } from '../components/hero/HeroSection';
-import { HowCanWeHelpSection } from '../components/home/HowCanWeHelpSection';
+import { QuickLinksStrip } from '../components/home/QuickLinksStrip';
 import { AboutDoctorSection } from '../components/home/AboutDoctorSection';
+import { HowCanWeHelpSection } from '../components/home/HowCanWeHelpSection';
 import { KnowYourProblemSection } from '../components/home/KnowYourProblemSection';
 import { CareJourneySection } from '../components/home/CareJourneySection';
 import { PatientReviewsSection } from '../components/home/PatientReviewsSection';
@@ -20,17 +21,17 @@ export const HomePage: React.FC = () => {
         canonicalPath="/"
       />
 
-      {/* 1. Header & Hero Section (Surface Background) */}
+      {/* 1. Header & Hero Section */}
       <HeroSection />
-      <SectionDivider variant="ecg" />
 
-      {/* 2. How Can We Help? (White Background) */}
-      <HowCanWeHelpSection />
-      <SectionDivider variant="ecg" />
+      {/* 2. Section A: Quick Links Strip (Floating Card) */}
+      <QuickLinksStrip />
 
-      {/* 3. About Dr. Sengupta Preview (Surface Background) */}
+      {/* 3. Section B: About Dr. Sengupta Introduction & Stats */}
       <AboutDoctorSection />
-      <SectionDivider variant="ecg" />
+
+      {/* 4. Section C: Our Services — Comprehensive Care */}
+      <HowCanWeHelpSection />
 
       {/* 4. Know Your Problem & Numbers (Primary-Soft Background) */}
       <KnowYourProblemSection />

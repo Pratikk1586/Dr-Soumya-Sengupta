@@ -1,10 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Award, Stethoscope, ArrowRight, GraduationCap } from 'lucide-react';
-import { Section } from '../common/Section';
-import { Button } from '../common/Button';
-import { SmartImage } from '../common/SmartImage';
-import { DoctorSocialLinks } from '../doctor/DoctorSocialLinks';
+import { ArrowRight, Users, Award, ShieldCheck, Heart } from 'lucide-react';
+import { Container } from '../common/Container';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
 import { doctorService } from '../../services';
@@ -12,128 +9,152 @@ import { CLINIC_IMAGES } from '../../config/images';
 import { DOCTOR_CREDENTIALS } from '../../config/credentials';
 
 export const AboutDoctorSection: React.FC = () => {
-  const { localize, isHindi, t } = useLanguage();
+  const { localize, isHindi } = useLanguage();
   const { data: doctor } = useService(() => doctorService.getProfile(), []);
 
   return (
-    <Section
-      eyebrow="Clinical Profile"
-      heading="About Dr. Soumya Sengupta"
-      lede="A disciplined, evidence-based approach to metabolic health that balances scientific rigor with patient-centered communication."
-      containerSize="xl"
-      className="bg-[#F7FAFA] border-b border-[#D7E5E6] relative py-10 sm:py-14"
-    >
-      <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        {/* Left Column: Photo cropped to 4:5 portrait (max ~560px tall) */}
-        <div className="lg:col-span-5 space-y-4">
-          <div className="relative mx-auto max-w-sm lg:max-w-none">
-            {/* Subtle radial teal glow behind portrait */}
+    <section className="py-12 sm:py-16 lg:py-20 bg-[#FBF8F1] relative overflow-hidden">
+      <Container size="xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* 1. Left: Doctor Portrait with Soft Green Organic Blob & Cream Backdrop */}
+          <div className="lg:col-span-4 relative flex items-center justify-center">
+            {/* Organic curved shape & green fluid wash behind photo */}
             <div
-              className="absolute -inset-3 rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(14,90,107,0.18)_0%,rgba(232,245,244,0.6)_60%,transparent_100%)] blur-xl pointer-events-none"
+              className="absolute -inset-4 rounded-[40px] pointer-events-none -z-0 opacity-80"
+              style={{
+                background: 'radial-gradient(ellipse at 30% 40%, rgba(15, 92, 74, 0.18) 0%, rgba(245, 239, 230, 0.8) 60%, transparent 100%)',
+              }}
               aria-hidden="true"
             />
-            <div className="relative rounded-2xl overflow-hidden shadow-[0_12px_32px_rgba(11,46,58,0.12)] border border-[#D7E5E6] ring-2 ring-[#0E5A6B]/30 max-w-[448px] max-h-[560px] mx-auto bg-white">
-              <SmartImage
+            {/* Subtle organic SVG wave accent */}
+            <svg
+              className="absolute -bottom-6 -left-6 w-44 h-44 text-[#0F5C4A]/10 pointer-events-none -z-0"
+              viewBox="0 0 200 200"
+              fill="currentColor"
+            >
+              <path d="M42.7,-62.9C53.8,-53.4,60.2,-39.1,64.8,-24.5C69.4,-9.9,72.2,4.9,68.7,18.7C65.2,32.4,55.5,45.1,43.2,54.4C30.9,63.7,15.5,69.5,-0.7,70.5C-16.9,71.5,-33.7,67.6,-46.6,58.3C-59.5,49.1,-68.4,34.4,-72.1,18.5C-75.9,2.6,-74.4,-14.6,-66.8,-28.4C-59.3,-42.2,-45.6,-52.7,-31.9,-61.2C-18.2,-69.7,-4.6,-76.3,9.5,-73.2C23.6,-70.2,31.6,-72.5,42.7,-62.9Z" transform="translate(100 100)" />
+            </svg>
+
+            {/* Doctor Photo Card */}
+            <div className="relative w-full max-w-[340px] sm:max-w-[360px] rounded-3xl overflow-hidden shadow-[0_16px_40px_rgba(27,42,38,0.12)] border border-[#E8E2D5] bg-white z-10 aspect-[4/5]">
+              <img
                 src={CLINIC_IMAGES.doctorProfile}
-                alt="Dr. Soumya Sengupta, Consultant Diabetologist & Metabolic Physician"
-                aspectRatio="4/5"
-                className="w-full h-full object-cover object-top max-h-[560px]"
+                alt="Dr. Soumya Sengupta — Consultant Diabetologist & Metabolic Physician"
+                className="w-full h-full object-cover object-top"
                 loading="lazy"
+                width={360}
+                height={450}
               />
             </div>
           </div>
-        </div>
 
-        {/* Right Column: Bio, Qualifications, Clinical Experience */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="space-y-2">
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1B2B34] tracking-tight">
+          {/* 2. Middle: Doctor Credentials, Specialisation, Bio, and CTA */}
+          <div className="lg:col-span-4 space-y-4 sm:space-y-4.5">
+            {/* Pill Designation Badge */}
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] text-[#B8862B] text-xs font-bold tracking-wider uppercase shadow-2xs">
+              <span>{isHindi ? 'कंसल्टेंट डायबेटोलॉजिस्ट' : 'CONSULTANT DIABETOLOGIST'}</span>
+            </div>
+
+            {/* Serif Doctor Name */}
+            <h2 className="font-serif font-bold text-2xl sm:text-3xl lg:text-[34px] text-[#1B2A26] leading-tight">
               {doctor ? localize(doctor.name) : 'Dr. Soumya Sengupta'}
-            </h3>
-            <p className="text-base sm:text-lg font-semibold text-[#0E5A6B]">
-              {doctor ? localize(doctor.title) : 'Consultant Diabetologist & Metabolic Physician'}
+            </h2>
+
+            {/* Qualifications & Diabetology Specialties */}
+            <div className="space-y-0.5">
+              <p className="text-sm sm:text-base font-semibold text-[#1B2A26]">
+                {DOCTOR_CREDENTIALS.degrees || 'MBBS, MD (Medicine), DM (Endocrinology)'}
+              </p>
+              <p className="text-xs sm:text-sm font-semibold text-[#B8862B]">
+                {isHindi
+                  ? 'डायबिटीज, थायरॉयड एवं मेटाबोलिक विकारों में विशेषज्ञ'
+                  : 'Specialist in Diabetes, Thyroid & Metabolic Disorders'}
+              </p>
+            </div>
+
+            {/* Short Introduction Paragraph */}
+            <p className="text-xs sm:text-sm text-[#4A5753] leading-relaxed font-normal">
+              {isHindi
+                ? 'डायबिटीज और संबंधित एंडोक्राइन विकारों से जूझ रहे रोगियों के लिए दयालु, साक्ष्य-आधारित देखभाल प्रदान करने के लिए समर्पित, जिसका मुख्य उद्देश्य दीर्घकालिक स्वास्थ्य और जीवन की गुणवत्ता में सुधार है।'
+                : 'Dedicated to providing compassionate, evidence-based care for patients with diabetes and related endocrine disorders, with a focus on long-term health and quality of life.'}
             </p>
-          </div>
 
-          <p className="text-sm sm:text-base text-[#4F6470] leading-relaxed font-normal">
-            {doctor
-              ? localize(doctor.shortBio)
-              : 'Dedicated to empowering patients with chronic metabolic conditions through structured education, continuous glucose monitoring (CGM), and individualized therapy regimens that protect vital organ systems.'}
-          </p>
-
-          {/* Credentials Row driven by DOCTOR_CREDENTIALS config */}
-          <div className="p-4 rounded-xl bg-[#E8F5F4] border border-[#D7E5E6] space-y-2.5">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-[#0E5A6B] flex items-center gap-1.5">
-              <GraduationCap className="w-4 h-4 text-[#0E5A6B]" />
-              <span>{isHindi ? 'योग्यताएं एवं पंजीकरण विवरण' : 'Qualifications & Professional Registrations'}</span>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-3 text-xs text-[#1B2B34]">
-              <div>
-                <span className="block text-[#4F6470] text-[11px] font-medium">{isHindi ? 'डिग्रियां:' : 'Degrees:'}</span>
-                <span className="font-semibold text-[#1B2B34]">{DOCTOR_CREDENTIALS.degrees}</span>
-              </div>
-              <div>
-                <span className="block text-[#4F6470] text-[11px] font-medium">{isHindi ? 'पंजीकरण संख्या:' : 'Registration No.:'}</span>
-                <span className="font-semibold font-mono text-[#1B2B34]">{DOCTOR_CREDENTIALS.registrationNumber}</span>
-              </div>
-              <div className="sm:col-span-1">
-                <span className="block text-[#4F6470] text-[11px] font-medium">{isHindi ? 'सदस्यता:' : 'Memberships:'}</span>
-                <span className="font-medium text-[#4F6470]">{DOCTOR_CREDENTIALS.memberships.join(' • ')}</span>
-              </div>
+            {/* Outlined Pill Button Linking to /about */}
+            <div className="pt-2">
+              <Link to="/about">
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#0F5C4A] text-[#0F5C4A] hover:bg-[#E8F2EE] font-semibold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap active:scale-[0.98]"
+                >
+                  <span>{isHindi ? 'डॉ. सेनगुप्ता के बारे में और जानें' : 'Know More About Dr. Sengupta'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
             </div>
           </div>
 
-          {/* Clinical Highlights Grid */}
-          <div className="grid sm:grid-cols-2 gap-4 pt-1">
-            <div className="p-4 rounded-xl bg-white border border-[#D7E5E6] hover:border-[#0E5A6B]/50 shadow-xs hover:shadow-sm transition-all space-y-1.5 group">
-              <div className="flex items-center gap-2 text-[#0E5A6B] font-bold text-xs uppercase tracking-wider">
-                <div className="w-6 h-6 rounded-md bg-[#E8F5F4] border border-[#D7E5E6] flex items-center justify-center group-hover:bg-[#0E5A6B] group-hover:text-white transition-colors">
-                  <Award className="w-3.5 h-3.5" />
+          {/* 3. Right: Beige Panel with 2x2 Grid of White Stat Cards */}
+          <div className="lg:col-span-4">
+            <div className="p-4 sm:p-5 rounded-3xl bg-[#F5EFE6]/80 border border-[#E8E2D5] shadow-xs">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {/* Stat 1: Patients Treated */}
+                <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8E2D5] shadow-xs flex flex-col items-center text-center gap-1.5 hover:shadow-sm transition-shadow">
+                  <div className="w-10 h-10 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] flex items-center justify-center text-[#B8862B] mb-0.5">
+                    <Users className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="font-serif font-bold text-xl sm:text-2xl text-[#0F5C4A] leading-tight">
+                    5000+
+                  </span>
+                  <span className="text-[11px] sm:text-xs font-semibold text-[#4A5753] leading-tight">
+                    {isHindi ? 'उपचारित मरीज' : 'Patients Treated'}
+                  </span>
                 </div>
-                <span>Clinical Tenure</span>
-              </div>
-              <p className="text-xs sm:text-sm text-[#1B2B34] font-medium">
-                Practicing since 2007 (19+ Years in Diabetes Care) • Cardio Diabetic Clinic
-              </p>
-            </div>
 
-            <div className="p-4 rounded-xl bg-white border border-[#D7E5E6] hover:border-[#0E5A6B]/50 shadow-xs hover:shadow-sm transition-all space-y-1.5 group">
-              <div className="flex items-center gap-2 text-[#0E5A6B] font-bold text-xs uppercase tracking-wider">
-                <div className="w-6 h-6 rounded-md bg-[#E8F5F4] border border-[#D7E5E6] flex items-center justify-center group-hover:bg-[#0E5A6B] group-hover:text-white transition-colors">
-                  <Stethoscope className="w-3.5 h-3.5" />
+                {/* Stat 2: Years of Experience */}
+                <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8E2D5] shadow-xs flex flex-col items-center text-center gap-1.5 hover:shadow-sm transition-shadow">
+                  <div className="w-10 h-10 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] flex items-center justify-center text-[#B8862B] mb-0.5">
+                    <Award className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="font-serif font-bold text-xl sm:text-2xl text-[#0F5C4A] leading-tight">
+                    10+ Years
+                  </span>
+                  <span className="text-[11px] sm:text-xs font-semibold text-[#4A5753] leading-tight">
+                    {isHindi ? 'का क्लिनिकल अनुभव' : 'of Experience'}
+                  </span>
                 </div>
-                <span>Specialisations</span>
+
+                {/* Stat 3: Evidence-Based Treatment */}
+                <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8E2D5] shadow-xs flex flex-col items-center text-center gap-1.5 hover:shadow-sm transition-shadow">
+                  <div className="w-10 h-10 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] flex items-center justify-center text-[#B8862B] mb-0.5">
+                    <ShieldCheck className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="font-serif font-bold text-sm sm:text-base text-[#1B2A26] leading-tight mt-1">
+                    Evidence-Based
+                  </span>
+                  <span className="text-[11px] font-semibold text-[#4A5753] leading-tight">
+                    {isHindi ? 'आधुनिक चिकित्सा' : 'Modern Treatment'}
+                  </span>
+                </div>
+
+                {/* Stat 4: Compassionate Care */}
+                <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8E2D5] shadow-xs flex flex-col items-center text-center gap-1.5 hover:shadow-sm transition-shadow">
+                  <div className="w-10 h-10 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] flex items-center justify-center text-[#B8862B] mb-0.5">
+                    <Heart className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="font-serif font-bold text-sm sm:text-base text-[#1B2A26] leading-tight mt-1">
+                    Compassionate
+                  </span>
+                  <span className="text-[11px] font-semibold text-[#4A5753] leading-tight">
+                    {isHindi ? 'रोगी-केंद्रित देखभाल' : 'Patient-Centred Care'}
+                  </span>
+                </div>
               </div>
-              <p className="text-xs sm:text-sm text-[#1B2B34] font-medium">
-                Diabetes, Hypertension, Dyslipidemia, Hypothyroidism & Organ Protection
-              </p>
             </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            <Link to="/about">
-              <Button variant="primary" size="md">
-                <span>{t('cta.learnMore')} — Full Qualifications & Experience</span>
-                <ArrowRight className="w-4 h-4 ml-1.5" aria-hidden="true" />
-              </Button>
-            </Link>
-
-            <Link to="/book-appointment">
-              <Button variant="outline" size="md">
-                <span>{t('cta.bookAppointment')}</span>
-              </Button>
-            </Link>
-          </div>
-
-          {/* Social Media Links */}
-          <div className="pt-3 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              {isHindi ? 'सोशल मीडिया पर जुड़ें:' : 'Connect with Doctor:'}
-            </span>
-            <DoctorSocialLinks variant="icons" />
           </div>
         </div>
-      </div>
-    </Section>
+      </Container>
+    </section>
   );
 };
+
+export default AboutDoctorSection;

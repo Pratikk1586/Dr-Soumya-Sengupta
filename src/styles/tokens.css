@@ -7,33 +7,45 @@
  */
 
 :root {
-  /* 1. Core Brand Colors */
-  --primary: #0E5A6B;          /* Deep Medical Teal */
-  --primary-dark: #0B2E3A;     /* Navy Teal (Headers, Footer base) */
-  --primary-soft: #E8F5F4;     /* Crisp Mint/Ice Tint (Cards, Chips, Section Alternates) */
-  --accent: #F2A33A;           /* Warm Amber Gold (Stars, Single Highlights, Badges) */
+  /* 1. Core Brand Colors (Deep Green & Warm Gold System) */
+  --primary: #0F5C4A;          /* Primary Deep Forest Green */
+  --primary-dark: #0B4636;     /* Darker Green (Hover, Footer base, Text accents) */
+  --primary-hover: #0B4636;
+  --primary-active: #083327;
+  --primary-soft: #E8F2EE;     /* Pale Green Tint (Badges, icon washes) */
+  --primary-glass: rgba(15, 92, 74, 0.08);
+
+  --accent: #B8862B;           /* Elegant Warm Gold / Bronze */
+  --accent-hover: #A07323;
+  --accent-soft: #F9F3E6;      /* Soft Warm Gold/Beige */
+  --accent-badge: #F5EFE6;     /* Subtle Beige Badge Background */
+
   --whatsapp: #1E9E5A;         /* Verified WhatsApp Emerald */
-  --surface: #F7FAFA;          /* Subtle Clinical Surface Background */
-  --card: #FFFFFF;             /* Pure Card White */
-  --text: #1B2B34;             /* Slate Charcoal (High contrast, WCAG AAA compliant) */
-  --text-muted: #4F6470;       /* Cool Slate (Subtle body copy, WCAG AA compliant) */
-  --border: #D7E5E6;           /* Refined Medical Border */
-  --danger: #C0392B;           /* Clinical Red (Emergency & Disclaimers strictly) */
+  --surface: #FBF8F1;          /* Warm Cream / Ivory Page Background */
+  --surface-alt: #F5EFE6;      /* Secondary Warm Beige Surface */
+  --card: #FFFFFF;             /* Crisp Card White */
+  --card-glass: rgba(255, 255, 255, 0.85);
 
-  /* 2. Interactive & Derivative Tokens */
-  --primary-hover: #094755;
-  --primary-active: #073843;
-  --accent-soft: #FEF6EB;
-  --danger-soft: #FDF2F2;
+  --text: #1B2A26;             /* Near-Black Forest Tinted (Headings) */
+  --text-muted: #4A5753;       /* Warm Grey-Green Slate (Body Copy) */
+  --text-subtle: #7A8783;      /* Subtle Captions & Meta */
 
-  /* 3. Geometry & Elevation (16px Card Radius + Soft Layered Shadows) */
-  --radius-card: 16px;
+  --border: #E8E2D5;           /* Light Warm Beige Border */
+  --border-subtle: #F0EAE0;
+  --border-green: rgba(15, 92, 74, 0.20);
+  --danger: #C0392B;           /* Clinical Red */
+
+  /* 2. Geometry & Elevation (20-28px Card Radius + Pill Elements) */
+  --radius-card: 20px;
+  --radius-card-lg: 28px;
   --radius-pill: 9999px;
 
-  /* Layered soft ambient shadows */
-  --shadow-card: 0 2px 8px -2px rgba(11, 46, 58, 0.05), 0 10px 24px -4px rgba(11, 46, 58, 0.04);
-  --shadow-card-hover: 0 4px 16px -2px rgba(11, 46, 58, 0.10), 0 16px 36px -6px rgba(11, 46, 58, 0.07);
-  --shadow-glow-teal: 0 0 40px rgba(14, 90, 107, 0.18);
+  /* Layered soft ambient shadows with large blur */
+  --shadow-card: 0 4px 20px -2px rgba(27, 42, 38, 0.04), 0 12px 32px -4px rgba(27, 42, 38, 0.05);
+  --shadow-card-hover: 0 8px 30px -4px rgba(15, 92, 74, 0.10), 0 20px 40px -6px rgba(27, 42, 38, 0.08);
+  --shadow-float: 0 16px 48px -8px rgba(15, 92, 74, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-glow-green: 0 0 60px rgba(15, 92, 74, 0.20);
+  --shadow-glow-gold: 0 0 40px rgba(184, 134, 43, 0.22);
 }
 
 /* ============================================================================
@@ -119,18 +131,18 @@
 .bg-molecule-pattern {
   background-image: 
     radial-gradient(var(--border) 1px, transparent 1px),
-    radial-gradient(rgba(14, 90, 107, 0.12) 1.5px, transparent 1.5px);
+    radial-gradient(rgba(15, 92, 74, 0.08) 1.5px, transparent 1.5px);
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
 }
 
 .bg-hexagon-pattern {
   background-color: transparent;
-  background-image: radial-gradient(circle at 50% 50%, rgba(14, 90, 107, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(circle at 50% 50%, rgba(15, 92, 74, 0.04) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
-/* Footer Gradient from --primary-dark to slightly lighter teal */
+/* Footer Gradient from Deep Forest Green #083327 to #0F5C4A */
 .footer-gradient {
-  background: linear-gradient(180deg, var(--primary-dark) 0%, #114252 100%);
+  background: linear-gradient(180deg, #083327 0%, #0F5C4A 100%);
 }

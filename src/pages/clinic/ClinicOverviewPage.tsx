@@ -129,25 +129,25 @@ export const ClinicOverviewPage: React.FC = () => {
       />
 
       {/* 1. HERO / INTRODUCTION SECTION */}
-      <section className="relative bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 pt-6 pb-12 sm:pb-16 overflow-hidden">
+      <section className="relative bg-gradient-to-b from-[#E8F2EE]/70 via-[#FBF8F1] to-[#FBF8F1] border-b border-[#E8E2D5] pt-6 pb-12 sm:pb-16 overflow-hidden">
         {/* Subtle decorative background glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/15 rounded-full blur-3xl pointer-events-none -z-0" />
-        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-[#EAF7FA]/70 rounded-full blur-2xl pointer-events-none -z-0" />
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0F5C4A]/5 rounded-full blur-3xl pointer-events-none -z-0" />
+        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-[#E8F2EE]/50 rounded-full blur-2xl pointer-events-none -z-0" />
 
         <Container size="xl" className="relative z-10">
           <Breadcrumb items={[{ label: t('nav.clinic') }]} />
 
           <div className="mt-4 max-w-4xl space-y-4">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40">
-                <Building2 className="w-3.5 h-3.5 text-[#103F4A]" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E8F2EE] text-[#0F5C4A] border border-[#0F5C4A]/20">
+                <Building2 className="w-3.5 h-3.5 text-[#0F5C4A]" />
                 <span>{isHindi ? 'क्लिनिक परिचय' : 'OUR CLINIC'}</span>
               </span>
               <VerificationBadge note={isHindi ? 'सत्यापित क्लिनिक विवरण' : 'Verified Clinical Practice'} />
             </div>
 
             <div className="flex items-center gap-3.5 sm:gap-4 pt-1">
-              <div className="h-12 sm:h-14 w-auto flex items-center shrink-0 bg-white px-2 py-1 rounded-xl border border-slate-200/80 shadow-2xs">
+              <div className="h-12 sm:h-14 w-auto flex items-center shrink-0 bg-white px-2.5 py-1 rounded-xl border border-[#E8E2D5] shadow-2xs">
                 <img
                   src={CLINIC_IMAGES.logo}
                   alt="Cardio Diabetic Clinic Logo"
@@ -156,7 +156,7 @@ export const ClinicOverviewPage: React.FC = () => {
                   height={40}
                 />
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B2A26] tracking-tight leading-tight">
                 {clinic ? localize(clinic.name) : 'Cardio Diabetic Clinic'}
               </h1>
             </div>

@@ -53,21 +53,21 @@ export const AboutPage: React.FC = () => {
       />
 
       {/* Header Banner */}
-      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
+      <div className="bg-gradient-to-b from-[#E8F2EE]/70 via-[#FBF8F1] to-[#FBF8F1] border-b border-[#E8E2D5] relative">
         <Container size="xl">
           <Breadcrumb items={[{ label: isHindi ? 'डॉक्टर परिचय' : 'Know Your Doctor' }]} />
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#103F4A]/10 text-[#103F4A] text-xs font-bold uppercase tracking-wider border border-[#65D9D0]/30">
-              <Shield className="w-3.5 h-3.5 text-[#103F4A]" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F2EE] text-[#0F5C4A] text-xs font-bold uppercase tracking-wider border border-[#0F5C4A]/20">
+              <Shield className="w-3.5 h-3.5 text-[#0F5C4A]" />
               {isHindi ? 'वरिष्ठ चिकित्सक परिचय एवं साख' : 'Physician Profile & Credentials'}
             </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#06181f] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#1B2A26] tracking-tight">
               {doctor ? localize(doctor.name) : 'Dr. Soumya Sengupta'}
             </h1>
-            <p className="text-base sm:text-xl text-[#103F4A] font-semibold">
+            <p className="text-base sm:text-xl text-[#B8862B] font-semibold">
               {doctor ? localize(doctor.title) : 'Consultant Diabetologist & Metabolic Physician'}
             </p>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium pt-1">
+            <p className="text-xs sm:text-sm text-[#4A5753] font-medium pt-1">
               {doctor ? localize(doctor.tagline) : 'Practicing Since 2007 • Cardio Diabetic Clinic • Comprehensive Metabolic Health'}
             </p>
           </div>

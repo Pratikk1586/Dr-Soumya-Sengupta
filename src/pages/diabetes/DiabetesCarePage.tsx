@@ -100,23 +100,23 @@ export const DiabetesCarePage: React.FC = () => {
       />
 
       {/* Hero Header */}
-      <div className="bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/60 border-b border-slate-200/80 relative">
+      <div className="bg-gradient-to-b from-[#E8F2EE]/70 via-[#FBF8F1] to-[#FBF8F1] border-b border-[#E8E2D5] relative">
         <Container size="xl">
           <Breadcrumb items={[{ label: isHindi ? 'डायबिटीज केयर' : 'Diabetes Care' }]} />
           <div className="py-8 sm:py-12 max-w-3xl space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40">
-              <Activity className="w-3.5 h-3.5 text-[#103F4A]" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E8F2EE] text-[#0F5C4A] border border-[#0F5C4A]/20">
+              <Activity className="w-3.5 h-3.5 text-[#0F5C4A]" />
               <span>{isHindi ? 'मरीज शिक्षा एवं देखभाल' : 'PATIENT CARE & EDUCATION'}</span>
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#06181f] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B2A26] tracking-tight leading-tight">
               {isHindi ? 'डायबिटीज केयर' : 'Diabetes Care'}
             </h1>
-            <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-[#4A5753] leading-relaxed font-normal">
               {isHindi
                 ? '“डायबिटीज को समझना इसे आत्मविश्वास के साथ प्रबंधित करने की दिशा में पहला कदम है।”'
                 : '“Understanding diabetes is the first step toward managing it with confidence.”'}
             </p>
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#4A5753]/80 leading-relaxed">
               {isHindi
                 ? 'यह खंड आपको और आपके परिवार को स्पष्ट, व्यावहारिक और तनाव-मुक्त जानकारी प्रदान करने के लिए तैयार किया गया है।'
                 : 'This section provides simple, compassionate, and practical guidance so you can take charge of your health without feeling overwhelmed.'}
