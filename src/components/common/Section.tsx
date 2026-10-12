@@ -15,7 +15,7 @@ export const Section: React.FC<SectionProps> = ({
   eyebrow,
   heading,
   lede,
-  containerSize = 'lg',
+  containerSize = 'xl',
   headerAlign = 'left',
   children,
   ...props
@@ -33,7 +33,7 @@ export const Section: React.FC<SectionProps> = ({
             )}
           >
             {eyebrow && (
-              <p className="text-xs font-bold uppercase tracking-wider text-[#0f3d4a] flex items-center gap-1.5 justify-start">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#103F4A] flex items-center gap-1.5 justify-start">
                 {eyebrow}
               </p>
             )}

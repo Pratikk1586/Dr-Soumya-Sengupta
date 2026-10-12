@@ -37,7 +37,8 @@ export const AppointmentTeaserSection: React.FC = () => {
       eyebrow={isHindi ? 'ऑनलाइन ओपीडी शेड्यूलिंग' : 'Online OPD Scheduling Desk'}
       heading={isHindi ? 'परामर्श समय आरक्षित करें' : 'Consultation Scheduling & Slot Reservation'}
       lede={isHindi}
-      className="bg-gradient-to-b from-white to-slate-50/50"
+      containerSize="xl"
+      className="bg-gradient-to-b from-white via-[#FCFEFF] to-[#EAF7FA]/40 border-b border-slate-200/80 relative"
     >
       <div className="grid lg:grid-cols-12 gap-8 items-center">
         {/* Left Column: Practice Overview & CTAs */}
@@ -84,15 +85,15 @@ export const AppointmentTeaserSection: React.FC = () => {
 
         {/* Right Column: Quick Chamber Logistics Card */}
         <div className="lg:col-span-5">
-          <Card padding="lg" className="border-slate-200/90 shadow-md bg-white space-y-5">
+          <Card padding="lg" className="border-slate-200/85 hover:border-[#65D9D0]/60 shadow-md bg-white/95 space-y-5 backdrop-blur-xs">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2 text-[#0f3d4a]">
-                <Clock className="w-5 h-5" />
+              <div className="flex items-center gap-2 text-[#103F4A]">
+                <Clock className="w-5 h-5 text-[#103F4A]" />
                 <h4 className="font-bold text-sm">
                   {isHindi ? 'चेंबर समय सारणी' : 'OPD Consulting Hours'}
                 </h4>
               </div>
-              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+              <span className="text-[11px] font-bold text-[#103F4A] bg-[#E7F8F2] px-2.5 py-0.5 rounded-full border border-[#65D9D0]/50">
                 {isHindi ? 'चाईबासा क्लिनिक' : 'Cardio Diabetic Clinic'}
               </span>
             </div>
@@ -123,7 +124,7 @@ export const AppointmentTeaserSection: React.FC = () => {
             <div className="pt-3 border-t border-slate-100 text-center">
               <Link
                 to="/clinic/timings"
-                className="text-xs font-semibold text-[#0f3d4a] hover:underline inline-flex items-center gap-1"
+                className="text-xs font-semibold text-[#103F4A] hover:underline inline-flex items-center gap-1"
               >
                 <span>{isHindi ? 'विस्तृत ओपीडी नियम व जानकारी' : 'View Full Chamber Schedule & FAQ'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />

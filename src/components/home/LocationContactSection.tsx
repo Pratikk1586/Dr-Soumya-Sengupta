@@ -25,6 +25,7 @@ export const LocationContactSection: React.FC = () => {
       eyebrow={isHindi ? 'चेंबर संपर्क एवं स्थान' : 'Physical Chamber Access'}
       heading={isHindi ? 'स्थान एवं संपर्क विवरण' : 'Location, Timings & Chamber Access'}
       lede={isHindi}
+      containerSize="xl"
       className="bg-[#faf9f6]"
     >
       <div className="grid lg:grid-cols-12 gap-8 items-start">
@@ -45,7 +46,7 @@ export const LocationContactSection: React.FC = () => {
 
             <div className="space-y-4 text-xs sm:text-sm text-slate-700">
               <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-[#0f3d4a] shrink-0 mt-0.5" />
+                <MapPin className="w-5 h-5 text-[#103F4A] shrink-0 mt-0.5" />
                 <div>
                   <strong className="block text-slate-900 font-semibold mb-0.5">
                     {isHindi ? 'चेंबर का पता:' : 'Chamber Postal Address:'}
@@ -58,7 +59,7 @@ export const LocationContactSection: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-3 pt-2 border-t border-slate-100">
-                <Clock className="w-5 h-5 text-[#0f3d4a] shrink-0 mt-0.5" />
+                <Clock className="w-5 h-5 text-[#103F4A] shrink-0 mt-0.5" />
                 <div>
                   <strong className="block text-slate-900 font-semibold mb-0.5">
                     {isHindi ? 'परामर्श समय:' : 'Routine Consulting Hours:'}
@@ -73,7 +74,7 @@ export const LocationContactSection: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-3 pt-2 border-t border-slate-100">
-                <Phone className="w-5 h-5 text-[#0f3d4a] shrink-0 mt-0.5" />
+                <Phone className="w-5 h-5 text-[#103F4A] shrink-0 mt-0.5" />
                 <div>
                   <strong className="block text-slate-900 font-semibold mb-0.5">
                     {isHindi ? 'सीधा संपर्क:' : 'Direct Phone & Desk:'}
@@ -94,11 +95,11 @@ export const LocationContactSection: React.FC = () => {
           </Card>
 
           <div className="flex items-center justify-between px-2 text-xs text-slate-500">
-            <Link to="/clinic/timings" className="font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1">
+            <Link to="/clinic/timings" className="font-semibold text-[#103F4A] hover:underline flex items-center gap-1">
               <span>{isHindi ? 'विस्तृत समय सारणी देखें' : 'View Full OPD Hours & Schedule'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-            <Link to="/contact" className="font-semibold text-[#0f3d4a] hover:underline flex items-center gap-1">
+            <Link to="/contact" className="font-semibold text-[#103F4A] hover:underline flex items-center gap-1">
               <span>{isHindi ? 'सभी संपर्क विकल्प' : 'All Contact Options'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
