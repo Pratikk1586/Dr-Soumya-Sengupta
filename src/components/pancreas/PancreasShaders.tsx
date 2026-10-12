@@ -11,6 +11,9 @@ export const PancreasShaders: React.FC = () => {
       {/* ------------------------------------------------------------- */}
       {/* 1. PROCEDURAL GLANDULAR TEXTURE (Acinar Lobulation)           */}
       {/* ------------------------------------------------------------- */}
+      {/* ------------------------------------------------------------- */}
+      {/* 1. PROCEDURAL GLANDULAR TEXTURE (Acinar Lobulation)           */}
+      {/* ------------------------------------------------------------- */}
       <filter
         id="pancreas-lobular-realistic"
         x="-15%"
@@ -36,16 +39,16 @@ export const PancreasShaders: React.FC = () => {
           yChannelSelector="G"
           result="displacedOrgan"
         />
-        {/* Specular lighting for moist, glistening tissue highlights */}
+        {/* Strong directional key light specular highlight from upper-left (azimuth 225, elevation 54) */}
         <feSpecularLighting
           in="fineNoise"
-          surfaceScale="2.2"
-          specularConstant="0.65"
-          specularExponent="18"
-          lightingColor="#fff4ed"
+          surfaceScale="2.8"
+          specularConstant="0.95"
+          specularExponent="16"
+          lightingColor="#fff8f0"
           result="specularHighlight"
         >
-          <feDistantLight azimuth="225" elevation="52" />
+          <feDistantLight azimuth="225" elevation="54" />
         </feSpecularLighting>
         {/* Clip specular light strictly to organ shape */}
         <feComposite
@@ -89,15 +92,16 @@ export const PancreasShaders: React.FC = () => {
           yChannelSelector="G"
           result="displacedDuodenum"
         />
+        {/* Upper-left key light on duodenum */}
         <feSpecularLighting
           in="mucosalNoise"
-          surfaceScale="1.8"
-          specularConstant="0.5"
+          surfaceScale="2.4"
+          specularConstant="0.82"
           specularExponent="14"
-          lightingColor="#ffe4e6"
+          lightingColor="#fff1f2"
           result="specHighlight"
         >
-          <feDistantLight azimuth="215" elevation="45" />
+          <feDistantLight azimuth="225" elevation="50" />
         </feSpecularLighting>
         <feComposite in="specHighlight" in2="displacedDuodenum" operator="in" result="clippedSpec" />
         <feBlend in="displacedDuodenum" in2="clippedSpec" mode="screen" />
@@ -123,13 +127,13 @@ export const PancreasShaders: React.FC = () => {
         />
         <feSpecularLighting
           in="capsuleNoise"
-          surfaceScale="3.2"
-          specularConstant="0.9"
-          specularExponent="28"
-          lightingColor="#ffd1dc"
+          surfaceScale="3.6"
+          specularConstant="1.25"
+          specularExponent="26"
+          lightingColor="#ffe4e6"
           result="capsularGloss"
         >
-          <feDistantLight azimuth="220" elevation="60" />
+          <feDistantLight azimuth="225" elevation="58" />
         </feSpecularLighting>
         <feComposite in="capsularGloss" in2="SourceGraphic" operator="in" result="clippedGloss" />
         <feBlend in="SourceGraphic" in2="clippedGloss" mode="screen" />
@@ -158,14 +162,25 @@ export const PancreasShaders: React.FC = () => {
       </filter>
 
       {/* ------------------------------------------------------------- */}
-      {/* 6. REALISTIC ANATOMICAL ORGAN DROP SHADOW                     */}
+      {/* 6. REALISTIC ANATOMICAL SHADOWS & LIGHTING                    */}
       {/* ------------------------------------------------------------- */}
+      {/* Contact shadow blur filter */}
+      <filter id="contact-shadow-blur" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="3.8" />
+      </filter>
+
+      {/* Soft drop shadow under the whole organ group */}
+      <filter id="whole-group-drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="14" stdDeviation="18" floodColor="#06181f" floodOpacity="0.22" />
+        <feDropShadow dx="0" dy="5" stdDeviation="8" floodColor="#103F4A" floodOpacity="0.16" />
+      </filter>
+
       <filter id="anatomical-depth-shadow" x="-15%" y="-15%" width="130%" height="130%">
         <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#103F4A" floodOpacity="0.18" />
       </filter>
 
       <filter id="lens-shadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="8" stdDeviation="10" floodColor="#06181f" floodOpacity="0.35" />
+        <feDropShadow dx="0" dy="8" stdDeviation="10" floodColor="#06181f" floodOpacity="0.3" />
       </filter>
 
       {/* ------------------------------------------------------------- */}
@@ -204,19 +219,19 @@ export const PancreasShaders: React.FC = () => {
         <stop offset="100%" stopColor="#c5473e" />
       </linearGradient>
 
-      {/* Spleen (Deep Maroon / Glossy Plum Tissue) */}
-      <radialGradient id="spleen-maroon-grad" cx="40%" cy="35%" r="65%">
-        <stop offset="0%" stopColor="#9b2743" />
-        <stop offset="40%" stopColor="#7a1831" />
-        <stop offset="75%" stopColor="#5c1023" />
-        <stop offset="100%" stopColor="#3d0715" />
+      {/* Spleen (Deep Maroon / Glossy Plum Tissue with Oval Volume) */}
+      <radialGradient id="spleen-maroon-grad" cx="38%" cy="32%" r="68%">
+        <stop offset="0%" stopColor="#b0314f" />
+        <stop offset="30%" stopColor="#8d1c37" />
+        <stop offset="65%" stopColor="#671027" />
+        <stop offset="100%" stopColor="#430818" />
       </radialGradient>
 
-      {/* Duct of Wirsung (Translucent Pale-Amber / Golden Secretory Duct) */}
+      {/* Duct of Wirsung (Continuous Thin Pale-Yellow Secretory Tube) */}
       <linearGradient id="wirsung-duct-grad" x1="100%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#fef08a" stopOpacity="0.95" />
-        <stop offset="45%" stopColor="#fde047" stopOpacity="0.9" />
-        <stop offset="100%" stopColor="#eab308" stopOpacity="0.85" />
+        <stop offset="0%" stopColor="#fef9c3" stopOpacity="0.95" />
+        <stop offset="45%" stopColor="#fef08a" stopOpacity="0.95" />
+        <stop offset="100%" stopColor="#fde047" stopOpacity="0.9" />
       </linearGradient>
 
       {/* Splenic & Mesenteric Artery (Oxygenated Crimson Arterial Blood) */}
@@ -244,26 +259,26 @@ export const PancreasShaders: React.FC = () => {
 
       {/* Inset Loupe Magnifier Glass Reflection */}
       <linearGradient id="lens-glass-glare" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.45" />
-        <stop offset="40%" stopColor="#ffffff" stopOpacity="0.08" />
-        <stop offset="60%" stopColor="#65D9D0" stopOpacity="0.05" />
-        <stop offset="100%" stopColor="#ffffff" stopOpacity="0.2" />
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.38" />
+        <stop offset="35%" stopColor="#ffffff" stopOpacity="0.08" />
+        <stop offset="65%" stopColor="#65D9D0" stopOpacity="0.04" />
+        <stop offset="100%" stopColor="#ffffff" stopOpacity="0.18" />
       </linearGradient>
 
-      {/* Metallic Chrome Bezel for Inset Loupe */}
-      <linearGradient id="lens-bezel-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#94a3b8" />
-        <stop offset="25%" stopColor="#f8fafc" />
-        <stop offset="50%" stopColor="#64748b" />
-        <stop offset="75%" stopColor="#f1f5f9" />
-        <stop offset="100%" stopColor="#475569" />
+      {/* Thin Glass Rim for Inset Loupe */}
+      <linearGradient id="lens-glass-rim" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+        <stop offset="25%" stopColor="#65D9D0" stopOpacity="0.5" />
+        <stop offset="50%" stopColor="#ffffff" stopOpacity="0.25" />
+        <stop offset="75%" stopColor="#65D9D0" stopOpacity="0.6" />
+        <stop offset="100%" stopColor="#ffffff" stopOpacity="0.85" />
       </linearGradient>
 
       {/* Projection Cone Gradient */}
       <linearGradient id="lens-cone-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#65D9D0" stopOpacity="0.4" />
-        <stop offset="60%" stopColor="#65D9D0" stopOpacity="0.15" />
-        <stop offset="100%" stopColor="#103F4A" stopOpacity="0.05" />
+        <stop offset="0%" stopColor="#65D9D0" stopOpacity="0.35" />
+        <stop offset="60%" stopColor="#65D9D0" stopOpacity="0.12" />
+        <stop offset="100%" stopColor="#103F4A" stopOpacity="0.04" />
       </linearGradient>
 
       {/* Beta Cell Cytoplasm & Membrane Gradient (Pink/Magenta) */}

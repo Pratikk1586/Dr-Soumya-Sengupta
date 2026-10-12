@@ -14,14 +14,14 @@ interface IsletLoupeInsetProps {
 export const IsletLoupeInset: React.FC<IsletLoupeInsetProps> = ({ isVisible, isHindi = false }) => {
   if (!isVisible) return null;
 
-  // Loupe Center & Radius
+  // Loupe Center & Radius (Calibrated to fit cleanly within SVG viewport)
   const cx = 398;
-  const cy = 372;
-  const r = 70;
+  const cy = 346;
+  const r = 66;
 
-  // Origin point in the pancreas tail where islets cluster
-  const originX = 388;
-  const originY = 216;
+  // Origin point in the pancreas tail where islets cluster densely
+  const originX = 430;
+  const originY = 190;
 
   return (
     <g id="islet-loupe-inset" className="transition-opacity duration-300" opacity={isVisible ? 1 : 0}>
@@ -29,9 +29,9 @@ export const IsletLoupeInset: React.FC<IsletLoupeInsetProps> = ({ isVisible, isH
       {/* 1. OPTICAL PROJECTION CONE (From Pancreatic Tail to Loupe Lens)  */}
       {/* ----------------------------------------------------------------- */}
       <polygon
-        points={`${originX},${originY} ${cx - r + 12},${cy - r + 14} ${cx + r - 12},${cy - r + 14}`}
+        points={`${originX},${originY} ${cx - r + 15},${cy - r + 16} ${cx + r - 15},${cy - r + 16}`}
         fill="url(#lens-cone-grad)"
-        opacity="0.25"
+        opacity="0.28"
         pointerEvents="none"
       />
       <line
@@ -61,19 +61,28 @@ export const IsletLoupeInset: React.FC<IsletLoupeInsetProps> = ({ isVisible, isH
       <circle cx={originX} cy={originY} r="2" fill="#f59e0b" />
 
       {/* ----------------------------------------------------------------- */}
-      {/* 2. LOUPE LENS HOUSING & DROP SHADOW                              */}
+      {/* 2. LOUPE LENS HOUSING, THIN GLASS RIM & DROP SHADOW              */}
       {/* ----------------------------------------------------------------- */}
-      {/* Outer shadow */}
-      <circle cx={cx} cy={cy} r={r + 3} fill="none" filter="url(#lens-shadow)" opacity="0.6" />
+      {/* Outer soft shadow */}
+      <circle cx={cx} cy={cy} r={r + 2} fill="none" filter="url(#lens-shadow)" opacity="0.5" />
 
-      {/* Chrome Bezel Rim */}
+      {/* Thinner, elegant glass-like rim with soft specular reflection */}
       <circle
         cx={cx}
         cy={cy}
-        r={r + 2}
+        r={r + 1.5}
         fill="none"
-        stroke="url(#lens-bezel-grad)"
-        strokeWidth="4.5"
+        stroke="url(#lens-glass-rim)"
+        strokeWidth="1.8"
+      />
+      <circle
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.45)"
+        strokeWidth="0.8"
+        pointerEvents="none"
       />
 
       {/* Inner Dark Microscopic Field Background */}
@@ -258,34 +267,74 @@ export const IsletLoupeInset: React.FC<IsletLoupeInsetProps> = ({ isVisible, isH
         {/* 4. CURVED GLASS GLARE & SPECULAR LENS REFLECTION              */}
         {/* ------------------------------------------------------------- */}
         <path
-          d={`M ${cx - r + 10} ${cy - 15} A ${r} ${r} 0 0 1 ${cx + 15} ${cy - r + 10} A ${r - 18} ${r - 18} 0 0 0 ${cx - r + 10} ${cy - 15} Z`}
+          d={`M ${cx - r + 8} ${cy - 12} A ${r} ${r} 0 0 1 ${cx + 12} ${cy - r + 8} A ${r - 16} ${r - 16} 0 0 0 ${cx - r + 8} ${cy - 12} Z`}
           fill="url(#lens-glass-glare)"
           pointerEvents="none"
         />
 
-        {/* Bottom edge reflection arc */}
+        {/* Bottom edge soft reflection arc */}
         <path
-          d={`M ${cx - 20} ${cy + r - 8} A ${r} ${r} 0 0 0 ${cx + r - 12} ${cy + 10} A ${r - 15} ${r - 15} 0 0 1 ${cx - 20} ${cy + r - 8} Z`}
+          d={`M ${cx - 24} ${cy + r - 10} A ${r} ${r} 0 0 0 ${cx + r - 14} ${cy + 8} A ${r - 18} ${r - 18} 0 0 1 ${cx - 24} ${cy + r - 10} Z`}
           fill="#ffffff"
-          opacity="0.12"
+          opacity="0.1"
           pointerEvents="none"
         />
       </g>
 
       {/* ----------------------------------------------------------------- */}
-      {/* 5. HISTOLOGICAL LABELS & CALIBRATION SCALE                        */}
+      {/* 5. HISTOLOGICAL LABELS (Banner placed BELOW loupe to avoid label collisions) */}
       {/* ----------------------------------------------------------------- */}
-      {/* Top magnification badge */}
-      <g transform={`translate(${cx}, ${cy - r + 14})`}>
+      {/* Cellular Legend Badge (Inside bottom edge of lens) */}
+      <g transform={`translate(${cx}, ${cy + r - 14})`}>
         <rect
-          x="-50"
-          y="-8"
-          width="100"
-          height="16"
-          rx="8"
-          fill="rgba(16, 63, 74, 0.92)"
+          x="-58"
+          y="-7"
+          width="116"
+          height="14"
+          rx="7"
+          fill="rgba(6, 24, 31, 0.92)"
+          stroke="rgba(101, 217, 208, 0.35)"
+          strokeWidth="0.8"
+        />
+        {/* Beta legend */}
+        <circle cx="-45" cy="0" r="2.6" fill="#d946ef" />
+        <text
+          x="-39"
+          y="2.6"
+          fontSize="6.5"
+          fontWeight="700"
+          fill="#fdf4ff"
+          fontFamily="sans-serif"
+        >
+          {isHindi ? 'बीटा (इंसुलिन)' : 'Beta (Insulin)'}
+        </text>
+
+        {/* Alpha legend */}
+        <circle cx="10" cy="0" r="2.6" fill="#f97316" />
+        <text
+          x="16"
+          y="2.6"
+          fontSize="6.5"
+          fontWeight="700"
+          fill="#fed7aa"
+          fontFamily="sans-serif"
+        >
+          {isHindi ? 'अल्फा' : 'Alpha'}
+        </text>
+      </g>
+
+      {/* Loupe Banner: Positioned neatly below the loupe */}
+      <g transform={`translate(${cx}, ${cy + r + 13})`}>
+        <rect
+          x="-64"
+          y="-10"
+          width="128"
+          height="20"
+          rx="10"
+          fill="#103F4A"
           stroke="#65D9D0"
-          strokeWidth="1"
+          strokeWidth="1.2"
+          filter="url(#anatomical-depth-shadow)"
         />
         <text
           x="0"
@@ -298,45 +347,6 @@ export const IsletLoupeInset: React.FC<IsletLoupeInsetProps> = ({ isVisible, isH
           letterSpacing="0.08em"
         >
           {isHindi ? 'सूक्ष्मदर्शी दृश्य (1000×)' : 'HISTOLOGY LOUPE (1000×)'}
-        </text>
-      </g>
-
-      {/* Bottom Cellular Legend Badge */}
-      <g transform={`translate(${cx}, ${cy + r - 13})`}>
-        <rect
-          x="-62"
-          y="-8"
-          width="124"
-          height="16"
-          rx="8"
-          fill="rgba(6, 24, 31, 0.94)"
-          stroke="rgba(101, 217, 208, 0.4)"
-          strokeWidth="0.8"
-        />
-        {/* Beta legend */}
-        <circle cx="-48" cy="0" r="2.8" fill="#d946ef" />
-        <text
-          x="-42"
-          y="2.8"
-          fontSize="6.5"
-          fontWeight="700"
-          fill="#fdf4ff"
-          fontFamily="sans-serif"
-        >
-          {isHindi ? 'बीटा (इंसुलिन)' : 'Beta (Insulin)'}
-        </text>
-
-        {/* Alpha legend */}
-        <circle cx="8" cy="0" r="2.8" fill="#f97316" />
-        <text
-          x="14"
-          y="2.8"
-          fontSize="6.5"
-          fontWeight="700"
-          fill="#fed7aa"
-          fontFamily="sans-serif"
-        >
-          {isHindi ? 'अल्फा' : 'Alpha'}
         </text>
       </g>
     </g>

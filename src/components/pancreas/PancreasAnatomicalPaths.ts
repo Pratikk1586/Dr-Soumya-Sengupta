@@ -2,13 +2,15 @@
  * Realistic Anatomical Paths for the Human Pancreas, Duodenum, Spleen & Vascular System.
  * ViewBox: 0 0 540 500
  *
- * Designed with medical anatomical proportions:
- * - Duodenal C-loop on the anatomical right (viewer's left)
- * - Pancreatic Head nestled inside the C-loop
- * - Pancreatic Neck, Body and Tail stretching obliquely across to the splenic hilum
- * - Main Pancreatic Duct (Duct of Wirsung) coursing through the gland
- * - Splenic Artery & Vein crossing along the postero-superior margin
- * - Deep maroon Spleen abutting the tail
+ * Refined Medical Anatomical Proportions:
+ * - Duodenal C-loop on anatomical right (viewer's left)
+ * - Pancreatic Head snug inside the C-loop with ZERO gap
+ * - Neck narrowing, body slender and gently arching across midline
+ * - Tail extending to and reaching the splenic hilum
+ * - Continuous thin pale-yellow Duct of Wirsung joining duodenum at Ampulla of Vater
+ * - Splenic vein running along posterior surface of body/tail; tortuous splenic artery above it
+ * - Oval spleen with subtle hilum notch and glossy highlight
+ * - Contact shadow along duodenal-pancreatic junction
  */
 
 export const REALISTIC_PATHS = {
@@ -24,99 +26,97 @@ export const REALISTIC_PATHS = {
 
   // 2. DUODENAL C-LOOP (Salmon-pink, D1 bulb, D2 descending, D3 horizontal, D4 ascending)
   duodenumMain:
-    'M 175 185 C 150 175, 115 185, 95 210 C 72 238, 68 285, 75 330 C 82 370, 110 405, 155 412 C 195 418, 235 400, 255 375 C 265 362, 260 348, 245 345 C 230 342, 215 355, 195 360 C 160 368, 130 355, 120 325 C 112 295, 115 255, 135 235 C 150 220, 170 222, 185 228 Z',
+    'M 175 180 C 145 172, 110 182, 88 208 C 65 236, 60 282, 66 332 C 72 376, 102 414, 150 422 C 195 428, 238 410, 260 382 C 270 368, 264 350, 246 348 C 228 346, 212 358, 188 364 C 152 372, 130 354, 122 322 C 116 290, 116 250, 134 228 C 148 214, 166 216, 180 220 Z',
 
   duodenumLumenHighlight:
-    'M 160 195 C 135 192, 108 210, 92 238 C 78 268, 76 312, 85 348 C 96 385, 128 402, 165 402 C 198 402, 230 388, 245 368',
+    'M 160 190 C 135 188, 104 205, 86 235 C 72 268, 68 312, 76 348 C 86 388, 120 410, 158 412 C 195 412, 232 396, 250 375',
 
-  // Plicae circulares (circular mucosal folds inside the duodenum)
+  // Plicae circulares (circular mucosal folds inside duodenum)
   duodenalFolds: [
-    'M 145 190 C 135 198, 125 208, 120 215',
-    'M 125 210 C 112 222, 105 235, 100 248',
-    'M 108 238 C 95 255, 90 272, 88 290',
-    'M 98 275 C 88 295, 86 315, 88 335',
-    'M 96 320 C 92 342, 98 360, 110 375',
-    'M 112 360 C 122 378, 138 392, 155 398',
-    'M 148 385 C 165 398, 185 402, 205 398',
-    'M 190 380 C 208 388, 225 382, 238 372',
+    'M 142 188 C 132 196, 122 206, 116 215',
+    'M 120 208 C 108 222, 100 236, 94 250',
+    'M 102 238 C 90 256, 84 274, 82 292',
+    'M 92 278 C 82 298, 80 318, 82 338',
+    'M 90 324 C 86 346, 92 366, 104 382',
+    'M 106 366 C 116 384, 132 398, 150 404',
+    'M 142 392 C 160 406, 180 410, 202 406',
+    'M 188 386 C 208 394, 226 388, 240 376',
   ],
 
-  // 3. PANCREATIC HEAD & UNCINATE PROCESS (Lobulated acinar parenchyma)
+  // 3. PANCREATIC HEAD & UNCINATE PROCESS (Snug inside C-loop with ZERO gap)
   headParenchyma:
-    'M 185 228 C 170 238, 155 255, 150 275 C 145 295, 152 320, 168 338 C 182 355, 205 365, 228 362 C 248 358, 258 342, 252 325 C 248 312, 235 305, 225 302 C 210 298, 205 285, 212 270 C 220 252, 228 240, 240 235 C 225 228, 202 224, 185 228 Z',
+    'M 226 230 C 200 212, 174 204, 148 206 C 130 212, 120 230, 118 255 C 118 290, 124 322, 132 352 C 156 364, 188 366, 218 360 C 238 350, 248 332, 238 312 C 230 286, 226 260, 226 230 Z',
 
   uncinateProcess:
-    'M 215 330 C 225 348, 242 358, 255 352 C 265 345, 262 330, 250 320 C 238 312, 225 318, 215 330 Z',
+    'M 218 340 C 230 358, 248 362, 258 350 C 265 340, 260 326, 246 318 C 235 312, 222 322, 218 340 Z',
 
-  // 4. PANCREATIC BODY (Corpus pancreatis - acinar glandular bridge)
+  // Contact shadow path along junction between duodenum and head of pancreas
+  contactShadowDuodenum:
+    'M 172 208 C 142 216, 120 242, 118 278 C 118 322, 126 352, 156 364 C 182 368, 214 366, 236 354',
+
+  // 4. PANCREATIC BODY (Slender, gently arching with narrowed neck)
   bodyParenchyma:
-    'M 240 235 C 255 230, 275 225, 305 220 C 335 215, 365 212, 388 208 C 392 222, 388 238, 375 248 C 350 262, 315 270, 278 275 C 255 278, 242 265, 238 250 C 235 242, 238 238, 240 235 Z',
+    'M 218 230 C 242 224, 280 215, 325 208 C 365 202, 385 198, 398 196 C 398 214, 385 220, 365 224 C 325 234, 280 244, 242 254 C 220 260, 214 246, 218 230 Z',
 
-  // 5. PANCREATIC TAIL (Cauda pancreatis - tapering into splenic hilum)
+  // 5. PANCREATIC TAIL (Slender, tapering and reaching the splenic hilum)
   tailParenchyma:
-    'M 388 208 C 405 204, 425 198, 442 190 C 448 196, 446 205, 438 214 C 424 228, 405 238, 388 242 C 375 245, 382 225, 388 208 Z',
+    'M 398 196 C 418 190, 438 184, 454 186 C 454 188, 438 194, 418 204 C 405 210, 398 214, 398 196 Z',
 
-  // Lobulation surface contours (nodular bumps on parenchyma)
+  // Combined overall pancreas silhouette for soft retroperitoneal drop shadow
+  pancreasGroupSilhouette:
+    'M 175 180 C 110 182, 60 282, 66 332 C 72 376, 102 414, 150 422 C 195 428, 242 410, 260 382 C 262 360, 254 340, 248 332 C 280 244, 365 224, 418 204 C 438 194, 454 188, 455 186 C 472 250, 520 202, 518 172 C 494 148, 466 135, 450 182 C 438 184, 398 196, 325 208 C 280 216, 242 226, 224 230 C 190 220, 158 218, 134 228 C 148 214, 166 216, 180 220 Z',
+
+  // Lobulation surface contours (nodular acinar bumps on parenchyma)
   parenchymalLobules: [
-    'M 175 255 C 185 250, 195 258, 192 268 C 188 275, 178 272, 175 255 Z',
-    'M 195 285 C 205 280, 218 288, 214 298 C 208 308, 196 302, 195 285 Z',
-    'M 165 295 C 175 288, 186 295, 184 308 C 180 318, 168 312, 165 295 Z',
-    'M 265 240 C 278 235, 290 242, 288 252 C 284 260, 270 258, 265 240 Z',
-    'M 310 230 C 322 225, 335 232, 332 242 C 328 250, 315 248, 310 230 Z',
-    'M 355 222 C 368 218, 380 225, 378 235 C 374 242, 360 240, 355 222 Z',
-    'M 405 212 C 418 208, 428 215, 425 224 C 420 230, 410 226, 405 212 Z',
+    'M 148 245 C 158 240, 168 248, 165 258 C 160 265, 150 262, 148 245 Z',
+    'M 172 278 C 182 272, 194 280, 190 290 C 185 298, 174 294, 172 278 Z',
+    'M 145 298 C 155 290, 166 298, 164 308 C 160 316, 148 312, 145 298 Z',
+    'M 180 328 C 190 322, 202 330, 198 340 C 192 346, 182 342, 180 328 Z',
+    'M 255 234 C 268 228, 278 235, 275 244 C 270 250, 258 248, 255 234 Z',
+    'M 295 224 C 308 218, 320 225, 316 234 C 312 240, 300 238, 295 224 Z',
+    'M 340 214 C 352 208, 364 215, 360 224 C 356 230, 345 228, 340 214 Z',
+    'M 382 204 C 394 198, 404 205, 400 214 C 396 220, 386 218, 382 204 Z',
+    'M 425 194 C 435 188, 444 194, 440 200 C 436 205, 428 204, 425 194 Z',
   ],
 
-  // 6. MAIN PANCREATIC DUCT (Duct of Wirsung + side tributaries)
+  // 6. MAIN PANCREATIC DUCT (Continuous, thin pale-yellow tube, joining duodenum at head)
   ductOfWirsung:
-    'M 438 195 C 415 204, 380 214, 340 222 C 300 230, 265 242, 235 255 C 215 264, 198 278, 185 295 C 178 305, 170 308, 162 308',
+    'M 450 186 C 422 192, 380 202, 335 218 C 290 234, 254 246, 226 248 C 198 250, 168 266, 148 288 C 136 300, 126 308, 118 308',
 
-  ductSideBranches: [
-    'M 410 205 L 415 198',
-    'M 390 210 L 392 202',
-    'M 370 216 L 375 208',
-    'M 365 218 L 362 228',
-    'M 335 224 L 338 214',
-    'M 330 226 L 328 236',
-    'M 295 232 L 298 222',
-    'M 290 235 L 288 248',
-    'M 255 246 L 260 236',
-    'M 250 250 L 246 262',
-    'M 215 268 L 222 258',
-    'M 205 274 L 198 285',
-  ],
+  // 7. VASCULAR AXIS (Splenic Vein posterior to body/tail; tortuous Splenic Artery above it)
+  // Splenic Vein (Royal blue, posterior surface of body and tail)
+  splenicVein:
+    'M 452 188 C 422 196, 378 208, 332 222 C 292 234, 258 244, 230 252',
 
-  // 7. VASCULAR AXIS (Splenic Artery, Splenic Vein, Portal Confluence)
-  // Splenic Artery (Tortuous crimson red vessel riding the superior margin)
+  // Splenic Artery (Crimson red, characteristically tortuous along superior border ABOVE vein)
   splenicArtery:
-    'M 245 222 C 265 212, 275 226, 295 214 C 315 202, 328 218, 350 206 C 372 194, 388 210, 410 198 C 425 190, 435 186, 448 182',
+    'M 224 222 C 238 200, 256 196, 268 210 C 282 222, 302 196, 318 190 C 334 186, 350 204, 366 194 C 382 184, 396 198, 414 188 C 428 178, 442 184, 452 180',
 
   splenicArteryBranches: [
-    'M 285 218 L 290 228',
-    'M 335 210 L 340 222',
-    'M 385 202 L 390 214',
-    'M 425 192 L 430 202',
+    'M 268 210 L 274 222',
+    'M 318 190 L 324 206',
+    'M 366 194 L 372 206',
+    'M 414 188 L 418 200',
+    'M 448 181 L 454 174',
+    'M 450 183 L 456 190',
   ],
 
-  // Splenic Vein (Deep royal blue vessel running posterior to body and tail)
-  splenicVein:
-    'M 445 192 C 420 204, 385 215, 345 225 C 310 234, 280 242, 255 252',
-
-  // Portal Vein & Superior Mesenteric Vein (SMV)
+  // Portal Vein Confluence & Superior Mesenteric Vein (SMV)
   portalVeinConfluence:
-    'M 255 252 C 262 235, 268 210, 275 185 C 285 188, 292 205, 285 230 C 280 248, 274 270, 268 310 C 260 350, 255 370, 248 385 L 238 382 C 245 365, 250 342, 258 305 C 262 278, 260 262, 255 252 Z',
+    'M 230 252 C 238 234, 244 208, 250 185 C 260 188, 266 205, 260 230 C 255 248, 248 270, 242 310 C 236 350, 230 370, 224 385 L 214 382 C 220 365, 226 342, 232 305 C 236 278, 234 262, 230 252 Z',
 
   // Superior Mesenteric Artery (SMA)
   superiorMesentericArtery:
-    'M 268 220 C 272 245, 270 280, 262 320 C 256 350, 250 375, 245 388',
+    'M 242 220 C 246 245, 244 280, 238 320 C 232 350, 226 375, 220 388',
 
-  // 8. SPLEEN (Deep maroon organ abutting the tail at upper-right)
+  // 8. SPLEEN (Oval shape with subtle hilum notch and glossy highlight)
   spleenOrgan:
-    'M 442 165 C 455 140, 485 132, 505 148 C 522 162, 528 192, 520 215 C 512 238, 492 255, 472 258 C 452 260, 440 248, 436 230 C 432 215, 438 200, 445 190 C 440 182, 438 174, 442 165 Z',
+    'M 466 135 C 494 148, 518 172, 520 202 C 512 228, 490 248, 472 250 C 455 222, 448 202, 446 186 C 445 178, 452 165, 466 135 Z',
 
   spleenHilumNotch:
-    'M 445 190 C 448 198, 452 205, 458 210',
+    'M 445 178 C 448 186, 448 194, 452 202',
 
-  spleenGastrosplenicFold:
-    'M 465 152 C 485 170, 495 200, 488 235',
+  spleenGlossyHighlight:
+    'M 470 142 C 492 152, 510 172, 512 195 C 506 182, 492 165, 474 152 Z',
 };
+

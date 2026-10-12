@@ -59,10 +59,10 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
     diabeticRelevance:
       'Primary target in diabetes: destroyed by autoimmunity in Type 1 and exhausted by chronic insulin resistance in Type 2.',
     hotspot: {
-      cx: 375,
-      cy: 220,
-      calloutX: 420,
-      calloutY: 300,
+      cx: 415,
+      cy: 192,
+      calloutX: 415,
+      calloutY: 250,
       title: 'Beta Cells & Islets',
       titleHi: 'बीटा कोशिकाएं एवं द्वीप',
     },
@@ -85,10 +85,10 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
     diabeticRelevance:
       'Preserving functional beta-cell reserve in the tail is vital for long-term metabolic control.',
     hotspot: {
-      cx: 418,
-      cy: 200,
-      calloutX: 450,
-      calloutY: 135,
+      cx: 442,
+      cy: 188,
+      calloutX: 455,
+      calloutY: 125,
       title: 'Pancreatic Tail',
       titleHi: 'पैन्क्रियाटिक टेल',
     },
@@ -112,8 +112,8 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
       'Visceral lipid accumulation in the body parenchyma accelerates insulin resistance.',
     hotspot: {
       cx: 310,
-      cy: 235,
-      calloutX: 295,
+      cy: 220,
+      calloutX: 300,
       calloutY: 110,
       title: 'Pancreatic Body',
       titleHi: 'पैन्क्रियाटिक बॉडी',
@@ -137,10 +137,10 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
     diabeticRelevance:
       'Coordinates with duodenal incretins (GLP-1) to trigger early-phase insulin release upon nutrient entry.',
     hotspot: {
-      cx: 195,
-      cy: 275,
-      calloutX: 115,
-      calloutY: 380,
+      cx: 170,
+      cy: 290,
+      calloutX: 110,
+      calloutY: 390,
       title: 'Head of Pancreas',
       titleHi: 'हेड ऑफ पैन्क्रियाज',
     },
@@ -163,10 +163,10 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
     diabeticRelevance:
       'Exocrine insufficiency frequently coexists with long-standing diabetes, altering glycemic stability.',
     hotspot: {
-      cx: 290,
-      cy: 250,
-      calloutX: 285,
-      calloutY: 345,
+      cx: 255,
+      cy: 242,
+      calloutX: 255,
+      calloutY: 335,
       title: 'Duct of Wirsung',
       titleHi: 'डक्ट ऑफ विर्सुंग',
     },
@@ -189,9 +189,9 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
     diabeticRelevance:
       'The incretin gut-pancreas axis accounts for 50–70% of postprandial insulin release.',
     hotspot: {
-      cx: 110,
-      cy: 260,
-      calloutX: 55,
+      cx: 88,
+      cy: 275,
+      calloutX: 52,
       calloutY: 195,
       title: 'Duodenal C-Loop',
       titleHi: 'ड्यूओडिनल सी-लूप',
@@ -215,10 +215,10 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
     diabeticRelevance:
       'Delivers newly secreted portal insulin directly to hepatic circulation for first-pass glycemic regulation.',
     hotspot: {
-      cx: 355,
-      cy: 165,
-      calloutX: 385,
-      calloutY: 70,
+      cx: 345,
+      cy: 185,
+      calloutX: 375,
+      calloutY: 65,
       title: 'Vascular Axis',
       titleHi: 'वैस्कुलर एक्सिस',
     },
@@ -241,10 +241,10 @@ export const PANCREAS_DATA: Record<PancreasPartId, PancreasPartInfo> = {
     diabeticRelevance:
       'Splenic vasculature carries newly released pancreatic hormones directly toward the portal system.',
     hotspot: {
-      cx: 468,
-      cy: 185,
-      calloutX: 475,
-      calloutY: 245,
+      cx: 485,
+      cy: 180,
+      calloutX: 480,
+      calloutY: 235,
       title: 'Spleen',
       titleHi: 'प्लीहा (Spleen)',
     },

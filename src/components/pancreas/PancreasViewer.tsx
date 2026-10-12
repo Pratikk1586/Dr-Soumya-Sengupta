@@ -172,13 +172,13 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
       )}
 
       {/* SVG Canvas Container */}
-      <div className="relative w-full max-w-[520px] aspect-[540/480] shrink-0 flex items-center justify-center">
+      <div className="relative w-full max-w-[520px] aspect-[540/490] shrink-0 flex items-center justify-center">
         <svg
           viewBox="0 0 540 500"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full drop-shadow-xl"
-          style={{ maxWidth: 520, maxHeight: 480, zIndex: 10 }}
+          style={{ maxWidth: 520, maxHeight: 490, zIndex: 10 }}
         >
           {/* Procedural Shaders, Filters & Organic Gradients */}
           <PancreasShaders />
@@ -191,9 +191,20 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
           </g>
 
           {/* ------------------------------------------------------------ */}
-          {/* 0. STOMACH SILHOUETTE (Soft Retroperitoneal Context)         */}
+          {/* 0. SOFT DROP SHADOW UNDER THE WHOLE GROUP                    */}
           {/* ------------------------------------------------------------ */}
-          <g id="stomach-backdrop" pointerEvents="none" opacity="0.28">
+          <path
+            d={REALISTIC_PATHS.pancreasGroupSilhouette}
+            fill="#081e26"
+            filter="url(#whole-group-drop-shadow)"
+            opacity="0.32"
+            pointerEvents="none"
+          />
+
+          {/* ------------------------------------------------------------ */}
+          {/* 1. STOMACH SILHOUETTE (Soft Retroperitoneal Context)         */}
+          {/* ------------------------------------------------------------ */}
+          <g id="stomach-backdrop" pointerEvents="none" opacity="0.22">
             <path
               d={REALISTIC_PATHS.stomachSilhouette}
               fill="url(#stomach-bed-grad)"
@@ -208,25 +219,15 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
                 stroke="#94a3b8"
                 strokeWidth="1.1"
                 fill="none"
-                opacity="0.45"
+                opacity="0.4"
                 strokeLinecap="round"
               />
             ))}
-            <text
-              x="290"
-              y="110"
-              fill="#475569"
-              fontSize="7.5"
-              fontWeight="600"
-              opacity="0.75"
-              letterSpacing="0.08em"
-            >
-              STOMACH (ANTERIOR BED)
-            </text>
+            {/* Label hidden to prevent collision with Pancreatic Body label */}
           </g>
 
           {/* ------------------------------------------------------------ */}
-          {/* 1. SPLEEN (Organ layer abutting the tail at hilum)           */}
+          {/* 2. SPLEEN (Oval organ abutting tail at hilum, glossy finish) */}
           {/* ------------------------------------------------------------ */}
           <g
             id="spleen"
@@ -238,7 +239,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
             opacity={getLayerOpacity('spleen')}
             style={{
               transform: isLayerActive('spleen') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '480px 200px',
+              transformOrigin: '480px 190px',
             }}
             onMouseEnter={() => handlePartHover('spleen')}
             onMouseLeave={() => handlePartHover(null)}
@@ -262,7 +263,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
                 pointerEvents="none"
               />
             )}
-            {/* Realistic Glossy Organ Body */}
+            {/* Oval Organ Body with Glossy 3D Shading */}
             <path
               d={REALISTIC_PATHS.spleenOrgan}
               fill="url(#spleen-maroon-grad)"
@@ -278,34 +279,17 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               strokeLinecap="round"
               pointerEvents="none"
             />
-            {/* Gastrosplenic fold ridge */}
+            {/* Glossy highlight on convex superolateral capsule */}
             <path
-              d={REALISTIC_PATHS.spleenGastrosplenicFold}
-              stroke="#ffffff"
-              strokeWidth="1.2"
-              strokeOpacity="0.25"
-              fill="none"
-              strokeLinecap="round"
+              d={REALISTIC_PATHS.spleenGlossyHighlight}
+              fill="url(#lens-glass-glare)"
+              opacity="0.75"
               pointerEvents="none"
             />
-            {/* Subtle Label */}
-            <text
-              x="475"
-              y="180"
-              fill="#ffffff"
-              fontSize="7.5"
-              fontWeight="700"
-              opacity="0.9"
-              textAnchor="middle"
-              pointerEvents="none"
-              letterSpacing="0.05em"
-            >
-              SPLEEN
-            </text>
           </g>
 
           {/* ------------------------------------------------------------ */}
-          {/* 2. VASCULAR AXIS (Splenic Artery & Vein, SMV, Portal Confl)  */}
+          {/* 3. VASCULAR AXIS (Splenic Vein posterior; Artery above)      */}
           {/* ------------------------------------------------------------ */}
           <g
             id="vasculature"
@@ -331,12 +315,13 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               }
             }}
           >
-            {/* Portal Confluence & Splenic Vein (Royal Blue) */}
+            {/* Portal Confluence & SMV (Royal Blue) */}
             <path
               d={REALISTIC_PATHS.portalVeinConfluence}
               fill="url(#splenic-vein-grad)"
               filter={isLayerActive('vasculature') ? 'url(#hover-glow-teal)' : 'url(#vessel-3d-sheen)'}
             />
+            {/* Splenic Vein: Running along posterior surface of body and tail */}
             <path
               d={REALISTIC_PATHS.splenicVein}
               stroke="url(#splenic-vein-grad)"
@@ -346,11 +331,11 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               filter={isLayerActive('vasculature') ? 'url(#hover-glow-teal)' : 'url(#vessel-3d-sheen)'}
             />
 
-            {/* Splenic Artery (Crimson Red, Undulating along superior border) */}
+            {/* Splenic Artery: Tortuous crimson vessel running superiorly ABOVE the vein */}
             <path
               d={REALISTIC_PATHS.splenicArtery}
               stroke="url(#splenic-artery-grad)"
-              strokeWidth="4.5"
+              strokeWidth="4.2"
               strokeLinecap="round"
               fill="none"
               filter={isLayerActive('vasculature') ? 'url(#hover-glow-teal)' : 'url(#vessel-3d-sheen)'}
@@ -379,7 +364,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
           </g>
 
           {/* ------------------------------------------------------------ */}
-          {/* 3. DUODENAL C-LOOP (Salmon-pink muscular wall & folds)        */}
+          {/* 4. DUODENAL C-LOOP (Salmon-pink muscular wall & folds)        */}
           {/* ------------------------------------------------------------ */}
           <g
             id="duodenum"
@@ -447,7 +432,21 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
           </g>
 
           {/* ------------------------------------------------------------ */}
-          {/* 4. HEAD OF PANCREAS & UNCINATE PROCESS                       */}
+          {/* 5. CONTACT OCCLUSION SHADOW (Duodenum - Pancreatic Head)     */}
+          {/* ------------------------------------------------------------ */}
+          <path
+            d={REALISTIC_PATHS.contactShadowDuodenum}
+            stroke="#160502"
+            strokeWidth="5.5"
+            strokeLinecap="round"
+            fill="none"
+            filter="url(#contact-shadow-blur)"
+            opacity="0.72"
+            pointerEvents="none"
+          />
+
+          {/* ------------------------------------------------------------ */}
+          {/* 6. HEAD OF PANCREAS & UNCINATE PROCESS (Snug inside C-Loop)  */}
           {/* ------------------------------------------------------------ */}
           <g
             id="head"
@@ -459,7 +458,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
             opacity={getLayerOpacity('head')}
             style={{
               transform: isLayerActive('head') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '200px 290px',
+              transformOrigin: '185px 290px',
             }}
             onMouseEnter={() => handlePartHover('head')}
             onMouseLeave={() => handlePartHover(null)}
@@ -489,7 +488,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               filter="url(#pancreas-lobular-realistic)"
               opacity="0.95"
             />
-            {/* Head Lobulated Parenchyma */}
+            {/* Head Lobulated Parenchyma: snug with zero gap inside C-Loop */}
             <path
               d={REALISTIC_PATHS.headParenchyma}
               fill="url(#pancreas-head-grad)"
@@ -498,7 +497,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
           </g>
 
           {/* ------------------------------------------------------------ */}
-          {/* 5. PANCREATIC BODY (Corpus pancreatis)                       */}
+          {/* 7. PANCREATIC BODY (Slender, gently arching, narrowed neck)  */}
           {/* ------------------------------------------------------------ */}
           <g
             id="body"
@@ -510,7 +509,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
             opacity={getLayerOpacity('body')}
             style={{
               transform: isLayerActive('body') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '315px 245px',
+              transformOrigin: '315px 225px',
             }}
             onMouseEnter={() => handlePartHover('body')}
             onMouseLeave={() => handlePartHover(null)}
@@ -533,7 +532,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
                 pointerEvents="none"
               />
             )}
-            {/* Glandular Body Tissue with Shaded Acinar Texture */}
+            {/* Slender Arched Glandular Body Tissue */}
             <path
               d={REALISTIC_PATHS.bodyParenchyma}
               fill="url(#pancreas-body-grad)"
@@ -542,7 +541,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
           </g>
 
           {/* ------------------------------------------------------------ */}
-          {/* 6. PANCREATIC TAIL (Cauda pancreatis)                        */}
+          {/* 8. PANCREATIC TAIL (Tapering to splenic hilum)               */}
           {/* ------------------------------------------------------------ */}
           <g
             id="tail"
@@ -554,7 +553,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
             opacity={getLayerOpacity('tail')}
             style={{
               transform: isLayerActive('tail') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '415px 215px',
+              transformOrigin: '425px 195px',
             }}
             onMouseEnter={() => handlePartHover('tail')}
             onMouseLeave={() => handlePartHover(null)}
@@ -577,7 +576,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
                 pointerEvents="none"
               />
             )}
-            {/* Tapering Tail Lobules */}
+            {/* Tapering Tail Lobules Reaching Splenic Hilum */}
             <path
               d={REALISTIC_PATHS.tailParenchyma}
               fill="url(#pancreas-tail-grad)"
@@ -599,8 +598,20 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
             ))}
           </g>
 
+          {/* Upper-left directional key light specular highlight ridge */}
+          <g pointerEvents="none" opacity="0.55">
+            <path
+              d="M 235 228 C 270 218, 320 210, 365 204 C 395 198, 425 190, 450 186"
+              stroke="#ffffff"
+              strokeWidth="1.6"
+              strokeOpacity="0.45"
+              fill="none"
+              strokeLinecap="round"
+            />
+          </g>
+
           {/* ------------------------------------------------------------ */}
-          {/* 7. DUCT OF WIRSUNG (Translucent Amber Channel & Tributaries)  */}
+          {/* 9. DUCT OF WIRSUNG (Continuous, thin pale-yellow tube)       */}
           {/* ------------------------------------------------------------ */}
           <g
             id="duct"
@@ -612,7 +623,7 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
             opacity={getLayerOpacity('duct')}
             style={{
               transform: isLayerActive('duct') ? 'scale(1.02)' : 'scale(1)',
-              transformOrigin: '300px 240px',
+              transformOrigin: '280px 240px',
             }}
             onMouseEnter={() => handlePartHover('duct')}
             onMouseLeave={() => handlePartHover(null)}
@@ -626,46 +637,54 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               }
             }}
           >
-            {/* Tributary branches */}
-            {REALISTIC_PATHS.ductSideBranches.map((br, idx) => (
+            {/* Active hover glow halo */}
+            {isLayerActive('duct') && (
               <path
-                key={idx}
-                d={br}
-                stroke="url(#wirsung-duct-grad)"
-                strokeWidth="1.6"
-                strokeOpacity="0.85"
-                fill="none"
+                d={REALISTIC_PATHS.ductOfWirsung}
+                stroke="#65D9D0"
+                strokeWidth="5"
                 strokeLinecap="round"
+                fill="none"
+                filter="url(#hover-glow-teal)"
+                opacity="0.9"
                 pointerEvents="none"
               />
-            ))}
-            {/* Main Duct Spine */}
+            )}
+            {/* Translucent pale-yellow outer sheath visible through parenchyma */}
+            <path
+              d={REALISTIC_PATHS.ductOfWirsung}
+              stroke="#fef08a"
+              strokeWidth="3.2"
+              strokeOpacity="0.45"
+              strokeLinecap="round"
+              fill="none"
+              pointerEvents="none"
+            />
+            {/* Main continuous, thin pale-yellow duct tube */}
             <path
               d={REALISTIC_PATHS.ductOfWirsung}
               stroke="url(#wirsung-duct-grad)"
-              strokeWidth="4.2"
+              strokeWidth="2.0"
               strokeLinecap="round"
               fill="none"
-              filter={isLayerActive('duct') ? 'url(#hover-glow-teal)' : 'none'}
             />
-            {/* Delicate Enzyme Flow Animation */}
+            {/* Continuous translucent fluid inner sheen */}
             <path
               d={REALISTIC_PATHS.ductOfWirsung}
               stroke="#ffffff"
-              strokeWidth="1.8"
+              strokeWidth="0.8"
               strokeLinecap="round"
+              strokeOpacity="0.75"
               fill="none"
-              className="ap-wirsung-flow"
-              opacity="0.8"
               pointerEvents="none"
             />
-            {/* Ampulla of Vater Papilla sphincter */}
-            <circle cx="162" cy="308" r="4.5" fill="#fde047" stroke="#ca8a04" strokeWidth="1" pointerEvents="none" />
-            <circle cx="162" cy="308" r="2" fill="#ffffff" pointerEvents="none" />
+            {/* Ampulla of Vater junction at medial duodenal wall */}
+            <circle cx="118" cy="308" r="3.2" fill="#fde047" stroke="#ca8a04" strokeWidth="0.9" pointerEvents="none" />
+            <circle cx="118" cy="308" r="1.4" fill="#ffffff" pointerEvents="none" />
           </g>
 
           {/* ------------------------------------------------------------ */}
-          {/* 8. BETA CELLS & ISLETS (Islets of Langerhans)                */}
+          {/* 10. BETA CELLS & ISLETS (Islets of Langerhans)               */}
           {/* ------------------------------------------------------------ */}
           <g
             id="islets"
@@ -687,23 +706,26 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
               }
             }}
           >
-            {/* Micro-Islet Golden/Amber Spheres across parenchyma */}
+            {/* Micro-Islet Golden/Amber Spheres distributed across parenchyma */}
             {[
-              { cx: 428, cy: 198, r: 6.2 },
-              { cx: 405, cy: 215, r: 6.5 },
-              { cx: 388, cy: 216, r: 7.2 },
-              { cx: 355, cy: 228, r: 6.0 },
-              { cx: 325, cy: 235, r: 6.8 },
-              { cx: 285, cy: 245, r: 5.8 },
-              { cx: 230, cy: 260, r: 5.5 },
-              { cx: 185, cy: 290, r: 6.5 },
+              { cx: 442, cy: 190, r: 3.6 },
+              { cx: 432, cy: 184, r: 4.0 },
+              { cx: 422, cy: 198, r: 3.8 },
+              { cx: 410, cy: 192, r: 4.2 },
+              { cx: 392, cy: 210, r: 4.0 },
+              { cx: 365, cy: 204, r: 3.8 },
+              { cx: 335, cy: 210, r: 3.8 },
+              { cx: 295, cy: 220, r: 3.6 },
+              { cx: 310, cy: 238, r: 3.6 },
+              { cx: 180, cy: 242, r: 3.8 },
+              { cx: 155, cy: 275, r: 3.8 },
             ].map((islet, idx) => (
               <g key={idx}>
                 {/* Bioluminescent halo */}
                 <circle
                   cx={islet.cx}
                   cy={islet.cy}
-                  r={islet.r * 1.6}
+                  r={islet.r * 1.5}
                   fill="none"
                   stroke="#65D9D0"
                   strokeWidth="1.2"
