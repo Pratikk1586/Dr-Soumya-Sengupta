@@ -74,31 +74,31 @@ export const CareJourneySection: React.FC = () => {
           : 'A transparent, collaborative 6-step medical roadmap for confident, continuous diabetes care.'
       }
       containerSize="xl"
-      className="bg-gradient-to-b from-[#FCFEFF] via-[#F8FCFD] to-white border-b border-slate-200/80 py-10 sm:py-14 relative"
+      className="bg-[#F7FAFA] border-b border-[#D7E5E6] py-10 sm:py-14 relative"
     >
       <div className="relative">
-        {/* Desktop horizontal connecting progress line */}
+        {/* Desktop horizontal dotted connecting progress line */}
         <div
-          className="hidden lg:block absolute top-6 left-12 right-12 h-0.5 bg-gradient-to-r from-[#103F4A] via-[#65D9D0] to-[#103F4A]/60 z-0"
+          className="hidden lg:block absolute top-7 left-12 right-12 h-0 border-t-2 border-dotted border-[#0E5A6B]/40 z-0"
           aria-hidden="true"
         />
 
-        {/* Mobile vertical connecting progress line */}
+        {/* Mobile vertical dotted connecting progress line */}
         <div
-          className="lg:hidden absolute top-6 bottom-8 left-5 sm:left-6 w-0.5 bg-gradient-to-b from-[#103F4A] via-[#65D9D0] to-[#103F4A]/60 z-0"
+          className="lg:hidden absolute top-7 bottom-10 left-7 w-0 border-l-2 border-dotted border-[#0E5A6B]/40 z-0"
           aria-hidden="true"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 sm:gap-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5 sm:gap-4 relative z-10">
           {JOURNEY_STEPS.map((step) => {
             const StepIcon = step.icon;
             return (
               <div
                 key={step.step}
-                className="flex items-start gap-3.5 lg:flex-col lg:items-center lg:text-center group"
+                className="flex items-start gap-4 lg:flex-col lg:items-center lg:text-center group"
               >
-                {/* Larger Step Number Circle */}
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#103F4A] text-white flex items-center justify-center font-bold text-sm sm:text-base shadow-sm ring-4 ring-white shrink-0 z-10 border-2 border-[#65D9D0] group-hover:scale-105 transition-transform">
+                {/* Large Step Numeral Badge */}
+                <div className="w-14 h-14 rounded-full bg-[#0E5A6B] text-white flex items-center justify-center font-extrabold text-lg sm:text-xl shadow-[0_4px_12px_rgba(14,90,107,0.2)] ring-4 ring-[#E8F5F4] border-2 border-white group-hover:scale-105 group-hover:bg-[#0B2E3A] transition-all duration-200 shrink-0 z-10">
                   {step.step}
                 </div>
 
@@ -106,18 +106,18 @@ export const CareJourneySection: React.FC = () => {
                 <Card
                   padding="sm"
                   hoverable
-                  className="flex-1 p-3.5 sm:p-4 border-slate-200/85 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-xs transition-all bg-white/95 w-full flex flex-col justify-between"
+                  className="flex-1 p-3.5 sm:p-4 border-[#D7E5E6] hover:border-[#0E5A6B]/60 shadow-xs hover:shadow-md transition-all bg-white w-full flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-center gap-2 mb-1 lg:justify-center">
-                      <div className="w-6 h-6 rounded bg-[#EAF7FA] flex items-center justify-center text-[#103F4A] shrink-0">
+                    <div className="flex items-center gap-2 mb-1.5 lg:justify-center">
+                      <div className="w-7 h-7 rounded-lg bg-[#E8F5F4] border border-[#D7E5E6] flex items-center justify-center text-[#0E5A6B] shrink-0 group-hover:bg-[#0E5A6B] group-hover:text-white transition-colors">
                         <StepIcon className="w-3.5 h-3.5" aria-hidden="true" />
                       </div>
-                      <h3 className="font-bold text-slate-900 text-xs sm:text-sm">
+                      <h3 className="font-bold text-[#1B2B34] text-xs sm:text-sm">
                         {step.title[langKey]}
                       </h3>
                     </div>
-                    <p className="text-xs text-slate-600 mt-1 leading-snug">
+                    <p className="text-xs text-[#4F6470] mt-1 leading-snug">
                       {step.desc[langKey]}
                     </p>
                   </div>
@@ -128,12 +128,12 @@ export const CareJourneySection: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-6 text-center flex flex-wrap items-center justify-center gap-3">
+      <div className="mt-8 text-center flex flex-wrap items-center justify-center gap-3">
         <Link to="/diabetes-care/management">
           <Button
             variant="outline"
             size="sm"
-            className="border-[#103F4A]/30 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all text-xs"
+            className="border-[#0E5A6B]/40 text-[#0E5A6B] hover:bg-[#0E5A6B] hover:text-white transition-all text-xs"
           >
             <span>{isHindi ? 'डायबिटीज प्रबंधन गाइड पढ़ें' : 'Read Full Diabetes Management Guide'}</span>
             <ArrowRight className="w-3.5 h-3.5 ml-1" />

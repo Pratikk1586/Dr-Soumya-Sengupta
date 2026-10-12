@@ -13,6 +13,7 @@ import {
 import { Section } from '../common/Section';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
+import { HbA1cRangeBar } from '../common/HbA1cRangeBar';
 import { useLanguage } from '../../context/useLanguage';
 
 export const KnowYourProblemSection: React.FC = () => {
@@ -74,28 +75,28 @@ export const KnowYourProblemSection: React.FC = () => {
           : 'Simple, educational guides to help you understand your symptoms and routine lab measurements.'
       }
       containerSize="xl"
-      className="bg-gradient-to-b from-[#FCFEFF] via-[#F8FCFD] to-[#F3F9FA] border-b border-slate-200/80 py-10 sm:py-14 relative"
+      className="bg-[#E8F5F4] border-b border-[#D7E5E6] py-10 sm:py-14 relative"
     >
       <div className="grid md:grid-cols-2 gap-5 sm:gap-6">
         {/* Card 1: Know Your Problem (Symptoms) */}
         <Card
           padding="md"
-          className="p-5 sm:p-6 flex flex-col justify-between bg-white/95 border-slate-200/85 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-xs transition-all backdrop-blur-xs"
+          className="p-5 sm:p-6 flex flex-col justify-between bg-white border-[#D7E5E6] hover:border-[#0E5A6B]/50 shadow-xs hover:shadow-md transition-all"
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#103F4A] bg-[#E7F8F2] px-2 py-0.5 rounded border border-[#65D9D0]/50 inline-flex items-center gap-1">
-                <HelpCircle className="w-3 h-3 text-[#103F4A]" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#0E5A6B] bg-[#E8F5F4] px-2.5 py-0.5 rounded-full border border-[#D7E5E6] inline-flex items-center gap-1">
+                <HelpCircle className="w-3 h-3 text-[#0E5A6B]" />
                 <span>{isHindi ? 'लक्षण मार्गदर्शिका' : 'Symptoms Guide'}</span>
               </span>
-              <span className="text-[11px] text-slate-500 font-medium">Part 1</span>
+              <span className="text-[11px] text-[#4F6470] font-medium">Part 1</span>
             </div>
 
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              <h3 className="text-base sm:text-lg font-bold text-[#1B2B34]">
                 {isHindi ? 'अपनी समस्या समझें (लक्षण)' : 'Know Your Problem'}
               </h3>
-              <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+              <p className="text-xs text-[#4F6470] mt-0.5 leading-relaxed">
                 {isHindi
                   ? 'सामान्य शारीरिक लक्षणों का अर्थ समझें और डॉक्टर से परामर्श हेतु तैयार रहें।'
                   : 'Understand what common body signals might indicate before your consultation.'}
@@ -108,17 +109,17 @@ export const KnowYourProblemSection: React.FC = () => {
                 return (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-lg bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-3"
+                    className="p-2.5 rounded-lg bg-[#F7FAFA] border border-[#D7E5E6]/70 flex items-center justify-between gap-3 group hover:border-[#0E5A6B]/40 transition-colors"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-md bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center shrink-0 border border-[#65D9D0]/30">
-                        <ItemIcon className="w-3.5 h-3.5 text-[#103F4A]" />
+                      <div className="w-7 h-7 rounded-md bg-[#E8F5F4] text-[#0E5A6B] flex items-center justify-center shrink-0 border border-[#D7E5E6] group-hover:bg-[#0E5A6B] group-hover:text-white transition-colors">
+                        <ItemIcon className="w-3.5 h-3.5" />
                       </div>
                       <div className="min-w-0">
-                        <span className="font-semibold text-xs text-slate-900 block truncate">
+                        <span className="font-semibold text-xs text-[#1B2B34] block truncate">
                           {item.title}
                         </span>
-                        <span className="text-[11px] text-slate-500 block truncate">
+                        <span className="text-[11px] text-[#4F6470] block truncate">
                           {item.hint}
                         </span>
                       </div>
@@ -129,12 +130,12 @@ export const KnowYourProblemSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-slate-100">
+          <div className="pt-4 mt-4 border-t border-[#D7E5E6]">
             <Link to="/patient-resources/know-your-problem">
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full justify-between border-[#103F4A]/30 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all text-xs"
+                className="w-full justify-between border-[#0E5A6B]/40 text-[#0E5A6B] hover:bg-[#0E5A6B] hover:text-white transition-all text-xs"
               >
                 <span>{isHindi ? 'सभी लक्षण व समस्याएं विस्तार से देखें' : 'Explore All Symptoms & Concerns'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -143,25 +144,25 @@ export const KnowYourProblemSection: React.FC = () => {
           </div>
         </Card>
 
-        {/* Card 2: Understand Your Numbers (Reports) */}
+        {/* Card 2: Understand Your Numbers (Reports) + HbA1c Range Bar Graphic */}
         <Card
           padding="md"
-          className="p-5 sm:p-6 flex flex-col justify-between bg-white/95 border-slate-200/85 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-xs transition-all backdrop-blur-xs"
+          className="p-5 sm:p-6 flex flex-col justify-between bg-white border-[#D7E5E6] hover:border-[#0E5A6B]/50 shadow-xs hover:shadow-md transition-all"
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#103F4A] bg-[#E7F8F2] px-2 py-0.5 rounded border border-[#65D9D0]/50 inline-flex items-center gap-1">
-                <LineChart className="w-3 h-3 text-[#103F4A]" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#0E5A6B] bg-[#E8F5F4] px-2.5 py-0.5 rounded-full border border-[#D7E5E6] inline-flex items-center gap-1">
+                <LineChart className="w-3 h-3 text-[#0E5A6B]" />
                 <span>{isHindi ? 'लैब रिपोर्ट्स' : 'Lab Biomarkers'}</span>
               </span>
-              <span className="text-[11px] text-slate-500 font-medium">Part 2</span>
+              <span className="text-[11px] text-[#4F6470] font-medium">Part 2</span>
             </div>
 
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              <h3 className="text-base sm:text-lg font-bold text-[#1B2B34]">
                 {isHindi ? 'अपनी रिपोर्ट्स समझें (नंबर्स)' : 'Understand Your Numbers'}
               </h3>
-              <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+              <p className="text-xs text-[#4F6470] mt-0.5 leading-relaxed">
                 {isHindi
                   ? 'HbA1c, शुगर, बीपी और कोलेस्ट्रॉल रिपोर्ट का अर्थ सरल भाषा में जानें।'
                   : 'Clear, plain-English explanations of what routine test results mean.'}
@@ -174,17 +175,17 @@ export const KnowYourProblemSection: React.FC = () => {
                 return (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-lg bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-3"
+                    className="p-2.5 rounded-lg bg-[#F7FAFA] border border-[#D7E5E6]/70 flex items-center justify-between gap-3 group hover:border-[#0E5A6B]/40 transition-colors"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-md bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center shrink-0 border border-[#65D9D0]/30">
-                        <ItemIcon className="w-3.5 h-3.5 text-[#103F4A]" />
+                      <div className="w-7 h-7 rounded-md bg-[#E8F5F4] text-[#0E5A6B] flex items-center justify-center shrink-0 border border-[#D7E5E6] group-hover:bg-[#0E5A6B] group-hover:text-white transition-colors">
+                        <ItemIcon className="w-3.5 h-3.5" />
                       </div>
                       <div className="min-w-0">
-                        <span className="font-semibold text-xs text-slate-900 block truncate">
+                        <span className="font-semibold text-xs text-[#1B2B34] block truncate">
                           {item.title}
                         </span>
-                        <span className="text-[11px] text-slate-500 block truncate">
+                        <span className="text-[11px] text-[#4F6470] block truncate">
                           {item.hint}
                         </span>
                       </div>
@@ -193,14 +194,19 @@ export const KnowYourProblemSection: React.FC = () => {
                 );
               })}
             </div>
+
+            {/* HbA1c Range Bar Graphic clearly marked general education */}
+            <div className="pt-1">
+              <HbA1cRangeBar />
+            </div>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-slate-100">
+          <div className="pt-4 mt-4 border-t border-[#D7E5E6]">
             <Link to="/patient-resources/understand-your-reports">
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full justify-between border-[#103F4A]/30 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all text-xs"
+                className="w-full justify-between border-[#0E5A6B]/40 text-[#0E5A6B] hover:bg-[#0E5A6B] hover:text-white transition-all text-xs"
               >
                 <span>{isHindi ? 'सभी लैब रिपोर्ट्स विस्तार से समझें' : 'Understand All Lab Reports in Detail'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
