@@ -3,16 +3,23 @@
 @theme {
   --color-primary-950: #06181f;
   --color-primary-900: #0a252f;
-  --color-primary-800: #0f3d4a;
+  --color-primary-800: #103F4A;
   --color-primary-700: #145466;
   --color-primary-600: #1b6c83;
   --color-primary-500: #238ba7;
-  --color-primary-100: #dff0f4;
-  --color-primary-50: #f0f7f9;
+  --color-primary-100: #EAF7FA;
+  --color-primary-50: #EAF7FA;
 
-  --color-surface-bg: #fcfdfd;
+  /* Curated Dr. Sengupta Medical Brand Tokens */
+  --color-medical-teal: #103F4A;
+  --color-medical-aqua: #65D9D0;
+  --color-medical-ice: #EAF7FA;
+  --color-medical-mint: #E7F8F2;
+  --color-medical-warm: #FCFEFF;
+
+  --color-surface-bg: #FCFEFF;
   --color-surface-card: #ffffff;
-  --color-surface-muted: #f8fafc;
+  --color-surface-muted: #F4FBFC;
   --color-surface-border: #e2e8f0;
   --color-surface-border-subtle: #f1f5f9;
 
@@ -33,8 +40,9 @@
   --color-error-border: #fecaca;
 
   --color-text-main: #0f172a;
-  --color-text-muted: #475569;
-  --color-text-subtle: #64748b;
+  --color-text-main: #0f172a;
+  --color-text-muted: #334155;
+  --color-text-subtle: #475569;
 
   --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -57,11 +65,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+::selection {
+  background-color: #EAF7FA;
+  color: #103F4A;
+}
+
 html,
 body,
 #root {
   max-width: 100%;
   overflow-x: clip;
+  color: var(--color-text-main);
+}
+
+/* Base Body Text Contrast - WCAG AA & AAA compliant */
+p, li, blockquote {
+  color: var(--color-text-muted);
 }
 
 /* Devanagari Typography Tuning: Enhanced line-height, strictly NO letter-spacing */
@@ -72,22 +91,61 @@ html[lang="hi"],
   letter-spacing: normal !important;
 }
 
-/* WCAG 2.2 Focus Indicators */
+/* WCAG 2.2 Highly Visible Focus Indicators */
 :focus-visible {
-  outline: 2px solid var(--color-primary-700);
-  outline-offset: 2px;
+  outline: 2px solid #103F4A !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 3px rgba(101, 217, 208, 0.45) !important;
   border-radius: var(--radius-sm);
 }
 
-/* Reduced Motion Preference */
+/* WCAG 2.5.5 / 2.5.8 Minimum Touch Target Size (44px) */
+.min-touch-target,
+button:not(.btn-icon-inline),
+a[role="button"] {
+  min-height: 44px;
+}
+
+/* Scroll-reveal animations */
+@keyframes scrollReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  animation: scrollReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-reveal-auto {
+    animation: scrollReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 25%;
+  }
+}
+
+/* Reduced Motion Preference - Strictly disables all transitions and animations */
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
   ::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .scroll-reveal,
+  .scroll-reveal-auto {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
   }
 }
 
@@ -108,4 +166,13 @@ html[lang="hi"],
 
 ::-webkit-scrollbar-thumb:hover {
   background: #9aaab1;
+}
+
+/* Scientific background pattern utilities */
+.bg-medical-subtle {
+  background: radial-gradient(circle at 50% 0%, rgba(234, 247, 250, 0.7) 0%, rgba(252, 254, 255, 0.95) 75%);
+}
+
+.bg-hero-glow {
+  background: radial-gradient(circle, rgba(101, 217, 208, 0.22) 0%, rgba(16, 63, 74, 0.08) 50%, transparent 75%);
 }

@@ -23,7 +23,7 @@ export const Section: React.FC<SectionProps> = ({
   const hasHeader = eyebrow || heading || lede;
 
   return (
-    <section className={cn('py-12 md:py-16 lg:py-20', className)} {...props}>
+    <section className={cn('py-12 md:py-16 lg:py-20 scroll-reveal-auto', className)} {...props}>
       <Container size={containerSize}>
         {hasHeader && (
           <header
@@ -43,7 +43,7 @@ export const Section: React.FC<SectionProps> = ({
               </h2>
             )}
             {lede && (
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+              <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
                 {lede}
               </p>
             )}
