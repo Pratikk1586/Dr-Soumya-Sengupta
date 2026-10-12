@@ -31,29 +31,23 @@ export const HeroSection: React.FC = () => {
   );
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#FCFEFF] via-[#F4FBFC] to-[#EAF7FA]/80 pt-4 pb-4 sm:pt-6 sm:pb-6 lg:pt-8 lg:pb-8">
-      {/* 1. Sophisticated Ambient Lighting Glows (Palette: #103F4A, #65D9D0, #EAF7FA, #E7F8F2) */}
-      {/* Soft radial aqua & deep medical teal glow behind pancreas illustration */}
+    <section className="relative overflow-hidden bg-[#F7FAFA] pt-4 pb-4 sm:pt-6 sm:pb-6 lg:pt-8 lg:pb-8">
+      {/* Subtle Molecule / Hexagon line pattern */}
+      <div className="absolute inset-0 bg-molecule-pattern opacity-40 pointer-events-none z-0" aria-hidden="true" />
+
+      {/* 1. Soft radial teal glow behind pancreas illustration */}
       <div
-        className="absolute top-1/2 -translate-y-1/2 right-[2%] lg:right-[6%] w-[380px] sm:w-[460px] lg:w-[520px] h-[380px] sm:h-[460px] lg:h-[520px] rounded-full pointer-events-none blur-3xl"
+        className="absolute top-1/2 -translate-y-1/2 right-[2%] lg:right-[6%] w-[380px] sm:w-[480px] lg:w-[560px] h-[380px] sm:h-[480px] lg:h-[560px] rounded-full pointer-events-none blur-3xl z-0"
         style={{
-          background: 'radial-gradient(circle, rgba(101,217,208,0.22) 0%, rgba(16,63,74,0.08) 50%, transparent 75%)',
+          background: 'radial-gradient(circle, rgba(14,90,107,0.22) 0%, rgba(232,245,244,0.45) 45%, transparent 75%)',
         }}
         aria-hidden="true"
       />
-      {/* Faint cool-blue & soft mint glow behind doctor portrait and left header */}
+      {/* Faint cool-teal & soft ice glow behind doctor portrait and left header */}
       <div
-        className="absolute top-8 left-2 sm:left-8 w-72 sm:w-88 h-72 sm:h-88 rounded-full pointer-events-none blur-3xl"
+        className="absolute top-8 left-2 sm:left-8 w-72 sm:w-88 h-72 sm:h-88 rounded-full pointer-events-none blur-3xl z-0"
         style={{
-          background: 'radial-gradient(circle, rgba(234,247,250,0.7) 0%, rgba(101,217,208,0.14) 40%, rgba(231,248,242,0.2) 60%, transparent 80%)',
-        }}
-        aria-hidden="true"
-      />
-      {/* Subtle top-center ambient diffusion */}
-      <div
-        className="hidden lg:block absolute -top-20 left-1/3 w-80 h-80 rounded-full pointer-events-none blur-3xl"
-        style={{
-          background: 'radial-gradient(circle, rgba(101,217,208,0.12) 0%, rgba(234,247,250,0.4) 60%, transparent 80%)',
+          background: 'radial-gradient(circle, rgba(232,245,244,0.7) 0%, rgba(14,90,107,0.10) 40%, transparent 80%)',
         }}
         aria-hidden="true"
       />
@@ -121,7 +115,7 @@ export const HeroSection: React.FC = () => {
               <div className="relative shrink-0">
                 {/* Faint cool-blue & aqua ambient halo */}
                 <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-[#65D9D0]/35 to-[#EAF7FA]/90 blur-xs pointer-events-none" />
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-[84px] lg:h-[84px] rounded-2xl overflow-hidden ring-2 ring-[#103F4A]/25 shadow-sm bg-slate-100">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-[84px] lg:h-[84px] rounded-2xl overflow-hidden ring-2 ring-[#0E5A6B]/30 shadow-[0_4px_16px_rgba(14,90,107,0.14)] bg-slate-100">
                   <img
                     src={CLINIC_IMAGES.doctorProfile}
                     alt="Dr. Soumya Sengupta — Consultant Diabetologist & Metabolic Physician"
@@ -133,17 +127,17 @@ export const HeroSection: React.FC = () => {
                 </div>
               </div>
               <div className="min-w-0">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[38px] xl:text-[42px] font-extrabold text-slate-950 tracking-[-0.025em] leading-[1.2]">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[38px] xl:text-[42px] font-extrabold text-[#1B2B34] tracking-[-0.025em] leading-[1.2]">
                   {doctor ? localize(doctor.name) : 'Dr. Soumya Sengupta'}
                 </h1>
-                <p className="text-sm sm:text-base md:text-lg font-bold text-[#103F4A] mt-0.5 sm:mt-1 leading-snug tracking-tight">
+                <p className="text-sm sm:text-base md:text-lg font-bold text-[#0E5A6B] mt-0.5 sm:mt-1 leading-snug tracking-tight">
                   {doctor ? localize(doctor.title) : 'Consultant Diabetologist & Metabolic Physician'}
                 </p>
               </div>
             </div>
 
             {/* Short Clinical Introduction */}
-            <p className="text-sm sm:text-base text-slate-700 leading-relaxed max-w-2xl font-normal pt-0.5">
+            <p className="text-sm sm:text-base text-[#4F6470] leading-relaxed max-w-2xl font-normal pt-0.5">
               {doctor ? localize(doctor.shortBio) : (
                 <>
                   Practicing physician since 2007 (19+ years in diabetes care) dedicated to early diabetes detection, hypertension control,
@@ -152,34 +146,34 @@ export const HeroSection: React.FC = () => {
               )}
             </p>
 
-            {/* Condition Chips: Single Accent Color, Each Linking to Its Dedicated Page */}
+            {/* Condition Chips: Uniform Teal-Tint Style, Each Linking to Its Dedicated Page */}
             <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
               <Link
                 to="/conditions/diabetes"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/60 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all font-semibold shadow-2xs group"
+                className="condition-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-semibold shadow-2xs group"
               >
-                <Activity className="w-3.5 h-3.5 text-[#103F4A] group-hover:text-white shrink-0 transition-colors" />
+                <Activity className="w-3.5 h-3.5 text-[#0E5A6B] group-hover:text-white shrink-0 transition-colors" />
                 <span>{isHindi ? 'डायबिटीज' : 'Diabetes Care'}</span>
               </Link>
               <Link
                 to="/conditions/thyroid"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/60 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all font-semibold shadow-2xs group"
+                className="condition-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-semibold shadow-2xs group"
               >
-                <Flame className="w-3.5 h-3.5 text-[#103F4A] group-hover:text-white shrink-0 transition-colors" />
+                <Flame className="w-3.5 h-3.5 text-[#0E5A6B] group-hover:text-white shrink-0 transition-colors" />
                 <span>{isHindi ? 'थायरॉयड' : 'Thyroid Disorders'}</span>
               </Link>
               <Link
                 to="/conditions/weight-management"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/60 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all font-semibold shadow-2xs group"
+                className="condition-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-semibold shadow-2xs group"
               >
-                <Scale className="w-3.5 h-3.5 text-[#103F4A] group-hover:text-white shrink-0 transition-colors" />
+                <Scale className="w-3.5 h-3.5 text-[#0E5A6B] group-hover:text-white shrink-0 transition-colors" />
                 <span>{isHindi ? 'वजन प्रबंधन' : 'Weight Management'}</span>
               </Link>
               <Link
                 to="/conditions/metabolic-health"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EAF7FA] border border-[#65D9D0]/60 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all font-semibold shadow-2xs group"
+                className="condition-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-semibold shadow-2xs group"
               >
-                <HeartPulse className="w-3.5 h-3.5 text-[#103F4A] group-hover:text-white shrink-0 transition-colors" />
+                <HeartPulse className="w-3.5 h-3.5 text-[#0E5A6B] group-hover:text-white shrink-0 transition-colors" />
                 <span>{isHindi ? 'मेटाबोलिक व दिल' : 'Metabolic Health'}</span>
               </Link>
             </div>
@@ -203,9 +197,9 @@ export const HeroSection: React.FC = () => {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto border-emerald-500/80 text-emerald-800 bg-emerald-50/70 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 font-bold px-5 transition-all shadow-xs"
+                    className="w-full sm:w-auto border-[#1E9E5A] text-[#1E9E5A] bg-[#1E9E5A]/10 hover:bg-[#1E9E5A] hover:text-white hover:border-[#1E9E5A] font-bold px-5 transition-all shadow-xs"
                   >
-                    <MessageCircle className="w-4 h-4 mr-2 text-emerald-600" aria-hidden="true" />
+                    <MessageCircle className="w-4 h-4 mr-2" aria-hidden="true" />
                     <span>WhatsApp</span>
                   </Button>
                 </a>

@@ -26,13 +26,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary:
-        'bg-[#103F4A] text-white hover:bg-[#0a252f] active:bg-[#06181f] focus-visible:outline-[#103F4A] shadow-xs',
+        'bg-[#0E5A6B] text-white hover:bg-[#0B4856] active:bg-[#073843] hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-[0_4px_12px_rgba(14,90,107,0.22)] focus-visible:outline-[#0E5A6B]',
       secondary:
-        'bg-[#EAF7FA] text-[#103F4A] hover:bg-[#d5f0f5] active:bg-[#c2e9f0] border border-[#65D9D0]/40 focus-visible:outline-[#103F4A]',
+        'bg-[#E8F5F4] text-[#0E5A6B] hover:bg-[#D7E5E6] active:bg-[#C8DEE0] border border-[#D7E5E6] focus-visible:outline-[#0E5A6B]',
       outline:
-        'border border-[#103F4A]/30 text-[#103F4A] bg-transparent hover:bg-[#EAF7FA]/60 active:bg-[#EAF7FA] focus-visible:outline-[#103F4A]',
+        'border border-[#0E5A6B]/35 text-[#0E5A6B] bg-transparent hover:bg-[#E8F5F4] active:bg-[#D7E5E6] hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-[#0E5A6B]',
       ghost:
-        'text-[#103F4A] bg-transparent hover:bg-[#EAF7FA]/50 active:bg-[#EAF7FA] focus-visible:outline-[#103F4A]',
+        'text-[#0E5A6B] bg-transparent hover:bg-[#E8F5F4]/60 active:bg-[#E8F5F4] focus-visible:outline-[#0E5A6B]',
     };
 
     const sizeStyles = {

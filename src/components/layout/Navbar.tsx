@@ -69,11 +69,27 @@ export const Navbar: React.FC = () => {
     }
   };
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 15);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <header
         ref={navRef}
-        className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/70 shadow-2xs transition-shadow"
+        className={cn(
+          'sticky top-0 z-40 transition-all duration-200',
+          isScrolled
+            ? 'bg-white/85 backdrop-blur-md border-b border-[#D7E5E6] shadow-[0_4px_20px_rgba(11,46,58,0.06)]'
+            : 'bg-white/95 border-b border-[#D7E5E6]/60 shadow-none'
+        )}
       >
         <Container size="xl" className="h-16 sm:h-20 flex items-center justify-between gap-2 lg:gap-3">
           {/* Logo & Clinical Identity */}
