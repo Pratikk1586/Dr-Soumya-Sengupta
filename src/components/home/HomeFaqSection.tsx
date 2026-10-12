@@ -123,7 +123,7 @@ export const HomeFaqSection: React.FC = () => {
           : 'Answers to common patient inquiries regarding appointment booking, consultation timings, reports, and diabetes management.'
       }
       containerSize="xl"
-      className="bg-gradient-to-b from-white via-[#FCFEFF] to-[#F8FCFD] border-b border-slate-200/80 py-10 sm:py-14 relative"
+      className="bg-white border-b border-[#D7E5E6] py-10 sm:py-14 relative"
     >
       {/* Schema.org FAQPage Structured Data */}
       <script
@@ -140,8 +140,8 @@ export const HomeFaqSection: React.FC = () => {
               padding="sm"
               className={`p-0 overflow-hidden border transition-all ${
                 isOpen
-                  ? 'border-[#103F4A]/40 shadow-xs bg-white'
-                  : 'border-slate-200/85 bg-white/90 hover:border-slate-300'
+                  ? 'border-[#0E5A6B] shadow-xs bg-white'
+                  : 'border-[#D7E5E6] bg-[#F7FAFA] hover:border-[#0E5A6B]/50'
               }`}
             >
               <button
@@ -149,15 +149,15 @@ export const HomeFaqSection: React.FC = () => {
                 onClick={() => toggleAccordion(faq.id)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${faq.id}`}
-                className="w-full p-4 sm:p-5 flex items-center justify-between text-left gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#103F4A] rounded-xl"
+                className="w-full p-4 sm:p-5 flex items-center justify-between text-left gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E5A6B] rounded-xl"
               >
-                <span className="flex items-center gap-2.5 font-bold text-xs sm:text-sm text-slate-900">
-                  <HelpCircle className="w-4 h-4 text-[#103F4A] shrink-0" aria-hidden="true" />
+                <span className="flex items-center gap-2.5 font-bold text-xs sm:text-sm text-[#1B2B34]">
+                  <HelpCircle className="w-4 h-4 text-[#0E5A6B] shrink-0" aria-hidden="true" />
                   <span>{faq.question[langKey]}</span>
                 </span>
                 <ChevronDown
-                  className={`w-4 h-4 text-slate-500 shrink-0 transition-transform duration-200 ${
-                    isOpen ? 'rotate-180 text-[#103F4A]' : ''
+                  className={`w-4 h-4 text-[#4F6470] shrink-0 transition-transform duration-200 ${
+                    isOpen ? 'rotate-180 text-[#0E5A6B]' : ''
                   }`}
                   aria-hidden="true"
                 />
@@ -166,7 +166,7 @@ export const HomeFaqSection: React.FC = () => {
               {isOpen && (
                 <div
                   id={`faq-answer-${faq.id}`}
-                  className="px-4 pb-4 sm:px-5 sm:pb-5 pt-0 text-xs sm:text-[13px] text-slate-600 leading-relaxed border-t border-slate-100"
+                  className="px-4 pb-4 sm:px-5 sm:pb-5 pt-0 text-xs sm:text-[13px] text-[#4F6470] leading-relaxed border-t border-[#D7E5E6]/70 bg-white"
                 >
                   <p className="mt-2.5">{faq.answer[langKey]}</p>
                 </div>
@@ -176,8 +176,8 @@ export const HomeFaqSection: React.FC = () => {
         })}
       </div>
 
-      <div className="mt-6 text-center text-xs text-slate-500 flex items-center justify-center gap-1.5">
-        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+      <div className="mt-6 text-center text-xs text-[#4F6470] flex items-center justify-center gap-1.5">
+        <ShieldCheck className="w-3.5 h-3.5 text-[#1E9E5A] shrink-0" />
         <span>
           {isHindi
             ? 'अतिरिक्त जानकारी हेतु आप सीधे चेंबर डेस्क पर फोन या व्हाट्सएप कर सकते हैं।'

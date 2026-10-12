@@ -1,5 +1,6 @@
 import React from 'react';
 import { SEO } from '../components/common/SEO';
+import { SectionDivider } from '../components/common/SectionDivider';
 import { HeroSection } from '../components/hero/HeroSection';
 import { HowCanWeHelpSection } from '../components/home/HowCanWeHelpSection';
 import { AboutDoctorSection } from '../components/home/AboutDoctorSection';
@@ -19,31 +20,39 @@ export const HomePage: React.FC = () => {
         canonicalPath="/"
       />
 
-      {/* 1. Header & Hero Section (Includes 'Our Clinic' redirection button) */}
+      {/* 1. Header & Hero Section (Surface Background) */}
       <HeroSection />
+      <SectionDivider variant="ecg" />
 
-      {/* 2. How Can We Help? (Short overview reflecting conditions with link to full section) */}
+      {/* 2. How Can We Help? (White Background) */}
       <HowCanWeHelpSection />
+      <SectionDivider variant="ecg" />
 
-      {/* 3. About Dr. Sengupta Preview (Overview with button to full About profile) */}
+      {/* 3. About Dr. Sengupta Preview (Surface Background) */}
       <AboutDoctorSection />
+      <SectionDivider variant="ecg" />
 
-      {/* 4. Know Your Problem (Merged with 'Know Your Numbers' tabs & full report guides) */}
+      {/* 4. Know Your Problem & Numbers (Primary-Soft Background) */}
       <KnowYourProblemSection />
+      <SectionDivider variant="ecg" />
 
-      {/* 5. Care Journey / Consultation Process (Step-by-step roadmap with actions) */}
+      {/* 5. Care Journey / Consultation Process (Surface Background) */}
       <CareJourneySection />
+      <SectionDivider variant="ecg" />
 
-      {/* 6. Patient Reviews (Observations & feedback) */}
+      {/* 6. Patient Reviews (White Background) */}
       <PatientReviewsSection />
+      <SectionDivider variant="ecg" />
 
-      {/* 7. Clinic Info (New section merging Showcase, Photos, Location, Map & Directions) */}
+      {/* 7. Clinic Info & Gallery Slot (Primary-Soft Background) */}
       <ClinicInfoSection />
+      <SectionDivider variant="ecg" />
 
-      {/* 8. FAQ Accordion (Frequently asked clinical & appointment questions with FAQPage schema) */}
+      {/* 8. FAQ Accordion (White Background) */}
       <HomeFaqSection />
+      <SectionDivider variant="ecg" />
 
-      {/* 9. Book Appointment Module (1-step scheduling & WhatsApp confirmation) */}
+      {/* 9. Book Appointment Module (Surface Background) */}
       <AppointmentTeaserSection />
     </>
   );

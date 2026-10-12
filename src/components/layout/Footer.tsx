@@ -22,13 +22,13 @@ export const Footer: React.FC = () => {
   const whatsappHref = getSafeWhatsAppHref('Hello Dr. Sengupta chamber reception, I would like to make an inquiry.');
 
   return (
-    <footer className="bg-[#0a252f] text-slate-300 pt-16 pb-24 md:pb-16 border-t border-[#103F4A] relative overflow-hidden">
-      {/* Emergency Disclaimer Banner */}
+    <footer className="footer-gradient text-slate-300 pt-16 pb-24 md:pb-16 border-t border-[#0E5A6B]/50 relative overflow-hidden">
+      {/* Emergency Disclaimer Banner: Red strictly for emergency elements */}
       <Container size="xl" className="mb-12">
-        <div className="bg-[#06181f] border border-amber-500/30 rounded-xl p-4 sm:p-5 flex items-start gap-3.5 shadow-sm">
-          <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />
-          <div className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            <strong className="text-amber-200 block mb-0.5">
+        <div className="bg-[#0B2E3A]/90 border border-[#C0392B]/60 rounded-xl p-4 sm:p-5 flex items-start gap-3.5 shadow-sm">
+          <ShieldAlert className="w-5 h-5 text-[#C0392B] shrink-0 mt-0.5" aria-hidden="true" />
+          <div className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+            <strong className="text-red-300 block mb-0.5">
               {t({ en: 'Emergency Medical Guidance', hi: 'आपातकालीन चिकित्सीय निर्देश' })}
             </strong>
             <p>{t('footer.emergencyNotice')}</p>

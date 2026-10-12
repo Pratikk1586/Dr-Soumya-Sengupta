@@ -27,19 +27,19 @@ export const PatientReviewsSection: React.FC = () => {
           : 'Real feedback shared by patients and families on Google Maps regarding consultation care and diabetes management.'
       }
       containerSize="xl"
-      className="bg-gradient-to-b from-white via-[#FCFEFF] to-[#F8FCFD] border-b border-slate-200/80 py-10 sm:py-14 relative"
+      className="bg-white border-b border-[#D7E5E6] py-10 sm:py-14 relative"
     >
       {/* Aggregate Rating & Review Count Header (Config-driven) */}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-semibold">
-          <Star className="w-4 h-4 fill-amber-400 text-amber-400 shrink-0" aria-hidden="true" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F5F4] border border-[#D7E5E6] text-[#1B2B34] text-xs font-semibold shadow-2xs">
+          <Star className="w-4 h-4 fill-[#F2A33A] text-[#F2A33A] shrink-0" aria-hidden="true" />
           <span>
             {typeof REVIEWS_CONFIG.rating === 'number'
               ? `${REVIEWS_CONFIG.rating.toFixed(1)} / 5.0`
               : (isHindi ? '[रेटिंग सत्यापन लंबित]' : '[Rating Pending Verification]')}
           </span>
-          <span className="text-amber-300">·</span>
-          <span>
+          <span className="text-[#0E5A6B]/40">·</span>
+          <span className="text-[#4F6470]">
             {typeof REVIEWS_CONFIG.reviewCount === 'number'
               ? `${REVIEWS_CONFIG.reviewCount} ${REVIEWS_CONFIG.platform}`
               : (isHindi ? `[समीक्षा संख्या लंबित] ${REVIEWS_CONFIG.platform}` : `[Count Pending] ${REVIEWS_CONFIG.platform}`)}
@@ -50,7 +50,7 @@ export const PatientReviewsSection: React.FC = () => {
           href={REVIEWS_CONFIG.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#103F4A] hover:underline"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0E5A6B] hover:underline"
         >
           <span>{isHindi ? 'गूगल मैप्स पर समीक्षाएं देखें' : 'View on Google Maps'}</span>
           <ExternalLink className="w-3.5 h-3.5" />
@@ -58,7 +58,7 @@ export const PatientReviewsSection: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="py-8 text-center text-xs text-slate-500">Loading reviews...</div>
+        <div className="py-8 text-center text-xs text-[#4F6470]">Loading reviews...</div>
       ) : (
         <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0">
           {reviews?.map((review) => (
@@ -66,35 +66,35 @@ export const PatientReviewsSection: React.FC = () => {
               <Card
                 hoverable
                 padding="sm"
-                className="p-4 sm:p-5 border-slate-200/85 hover:border-[#65D9D0]/60 shadow-2xs hover:shadow-xs flex flex-col justify-between bg-white/95 transition-all h-full"
+                className="p-4 sm:p-5 border-[#D7E5E6] hover:border-[#0E5A6B]/50 shadow-xs hover:shadow-md flex flex-col justify-between bg-[#F7FAFA] transition-all h-full"
               >
               <div className="space-y-3">
                 {/* 5-Star Rating & Verified Badge */}
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-0.5 text-amber-400" aria-label="5 out of 5 stars">
+                  <div className="flex items-center gap-0.5 text-[#F2A33A]" aria-label="5 out of 5 stars">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+                      <Star key={i} className="w-3.5 h-3.5 fill-[#F2A33A] text-[#F2A33A]" aria-hidden="true" />
                     ))}
                   </div>
-                  <span className="inline-flex items-center gap-1 text-[10px] text-[#103F4A] bg-[#EAF7FA] px-2 py-0.5 rounded font-bold border border-[#65D9D0]/50">
-                    <ShieldCheck className="w-3 h-3 text-[#103F4A] shrink-0" aria-hidden="true" />
+                  <span className="inline-flex items-center gap-1 text-[10px] text-[#0E5A6B] bg-[#E8F5F4] px-2 py-0.5 rounded-full font-bold border border-[#D7E5E6]">
+                    <ShieldCheck className="w-3 h-3 text-[#0E5A6B] shrink-0" aria-hidden="true" />
                     <span>Google</span>
                   </span>
                 </div>
 
                 {/* Review Comment */}
-                <blockquote className="text-slate-700 text-xs sm:text-[13px] leading-relaxed italic">
+                <blockquote className="text-[#4F6470] text-xs sm:text-[13px] leading-relaxed italic">
                   "{localize(review.comment)}"
                 </blockquote>
               </div>
 
               {/* Reviewer Details & Link */}
-              <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs gap-2">
+              <div className="pt-3 mt-3 border-t border-[#D7E5E6] flex items-center justify-between text-xs gap-2">
                 <div className="min-w-0">
-                  <span className="font-bold text-slate-900 block text-xs truncate">
+                  <span className="font-bold text-[#1B2B34] block text-xs truncate">
                     {review.patientInitials}
                   </span>
-                  <span className="text-[11px] text-slate-500 block truncate">
+                  <span className="text-[11px] text-[#4F6470] block truncate">
                     {review.year || (isHindi ? 'सत्यापित समीक्षा' : 'Verified Review')}
                   </span>
                 </div>
@@ -104,7 +104,7 @@ export const PatientReviewsSection: React.FC = () => {
                     href={review.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#103F4A] hover:text-[#1b6c83] shrink-0 hover:underline"
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0E5A6B] hover:text-[#0B2E3A] shrink-0 hover:underline"
                     aria-label={`View ${review.patientInitials} review on Google Maps`}
                   >
                     <span>{isHindi ? 'देखें' : 'View'}</span>

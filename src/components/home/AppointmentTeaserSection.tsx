@@ -43,18 +43,18 @@ export const AppointmentTeaserSection: React.FC = () => {
           : 'Cardio Diabetic Clinic Chaibasa — fill the inline form below or book directly via WhatsApp / phone.'
       }
       containerSize="xl"
-      className="bg-gradient-to-b from-white via-[#FCFEFF] to-[#EAF7FA]/40 border-b border-slate-200/80 py-10 sm:py-14 relative"
+      className="bg-[#F7FAFA] border-b border-[#D7E5E6] py-10 sm:py-14 relative"
     >
       <div className="grid lg:grid-cols-12 gap-7 sm:gap-8 items-start">
         {/* Left Column: Practice Overview, Benefits & Single-Row Direct Actions */}
         <div className="lg:col-span-6 space-y-5">
           <div className="space-y-2.5">
-            <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+            <h3 className="text-lg sm:text-xl font-bold text-[#1B2B34] tracking-tight">
               {isHindi
                 ? 'डॉ. सौम्य सेनगुप्ता के साथ चेंबर अथवा ऑनलाइन परामर्श का समय चुनें'
                 : 'Schedule an In-Chamber or Telemedicine Consultation with Dr. Soumya Sengupta'}
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#4F6470] leading-relaxed">
               {isHindi
                 ? 'हमारे आसान अपॉइंटमेंट फॉर्म के माध्यम से अपना पसंदीदा दिन और समय चुनें। हमारी टीम आपके समय की पुष्टि हेतु संपर्क करेगी।'
                 : 'Submit your preferred date, time slot, and clinical concern. Our chamber desk reviews requests promptly and confirms your appointment via phone or WhatsApp.'}
@@ -64,27 +64,27 @@ export const AppointmentTeaserSection: React.FC = () => {
           <div className="space-y-3 pt-1">
             {benefits.map((b) => (
               <div key={b.title} className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-[#1E9E5A] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-slate-900">{b.title}</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">{b.desc}</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-[#1B2B34]">{b.title}</h4>
+                  <p className="text-xs text-[#4F6470] mt-0.5">{b.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* OPD Hours & Fee Banner */}
-          <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-800">
-              <span className="flex items-center gap-1.5 text-[#103F4A]">
-                <Clock className="w-3.5 h-3.5 text-[#103F4A]" />
+          <div className="p-3.5 rounded-xl bg-white border border-[#D7E5E6] shadow-xs space-y-2">
+            <div className="flex items-center justify-between text-xs font-semibold text-[#1B2B34]">
+              <span className="flex items-center gap-1.5 text-[#0E5A6B]">
+                <Clock className="w-3.5 h-3.5 text-[#0E5A6B]" />
                 <span>{isHindi ? 'परामर्श समय:' : 'Consulting Hours:'}</span>
               </span>
-              <span className="text-slate-600 font-normal">Mon–Sat: 10 AM – 2 PM & 5 PM – 8 PM</span>
+              <span className="text-[#4F6470] font-normal">Mon–Sat: 10 AM – 2 PM & 5 PM – 8 PM</span>
             </div>
-            <div className="flex items-center justify-between text-xs text-slate-600 pt-1 border-t border-slate-100">
-              <span>{isHindi ? 'परामर्श शुल्क:' : 'Standard Fee:'} <strong className="text-slate-900 font-semibold">₹1,000</strong></span>
-              <Link to="/clinic/timings" className="text-[11px] text-[#103F4A] hover:underline font-semibold flex items-center gap-0.5">
+            <div className="flex items-center justify-between text-xs text-[#4F6470] pt-1 border-t border-[#D7E5E6]/70">
+              <span>{isHindi ? 'परामर्श शुल्क:' : 'Standard Fee:'} <strong className="text-[#1B2B34] font-semibold">₹1,000</strong></span>
+              <Link to="/clinic/timings" className="text-[11px] text-[#0E5A6B] hover:underline font-semibold flex items-center gap-0.5">
                 <span>{isHindi ? 'नियम व समय' : 'View Timings'}</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
@@ -94,15 +94,15 @@ export const AppointmentTeaserSection: React.FC = () => {
           {/* Action Row: Teal primary, Green WhatsApp, Outline Call aligned on one row */}
           <div className="pt-2 flex flex-wrap sm:flex-nowrap items-center gap-2.5">
             <Link to="/book-appointment" className="w-full sm:w-auto">
-              <Button variant="primary" size="md" className="w-full bg-[#103F4A] hover:bg-[#0C323B] text-white shadow-xs">
+              <Button variant="primary" size="md" className="w-full shadow-xs">
                 <Calendar className="w-4 h-4 mr-1.5" />
                 <span>{isHindi ? 'ऑनलाइन फॉर्म' : 'Book Appointment'}</span>
               </Button>
             </Link>
 
-            <WhatsAppButton variant="appointment" size="md" className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs" />
+            <WhatsAppButton variant="appointment" size="md" className="w-full sm:w-auto shadow-xs" />
 
-            <CallButton size="md" variant="outline" className="w-full sm:w-auto border border-[#103F4A]/40 text-[#103F4A] hover:bg-[#103F4A] hover:text-white" />
+            <CallButton size="md" variant="outline" className="w-full sm:w-auto border-[#0E5A6B]/40 text-[#0E5A6B] hover:bg-[#0E5A6B] hover:text-white" />
           </div>
         </div>
 

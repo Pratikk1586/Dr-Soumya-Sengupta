@@ -4,13 +4,14 @@ import { Activity, Flame, Scale, HeartPulse, ArrowRight } from 'lucide-react';
 import { Section } from '../common/Section';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
+import { DuotoneIcon } from '../common/DuotoneIcon';
 import { useLanguage } from '../../context/useLanguage';
 
 interface ClinicalFocusArea {
   id: string;
   title: { en: string; hi: string };
   description: { en: string; hi: string };
-  icon: React.FC<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; 'aria-hidden'?: boolean | 'true' | 'false' }>;
   link: string;
   badge: { en: string; hi: string };
   cta: { en: string; hi: string };
@@ -81,7 +82,7 @@ export const HowCanWeHelpSection: React.FC = () => {
           : 'Patient-friendly, evidence-based care for diabetes, thyroid, and metabolic vitality.'
       }
       containerSize="xl"
-      className="bg-gradient-to-b from-[#FCFEFF] via-[#F8FCFD] to-[#F3F9FA] border-b border-slate-200/70 py-10 sm:py-14 relative"
+      className="bg-white border-b border-[#D7E5E6] py-10 sm:py-14 relative"
     >
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {FOCUS_AREAS.map((area) => {
@@ -91,32 +92,30 @@ export const HowCanWeHelpSection: React.FC = () => {
               key={area.id}
               hoverable
               padding="sm"
-              className="p-4 sm:p-5 flex flex-col justify-between bg-white/95 border-slate-200/85 hover:border-[#65D9D0]/70 shadow-2xs hover:shadow-md hover:shadow-[#103F4A]/5 transition-all duration-200 group relative backdrop-blur-xs"
+              className="p-4 sm:p-5 flex flex-col justify-between bg-[#F7FAFA] border-[#D7E5E6] hover:border-[#0E5A6B]/50 shadow-xs hover:shadow-md transition-all duration-200 group relative"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-lg bg-[#EAF7FA] text-[#103F4A] flex items-center justify-center group-hover:scale-105 transition-transform border border-[#65D9D0]/30">
-                    <IconComponent className="w-4 h-4 text-[#103F4A]" aria-hidden="true" />
-                  </div>
-                  <span className="text-[10px] font-bold text-[#103F4A] bg-[#E7F8F2] px-2 py-0.5 rounded border border-[#65D9D0]/40">
+                  <DuotoneIcon icon={IconComponent} size="md" />
+                  <span className="text-[10px] font-bold text-[#0E5A6B] bg-[#E8F5F4] px-2 py-0.5 rounded-full border border-[#D7E5E6]">
                     {area.badge[langKey]}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-[#103F4A] transition-colors">
+                  <h3 className="font-bold text-[#1B2B34] text-sm leading-snug group-hover:text-[#0E5A6B] transition-colors">
                     {area.title[langKey]}
                   </h3>
-                  <p className="mt-1 text-xs text-slate-600 leading-relaxed font-normal">
+                  <p className="mt-1 text-xs text-[#4F6470] leading-relaxed font-normal">
                     {area.description[langKey]}
                   </p>
                 </div>
               </div>
 
-              <div className="pt-3 mt-3 border-t border-slate-100">
+              <div className="pt-3 mt-3 border-t border-[#D7E5E6]">
                 <Link
                   to={area.link}
-                  className="w-full flex items-center justify-between px-3 py-1.5 rounded-md bg-[#EAF7FA]/80 text-[#103F4A] border border-[#65D9D0]/50 group-hover:bg-[#103F4A] group-hover:text-white group-hover:border-[#103F4A] transition-all duration-200 text-xs font-semibold"
+                  className="w-full flex items-center justify-between px-3 py-1.5 rounded-md bg-[#E8F5F4] text-[#0E5A6B] border border-[#D7E5E6] group-hover:bg-[#0E5A6B] group-hover:text-white group-hover:border-[#0E5A6B] transition-all duration-200 text-xs font-semibold"
                 >
                   <span>{area.cta[langKey]}</span>
                   <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
@@ -130,7 +129,7 @@ export const HowCanWeHelpSection: React.FC = () => {
       {/* Redirection button to Conditions section */}
       <div className="mt-6 text-center">
         <Link to="/conditions">
-          <Button variant="outline" size="sm" className="border-[#103F4A]/30 text-[#103F4A] hover:bg-[#103F4A] hover:text-white transition-all text-xs">
+          <Button variant="outline" size="sm" className="border-[#0E5A6B]/40 text-[#0E5A6B] hover:bg-[#0E5A6B] hover:text-white transition-all text-xs">
             <span>{isHindi ? 'सभी स्थितियां व विषय देखें' : 'View All Conditions & Health Topics'}</span>
             <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
           </Button>
