@@ -20,7 +20,7 @@ async function main() {
   // 1. Desktop 1440px states
   {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-    await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+    await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
     
     const viewer = page.locator('[data-pancreas-viewer="true"]');
     await viewer.scrollIntoViewIfNeeded();
@@ -54,7 +54,7 @@ async function main() {
     console.log('Saved hover_spleen.png');
 
     // Hover Islets Lens
-    await triggerHover(page, 'g[aria-label*="Islets of Langerhans 1000x Cellular Loupe Lens"]');
+    await triggerHover(page, 'circle[aria-label*="Islets of Langerhans 1000x Cellular Loupe Lens"]');
     await page.screenshot({
       path: path.join(ARTIFACTS_DIR, 'hover_islets_lens.png'),
     });
@@ -66,7 +66,7 @@ async function main() {
   // 2. Debug mode (?debug=1) at 1440px
   {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-    await page.goto('http://localhost:5173/?debug=1', { waitUntil: 'networkidle' });
+    await page.goto('http://localhost:5173/?debug=1', { waitUntil: 'domcontentloaded' });
     const viewer = page.locator('[data-pancreas-viewer="true"]');
     await viewer.scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
@@ -81,7 +81,7 @@ async function main() {
   // 3. Tablet landscape 1024px
   {
     const page = await browser.newPage({ viewport: { width: 1024, height: 768 } });
-    await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+    await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
     const viewer = page.locator('[data-pancreas-viewer="true"]');
     await viewer.scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
@@ -96,7 +96,7 @@ async function main() {
   // 4. Tablet portrait 768px
   {
     const page = await browser.newPage({ viewport: { width: 768, height: 1024 } });
-    await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+    await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
     const viewer = page.locator('[data-pancreas-viewer="true"]');
     await viewer.scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
@@ -111,7 +111,7 @@ async function main() {
   // 5. Mobile 390px
   {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
-    await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+    await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded' });
     const viewer = page.locator('[data-pancreas-viewer="true"]');
     await viewer.scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
