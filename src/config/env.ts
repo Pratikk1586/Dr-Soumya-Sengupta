@@ -29,8 +29,8 @@ function sanitizePhone(raw: string): string {
   return raw.replace(/[^+\d]/g, '');
 }
 
-const rawPhone = cleanString(import.meta.env.VITE_CLINIC_PHONE);
-const rawWhatsapp = cleanString(import.meta.env.VITE_WHATSAPP_NUMBER);
+const rawPhone = cleanString(import.meta.env.VITE_CLINIC_PHONE) || '+91 6582 256446';
+const rawWhatsapp = cleanString(import.meta.env.VITE_WHATSAPP_NUMBER) || '919431114510';
 const rawEmail = cleanString(import.meta.env.VITE_EMAIL || import.meta.env.VITE_CLINIC_EMAIL);
 const rawAddress = cleanString(import.meta.env.VITE_ADDRESS);
 const rawMapsUrl = cleanString(import.meta.env.VITE_GOOGLE_MAPS_URL || import.meta.env.VITE_CLINIC_MAPS_URL) || 'https://maps.app.goo.gl/59pyGSNwQ8x2ruQ26';

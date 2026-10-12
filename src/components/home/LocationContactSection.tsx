@@ -11,6 +11,7 @@ import { VerificationBadge } from '../common/VerificationBadge';
 import { useLanguage } from '../../context/useLanguage';
 import { useService } from '../../hooks/useService';
 import { clinicService } from '../../services';
+import { getTelHref } from '../../lib/contact';
 
 export const LocationContactSection: React.FC = () => {
   const { localize, isHindi } = useLanguage();
@@ -79,9 +80,12 @@ export const LocationContactSection: React.FC = () => {
                   <strong className="block text-slate-900 font-semibold mb-0.5">
                     {isHindi ? 'सीधा संपर्क:' : 'Direct Phone & Desk:'}
                   </strong>
-                  <p className="font-mono text-slate-800 font-semibold">
+                  <a
+                    href={getTelHref(clinic?.phone) || 'tel:+916582256446'}
+                    className="font-mono text-slate-800 font-semibold hover:underline hover:text-[#103F4A] inline-block"
+                  >
                     {clinic?.phone || '+91 6582 256446'}
-                  </p>
+                  </a>
                 </div>
               </div>
             </div>

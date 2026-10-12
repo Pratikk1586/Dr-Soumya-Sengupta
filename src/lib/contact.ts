@@ -13,7 +13,7 @@ export function getTelHref(rawPhone?: string | null): string | null {
   const phone =
     rawPhone !== undefined
       ? rawPhone
-      : (import.meta.env.VITE_CLINIC_PHONE || '');
+      : (import.meta.env.VITE_CLINIC_PHONE || '+91 6582 256446');
 
   if (!phone || typeof phone !== 'string') return null;
 

@@ -5,7 +5,6 @@ import { SEO } from '../components/common/SEO';
 import { Container } from '../components/common/Container';
 import { Breadcrumb } from '../components/common/Breadcrumb';
 import { Card } from '../components/common/Card';
-import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { MedicalDisclaimerBanner } from '../components/common/MedicalDisclaimerBanner';
 import { VerificationBadge } from '../components/common/VerificationBadge';
@@ -16,6 +15,8 @@ import { MapSection } from '../components/common/MapSection';
 import { useLanguage } from '../context/useLanguage';
 import { useService } from '../hooks/useService';
 import { clinicService } from '../services';
+import { getTelHref } from '../lib/contact';
+import { buildWhatsAppUrl } from '../lib/whatsapp';
 
 export const ContactPage: React.FC = () => {
   const { localize, isHindi, t } = useLanguage();
@@ -54,12 +55,16 @@ export const ContactPage: React.FC = () => {
         structuredData={clinicJsonLd}
       />
 
-      <div className="bg-[#faf9f6] border-b border-slate-200">
-        <Container size="xl">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#EAF7FA]/70 via-[#FCFEFF] to-white border-b border-slate-200/80">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#65D9D0]/10 rounded-full blur-3xl pointer-events-none" />
+        <Container size="xl" className="relative z-10">
           <Breadcrumb items={[{ label: t('nav.contact') }]} />
           <div className="py-6 sm:py-10 max-w-3xl space-y-3">
-            <Badge variant="primary">{isHindi ? 'रिसेप्शन एवं संपर्क' : 'Reception & Inquiries'}</Badge>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#06181f] tracking-tight">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAF7FA] text-[#103F4A] border border-[#65D9D0]/40 shadow-xs">
+              <Phone className="w-3.5 h-3.5 text-[#103F4A]" />
+              <span>{isHindi ? 'रिसेप्शन एवं संपर्क' : 'Reception & Inquiries'}</span>
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#103F4A] tracking-tight">
               {isHindi ? 'परामर्श चेंबर से संपर्क करें' : 'Contact the Consultation Chamber'}
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
@@ -77,13 +82,13 @@ export const ContactPage: React.FC = () => {
         {/* Contact Cards Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Phone Card */}
-          <Card padding="lg" className="space-y-4 flex flex-col justify-between">
+          <Card padding="lg" className="space-y-4 flex flex-col justify-between border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/60 hover:shadow-lg hover:shadow-[#103F4A]/5 transition-all bg-white">
             <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-[#dff0f4] text-[#0a252f] flex items-center justify-center">
-                <Phone className="w-5 h-5 text-[#0f3d4a]" />
+              <div className="w-11 h-11 rounded-xl bg-[#EAF7FA] border border-[#65D9D0]/30 text-[#103F4A] flex items-center justify-center shadow-xs">
+                <Phone className="w-5 h-5 text-[#103F4A]" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-slate-900">
+                <h2 className="text-base font-bold text-[#103F4A]">
                   {isHindi ? 'टेलीफोन अपॉइंटमेंट डेस्क' : 'Telephone Appointment Desk'}
                 </h2>
                 <p className="text-xs text-slate-500 mt-1">
@@ -91,9 +96,12 @@ export const ContactPage: React.FC = () => {
                 </p>
               </div>
               <div className="pt-2">
-                <p className="font-mono text-sm font-bold text-slate-800">
-                  {clinic?.phone || '+91 98300 00000'}
-                </p>
+                <a
+                  href={getTelHref(clinic?.phone) || 'tel:+916582256446'}
+                  className="font-mono text-sm font-bold text-slate-800 hover:underline hover:text-[#103F4A] inline-block"
+                >
+                  {clinic?.phone || '+91 6582 256446'}
+                </a>
                 <VerificationBadge className="mt-1" />
               </div>
             </div>
@@ -104,9 +112,9 @@ export const ContactPage: React.FC = () => {
           </Card>
 
           {/* WhatsApp Card */}
-          <Card padding="lg" className="space-y-4 flex flex-col justify-between">
+          <Card padding="lg" className="space-y-4 flex flex-col justify-between border-slate-200/90 shadow-2xs hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-900/5 transition-all bg-white">
             <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-200">
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-200 shadow-xs">
                 <MessageCircle className="w-5 h-5 text-emerald-700" />
               </div>
               <div>
@@ -118,9 +126,14 @@ export const ContactPage: React.FC = () => {
                 </p>
               </div>
               <div className="pt-2">
-                <p className="font-mono text-sm font-bold text-slate-800">
-                  {clinic?.whatsapp || '+91 98300 00000'}
-                </p>
+                <a
+                  href={buildWhatsAppUrl('enquiry', undefined, clinic?.whatsapp) || 'https://wa.me/919431114510'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-sm font-bold text-slate-800 hover:underline hover:text-emerald-700 inline-block"
+                >
+                  {clinic?.whatsapp || '+91 94311 14510'}
+                </a>
                 <VerificationBadge className="mt-1" />
               </div>
             </div>
@@ -131,13 +144,13 @@ export const ContactPage: React.FC = () => {
           </Card>
 
           {/* Email Card */}
-          <Card padding="lg" className="space-y-4 flex flex-col justify-between">
+          <Card padding="lg" className="space-y-4 flex flex-col justify-between border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/60 hover:shadow-lg hover:shadow-[#103F4A]/5 transition-all bg-white">
             <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center">
-                <Mail className="w-5 h-5" />
+              <div className="w-11 h-11 rounded-xl bg-[#EAF7FA] border border-[#65D9D0]/30 text-[#103F4A] flex items-center justify-center shadow-xs">
+                <Mail className="w-5 h-5 text-[#103F4A]" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-slate-900">
+                <h2 className="text-base font-bold text-[#103F4A]">
                   {isHindi ? 'आधिकारिक क्लिनिकल ईमेल' : 'Official Clinical Email'}
                 </h2>
                 <p className="text-xs text-slate-500 mt-1">
@@ -145,9 +158,12 @@ export const ContactPage: React.FC = () => {
                 </p>
               </div>
               <div className="pt-2">
-                <p className="font-mono text-sm font-bold text-slate-800">
-                  {clinic?.email || 'care@drsoumyasengupta.com'}
-                </p>
+                <a
+                  href={`mailto:${clinic?.email || 'saumyasengupta@yahoo.co.in'}`}
+                  className="font-mono text-sm font-bold text-slate-800 hover:underline hover:text-[#103F4A] inline-block"
+                >
+                  {clinic?.email || 'saumyasengupta@yahoo.co.in'}
+                </a>
                 <VerificationBadge className="mt-1" />
               </div>
             </div>
@@ -161,10 +177,10 @@ export const ContactPage: React.FC = () => {
         {/* Physical Chamber Logistics & Map Card */}
         <div className="grid lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-5">
-            <Card padding="lg" className="space-y-5">
+            <Card padding="lg" className="space-y-5 border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/50 transition-all bg-white">
               <div className="flex items-center gap-3 pb-3 border-b border-slate-200">
-                <MapPin className="w-5 h-5 text-[#0f3d4a]" />
-                <h2 className="text-base font-bold text-slate-900">
+                <MapPin className="w-5 h-5 text-[#103F4A]" />
+                <h2 className="text-base font-bold text-[#103F4A]">
                   {isHindi ? 'चेंबर विवरण एवं समय' : 'Physical Chamber Logistics'}
                 </h2>
               </div>
