@@ -4,7 +4,6 @@ import {
   GraduationCap,
   Award,
   CheckCircle,
-  Shield,
   Calendar,
   Building2,
   FileCheck,
@@ -14,7 +13,6 @@ import {
   Users,
   MapPin,
   Phone,
-  Sparkles,
   Share2,
   Heart,
   HeartPulse,
@@ -33,7 +31,6 @@ import {
 } from 'lucide-react';
 import { SEO } from '../components/common/SEO';
 import { Container } from '../components/common/Container';
-import { Breadcrumb } from '../components/common/Breadcrumb';
 import { CertificateModal } from '../components/doctor/CertificateModal';
 import { DoctorSocialLinks } from '../components/doctor/DoctorSocialLinks';
 import { useLanguage } from '../context/useLanguage';
