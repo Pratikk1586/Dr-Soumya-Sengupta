@@ -87,6 +87,11 @@ p, li, blockquote {
   color: var(--color-text-muted);
 }
 
+footer p,
+footer li {
+  color: inherit;
+}
+
 /* Devanagari Typography Tuning: Enhanced line-height, strictly NO letter-spacing */
 html[lang="hi"],
 .font-devanagari {

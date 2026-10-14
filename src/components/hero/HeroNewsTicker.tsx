@@ -62,7 +62,7 @@ export const HeroNewsTicker: React.FC<HeroNewsTickerProps> = ({ className = '' }
     <>
       <div
         className={cn(
-          'w-full max-w-2xl bg-white/90 rounded-full border border-slate-200/90 px-3 py-1.5 sm:py-2 flex items-center justify-between gap-2 shadow-2xs hover:shadow-xs hover:border-[#65D9D0]/70 transition-all backdrop-blur-xs',
+          'w-full max-w-xl bg-white/95 rounded-full border border-[#E8E2D5] px-3.5 py-1.5 sm:py-2 flex items-center justify-between gap-2 shadow-2xs hover:shadow-xs hover:border-[#0F5C4A]/40 transition-all backdrop-blur-xs',
           className
         )}
         onMouseEnter={() => setIsPaused(true)}
@@ -72,15 +72,15 @@ export const HeroNewsTicker: React.FC<HeroNewsTickerProps> = ({ className = '' }
       >
         {/* Left: Slim badge & notice text */}
         <div className="flex items-center gap-2 min-w-0">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#103F4A] text-white text-[10px] sm:text-[11px] font-bold shrink-0 uppercase tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#0F5C4A] text-white text-[10px] sm:text-[11px] font-bold shrink-0 uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
             <span>{isHindi ? 'सूचना' : 'Notice'}</span>
           </span>
 
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="text-left text-xs text-slate-700 hover:text-[#103F4A] truncate font-medium transition-colors cursor-pointer"
+            className="text-left text-xs text-[#1B2A26] hover:text-[#0F5C4A] truncate font-medium transition-colors cursor-pointer"
             title={localize(currentNotice.title)}
           >
             {localize(currentNotice.title)}
@@ -88,13 +88,13 @@ export const HeroNewsTicker: React.FC<HeroNewsTickerProps> = ({ className = '' }
         </div>
 
         {/* Right: Controls & View All */}
-        <div className="flex items-center gap-1 shrink-0 text-slate-400">
+        <div className="flex items-center gap-1 shrink-0 text-[#4A5753]">
           {filteredNotices.length > 1 && (
             <div className="flex items-center gap-0.5">
               <button
                 type="button"
                 onClick={handlePrev}
-                className="p-1 rounded-full hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
+                className="p-1 rounded-full hover:bg-[#E8F2EE] hover:text-[#0F5C4A] transition-colors cursor-pointer"
                 aria-label="Previous announcement"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
@@ -102,7 +102,7 @@ export const HeroNewsTicker: React.FC<HeroNewsTickerProps> = ({ className = '' }
               <button
                 type="button"
                 onClick={handleNext}
-                className="p-1 rounded-full hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
+                className="p-1 rounded-full hover:bg-[#E8F2EE] hover:text-[#0F5C4A] transition-colors cursor-pointer"
                 aria-label="Next announcement"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -112,7 +112,7 @@ export const HeroNewsTicker: React.FC<HeroNewsTickerProps> = ({ className = '' }
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="text-[11px] font-bold text-[#103F4A] hover:underline px-1.5 py-0.5 ml-1 hidden sm:inline cursor-pointer"
+            className="text-[11px] font-bold text-[#0F5C4A] hover:underline px-1.5 py-0.5 ml-1 hidden sm:inline cursor-pointer"
           >
             {isHindi ? 'सभी देखें' : 'View All'}
           </button>

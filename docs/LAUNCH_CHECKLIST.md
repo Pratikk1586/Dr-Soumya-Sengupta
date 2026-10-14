@@ -1,7 +1,7 @@
 # Practice Launch Readiness Checklist — Dr. Soumya Sengupta Website
 
-> Generated automatically by `npm run content:audit` on 2026-10-07.
-> Total registered items requiring formal review: **91**
+> Generated automatically by `npm run content:audit` on 2026-10-12.
+> Total registered items requiring formal review: **67**
 
 ---
 

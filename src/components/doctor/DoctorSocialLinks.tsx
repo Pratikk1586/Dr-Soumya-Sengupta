@@ -1,7 +1,8 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { useLanguage } from '../../context/useLanguage';
-import { DOCTOR_DATA } from '../../data/doctor';
+import { useService } from '../../hooks/useService';
+import { doctorService } from '../../services';
 import type { DoctorSocialLink } from '../../types';
 import { cn } from '../../utils/cn';
 
@@ -172,10 +173,12 @@ export const DoctorSocialLinks: React.FC<DoctorSocialLinksProps> = ({
   variant = 'icons',
   theme = 'light',
   className,
-  links = DOCTOR_DATA.socialLinks || [],
+  links: customLinks,
   title,
 }) => {
   const { localize, isHindi } = useLanguage();
+  const { data: doctor } = useService(() => doctorService.getProfile(), []);
+  const links = customLinks ?? doctor?.socialLinks ?? [];
 
   if (!links || links.length === 0) return null;
 

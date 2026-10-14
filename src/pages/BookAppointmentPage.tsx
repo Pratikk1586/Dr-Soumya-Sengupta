@@ -471,7 +471,7 @@ export const BookAppointmentPage: React.FC = () => {
                     <span className="inline-flex items-center gap-1.5">
                       <FileText className="w-3.5 h-3.5 text-slate-500" />
                       {isHindi ? 'परामर्श का संक्षिप्त कारण' : 'Brief Reason for Visit'}
-                      <span className="text-slate-400 font-normal lowercase">(optional)</span>
+                      <span className="text-slate-600 font-medium lowercase">(optional)</span>
                     </span>
                   </label>
                   <textarea

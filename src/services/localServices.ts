@@ -193,7 +193,8 @@ export class LocalAppointmentService implements AppointmentService {
 }
 
 import { GALLERY_ITEMS } from '../data/gallery';
-import type { GalleryService, GalleryItem, GalleryCategory } from './types';
+import { EVENTS_DATA } from '../data/events';
+import type { GalleryService, GalleryItem, GalleryCategory, EventService, EventItem } from './types';
 
 export class LocalGalleryService implements GalleryService {
   async getGalleryItems(category?: GalleryCategory): Promise<GalleryItem[]> {
@@ -201,5 +202,11 @@ export class LocalGalleryService implements GalleryService {
       return Promise.resolve(GALLERY_ITEMS);
     }
     return Promise.resolve(GALLERY_ITEMS.filter((item) => item.category === category));
+  }
+}
+
+export class LocalEventService implements EventService {
+  async getEvents(): Promise<EventItem[]> {
+    return Promise.resolve(EVENTS_DATA as EventItem[]);
   }
 }

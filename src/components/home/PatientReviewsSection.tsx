@@ -71,7 +71,7 @@ export const PatientReviewsSection: React.FC = () => {
               <div className="space-y-3">
                 {/* 5-Star Rating & Verified Badge */}
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-0.5 text-[#F2A33A]" aria-label="5 out of 5 stars">
+                  <div className="flex items-center gap-0.5 text-[#F2A33A]" role="img" aria-label="5 out of 5 stars">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-3.5 h-3.5 fill-[#F2A33A] text-[#F2A33A]" aria-hidden="true" />
                     ))}

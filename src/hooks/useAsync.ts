@@ -24,7 +24,9 @@ export function useAsync<T>(
   });
 
   const asyncFnRef = useRef(asyncFn);
-  asyncFnRef.current = asyncFn;
+  useEffect(() => {
+    asyncFnRef.current = asyncFn;
+  });
 
   const reload = useCallback(async () => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));

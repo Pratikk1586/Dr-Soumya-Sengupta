@@ -158,3 +158,19 @@ export interface GalleryItem {
 export interface GalleryService {
   getGalleryItems(category?: GalleryCategory): Promise<GalleryItem[]>;
 }
+
+export interface EventItem {
+  id: string;
+  title: LocalizedString;
+  date: string;
+  location: LocalizedString;
+  description: LocalizedString;
+  category: string;
+  image: string;
+  keyHighlights: LocalizedString[];
+  galleryImages?: string[];
+}
+
+export interface EventService {
+  getEvents(): Promise<EventItem[]>;
+}

@@ -81,7 +81,7 @@ export const HowCanWeHelpSection: React.FC = () => {
         {/* Section Header with Centered Badge */}
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-10 sm:mb-12">
           {/* Centered Pill Badge */}
-          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] text-[#B8862B] text-xs font-bold tracking-wider uppercase shadow-2xs">
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] text-[#875D14] text-xs font-bold tracking-wider uppercase shadow-2xs">
             <span>{isHindi ? 'हमारी सेवाएं' : 'OUR SERVICES'}</span>
           </div>
 

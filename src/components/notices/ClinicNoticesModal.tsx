@@ -36,11 +36,19 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
 
   const notices = useMemo(() => allNotices ?? [], [allNotices]);
 
-  useEffect(() => {
-    if (initialFilter) {
-      setFilterType(initialFilter);
+  const [prevFilter, setPrevFilter] = useState(initialFilter);
+  if (initialFilter !== prevFilter) {
+    setPrevFilter(initialFilter);
+    setFilterType(initialFilter);
+  }
+
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
+    if (!isOpen) {
+      setPopupNotice(null);
     }
-  }, [initialFilter]);
+  }
 
   // Two options filtering:
   // 1. "Latest news": updated within 3 days
@@ -52,13 +60,6 @@ export const ClinicNoticesModal: React.FC<ClinicNoticesModalProps> = ({
     }
     return notices;
   }, [filterType, notices]);
-
-  // Ensure popupNotice resets whenever the modal opens or closes
-  useEffect(() => {
-    if (!isOpen) {
-      setPopupNotice(null);
-    }
-  }, [isOpen]);
 
   // Handle ESC key: close popup detail first if open, else close modal
   useEffect(() => {

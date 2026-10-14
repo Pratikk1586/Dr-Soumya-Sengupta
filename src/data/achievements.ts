@@ -1,55 +1,59 @@
 import type { DoctorAchievement } from '../types';
+import { CLINIC_IMAGES } from '../config/images';
 
 export const ACHIEVEMENTS_DATA: DoctorAchievement[] = [
   {
     id: 'ach-1',
     title: {
-      en: '19+ Years of Community Diabetic Screening Leadership',
-      hi: '19+ वर्षों से सामुदायिक मधुमेह जांच शिविरों का नेतृत्व',
+      en: 'RSSDI JHCON 2026 Stage Presentation',
+      hi: 'आरएसएसडीआई झरकॉन 2026 मंच प्रस्तुति',
     },
     organization: {
-      en: 'West Singhbhum & Jharkhand Community Outreach',
-      hi: 'पश्चिमी सिंहभूम एवं झारखंड जन-स्वास्थ्य पहल',
+      en: 'Research Society for the Study of Diabetes in India',
+      hi: 'रिसर्च सोसाइटी फॉर द स्टडी ऑफ डायबिटीज इन इंडिया',
     },
-    year: '2007 – Present',
+    year: '2026',
     description: {
-      en: 'Organized and led multi-specialty screening camps across Chaibasa and surrounding regions, enabling early detection of asymptomatic diabetes to protect vital organs.',
-      hi: 'चाईबासा और आसपास के क्षेत्रों में नियमित रूप से मधुमेह जांच शिविर आयोजित कर शुरुआती चरण में बीमारी की पहचान और अंग सुरक्षा में मार्गदर्शन किया।',
+      en: 'Stage presentation and academic participation at the RSSDI JHCON 2026 conference.',
+      hi: 'आरएसएसडीआई झरकॉन 2026 राज्य सम्मेलन में विशेषज्ञ मंच प्रस्तुति एवं सहभागिता।',
     },
-    category: 'screening',
+    category: 'academic',
+    image: CLINIC_IMAGES.rssdiJhconAward,
   },
   {
     id: 'ach-2',
     title: {
-      en: 'Founder of Cardio Diabetic Clinic, Chaibasa',
-      hi: 'कार्डियो डायबिटिक क्लिनिक, चाईबासा के संस्थापक',
+      en: '19+ Years of Community Diabetic Screening',
+      hi: '19+ वर्षों से सामुदायिक मधुमेह जांच शिविर',
     },
     organization: {
-      en: 'Cardio Diabetic Clinic, Amlatola, Chaibasa',
-      hi: 'कार्डियो डायबिटिक क्लिनिक, अमलाटोला, चाईबासा',
+      en: 'Cardio Diabetic Clinic & Regional Health Outreach',
+      hi: 'कार्डियो डायबिटिक क्लिनिक एवं क्षेत्रीय स्वास्थ्य पहल',
     },
-    year: 'Est. 2007',
+    year: '2007 – Present',
     description: {
-      en: 'Established a dedicated regional center for chronic metabolic care, balancing tight glycemic targets with continuous risk reduction for heart, kidney, and nerve health.',
-      hi: 'चाईबासा में समर्पित मेटाबोलिक स्वास्थ्य केंद्र की स्थापना की, जो ग्लूकोज संतुलन के साथ-साथ हृदय, गुर्दे और नसों की दीर्घकालिक सुरक्षा पर केंद्रित है।',
+      en: 'Organized and led multi-specialty screening camps across Chaibasa and surrounding regions.',
+      hi: 'चाईबासा और आसपास के क्षेत्रों में नियमित रूप से मधुमेह जांच शिविरों का सफल आयोजन।',
     },
-    category: 'clinical',
+    category: 'community',
+    image: CLINIC_IMAGES.ccdsiConference,
   },
   {
     id: 'ach-3',
     title: {
-      en: 'Continuous Organ Preservation & Patient Education Advocacy',
-      hi: 'अंग सुरक्षा एवं रोगी शिक्षा अभियान',
+      en: 'Continuous Organ Preservation & Awareness Programs',
+      hi: 'निरंतर अंग सुरक्षा एवं रोगी जागरूकता अभियान',
     },
     organization: {
       en: 'Clinical Diabetology & Preventive Medicine',
       hi: 'क्लिनिकल डायबेटोलॉजी एवं प्रिवेंटिव मेडिसिन',
     },
-    year: '2007 – Present',
+    year: 'Ongoing',
     description: {
-      en: 'Advocating the core clinical principle that early glycemic control enables patients to lead a normal, healthy life forever without end-organ damage.',
-      hi: 'इस मूल सिद्धांत का प्रचार कि समय पर नियंत्रण से मरीज बिना किसी अंग क्षति के सदैव एक स्वस्थ और सामान्य जीवन जी सकते हैं।',
+      en: 'Advocating early detection, lifestyle modification and patient education for a healthier community.',
+      hi: 'स्वस्थ समुदाय के लिए शीघ्र पहचान, जीवनशैली बदलाव और रोगी शिक्षा का निरंतर प्रचार।',
     },
-    category: 'community',
+    category: 'screening',
+    image: '/images/doctor-awareness-program.webp',
   },
 ];

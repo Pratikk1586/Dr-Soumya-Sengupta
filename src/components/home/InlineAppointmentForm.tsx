@@ -93,7 +93,7 @@ export const InlineAppointmentForm: React.FC = () => {
 
       if (res.success) {
         setSuccessData({
-          referenceId: res.referenceId || `SS-${Date.now().toString().slice(-6)}`,
+          referenceId: res.referenceId || 'APT-ONLINE',
           data,
         });
       } else {

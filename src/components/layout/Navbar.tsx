@@ -8,10 +8,9 @@ import { SearchModal } from './SearchModal';
 import { MobileDrawer } from './MobileDrawer';
 import { ClinicNoticesModal } from '../notices/ClinicNoticesModal';
 import { cn } from '../../utils/cn';
-import { Container } from '../common/Container';
 
 export const Navbar: React.FC = () => {
-  const { localize, t } = useLanguage();
+  const { localize, t, isHindi } = useLanguage();
   const location = useLocation();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -89,54 +88,29 @@ export const Navbar: React.FC = () => {
             : 'bg-[#FBF8F1]/95 backdrop-blur-sm border-b border-[#E8E2D5]/70 shadow-none py-3 sm:py-4'
         )}
       >
-        <Container size="xl" className="flex items-center justify-between gap-3 lg:gap-4">
+        <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-6 xl:px-10 flex items-center justify-between gap-1.5 lg:gap-2 xl:gap-4">
           {/* Logo & Clinical Identity */}
           <Link
             to="/"
-            className="flex items-center gap-2.5 sm:gap-3 shrink-0 group focus-visible:outline-2 focus-visible:outline-[#0F5C4A] rounded-lg p-0.5"
+            className="flex items-center shrink-0 group focus-visible:outline-2 focus-visible:outline-[#0F5C4A] rounded-lg p-0.5 ml-0.5 sm:ml-1"
+            aria-label="Dr. Soumya Sengupta's Diabetic Clinic"
           >
-            {/* Circular Green & Gold Leaf Emblem */}
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-white via-[#FBF8F1] to-[#F5EFE6] border border-[#B8862B]/35 flex items-center justify-center shadow-xs shrink-0 relative overflow-hidden group-hover:border-[#B8862B] transition-colors">
-              <svg
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 text-[#0F5C4A]"
-                aria-hidden="true"
-              >
-                {/* Curved stem */}
-                <path
-                  d="M16 28 C16 20 18 12 24 8"
-                  stroke="#B8862B"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-                {/* Left Leaf (Deep Green) */}
-                <path
-                  d="M16 22 C10 20 7 14 11 9 C15 11 16 16 16 22 Z"
-                  fill="#0F5C4A"
-                />
-                {/* Right Leaf (Warm Accent) */}
-                <path
-                  d="M16 17 C19 14 24 12 25 7 C21 7 17 11 16 17 Z"
-                  fill="#B8862B"
-                />
-                {/* Small Center Sprout */}
-                <circle cx="16" cy="7.5" r="2" fill="#0F5C4A" />
-              </svg>
-            </div>
-            <div className="shrink-0 min-w-0">
-              <span className="block text-sm sm:text-base lg:text-lg font-serif font-bold text-[#1B2A26] tracking-tight leading-none group-hover:text-[#0F5C4A] transition-colors">
-                Dr. Soumya Sengupta
-              </span>
-              <span className="block text-[10px] sm:text-[11px] font-medium text-[#4A5753] tracking-tight mt-0.5 sm:mt-1">
-                Diabetes • Thyroid • Metabolic Health
-              </span>
-            </div>
+            <picture>
+              <source type="image/webp" srcSet="/images/clinic-logo.webp" />
+              <img
+                src="/images/clinic-logo.png"
+                alt="Dr. Soumya Sengupta's Diabetic Clinic"
+                className="h-[40px] sm:h-[46px] lg:h-[48px] xl:h-[53px] w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+                width={157}
+                height={53}
+                fetchPriority="high"
+                loading="eager"
+              />
+            </picture>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 shrink-0" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 2xl:gap-2 shrink-0" aria-label="Main Navigation">
             {NAVIGATION_ITEMS.map((item) => {
               const hasChildren = item.children && item.children.length > 0;
               const isCurrentSection =
@@ -157,9 +131,9 @@ export const Navbar: React.FC = () => {
                     }}
                     className={({ isActive }) =>
                       cn(
-                        'relative px-2.5 py-2 text-xs xl:text-[13.5px] font-medium transition-colors whitespace-nowrap',
+                        'relative px-1.5 py-1 xl:px-2 xl:py-1.5 2xl:px-2.5 2xl:py-2 text-[11.5px] xl:text-[13px] 2xl:text-[13.5px] font-medium transition-colors whitespace-nowrap',
                         isActive
-                          ? 'text-[#0F5C4A] font-bold after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-[#0F5C4A] after:rounded-full'
+                          ? 'text-[#0F5C4A] font-bold after:absolute after:bottom-0 after:left-1.5 after:right-1.5 after:h-0.5 after:bg-[#0F5C4A] after:rounded-full'
                           : 'text-[#4A5753] hover:text-[#0F5C4A]'
                       )
                     }
@@ -186,9 +160,9 @@ export const Navbar: React.FC = () => {
                     }}
                     onKeyDown={(e) => handleDropdownKeyDown(e, item.id)}
                     className={cn(
-                      'relative inline-flex items-center gap-1 px-2.5 py-2 text-xs xl:text-[13.5px] font-medium transition-colors cursor-pointer select-none whitespace-nowrap',
+                      'relative inline-flex items-center gap-0.5 xl:gap-1 px-1.5 py-1 xl:px-2 xl:py-1.5 2xl:px-2.5 2xl:py-2 text-[11.5px] xl:text-[13px] 2xl:text-[13.5px] font-medium transition-colors cursor-pointer select-none whitespace-nowrap',
                       isCurrentSection
-                        ? 'text-[#0F5C4A] font-bold after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-[#0F5C4A] after:rounded-full'
+                        ? 'text-[#0F5C4A] font-bold after:absolute after:bottom-0 after:left-1.5 after:right-1.5 after:h-0.5 after:bg-[#0F5C4A] after:rounded-full'
                         : 'text-[#4A5753] hover:text-[#0F5C4A]'
                     )}
                     aria-expanded={isOpen}
@@ -250,28 +224,29 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Action Bar (Search, Language Switcher, Book Appointment CTA, Hamburger) */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 lg:gap-2 xl:gap-2.5 2xl:gap-3 shrink-0 mr-0.5 sm:mr-1">
             {/* Search Trigger */}
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 rounded-full text-[#4A5753] hover:text-[#0F5C4A] hover:bg-[#E8F2EE] transition-colors cursor-pointer shrink-0"
+              className="w-8 h-8 2xl:w-9 2xl:h-9 flex items-center justify-center rounded-full text-[#4A5753] hover:text-[#0F5C4A] hover:bg-[#E8F2EE] transition-colors cursor-pointer shrink-0"
               aria-label="Open search"
             >
-              <Search className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+              <Search className="w-4 h-4 xl:w-[17px] xl:h-[17px]" />
             </button>
 
-            {/* Language Switcher */}
-            <LanguageSwitcher variant="compact" className="shrink-0" />
+            {/* Language Switcher (Desktop / Tablet) */}
+            <LanguageSwitcher variant="compact" className="hidden sm:inline-flex shrink-0" />
 
             {/* Booking CTA Button (Deep green pill with calendar icon) */}
             <Link to="/book-appointment" className="hidden sm:inline-block shrink-0">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0F5C4A] hover:bg-[#0B4636] text-white text-xs sm:text-sm font-semibold shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap active:scale-[0.98]"
+                className="inline-flex items-center gap-1 xl:gap-2 px-2.5 py-1.5 xl:px-4 xl:py-2 2xl:px-4.5 2xl:py-2.5 rounded-full bg-[#0F5C4A] hover:bg-[#0B4636] text-white text-[11px] xl:text-[12.5px] 2xl:text-[13px] font-semibold shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap active:scale-[0.98]"
               >
-                <Calendar className="w-4 h-4 text-white" aria-hidden="true" />
-                <span>{t('cta.bookAppointment')}</span>
+                <Calendar className="w-3 h-3 xl:w-4 xl:h-4 text-white" aria-hidden="true" />
+                <span className="hidden xl:inline">{t('cta.bookAppointment')}</span>
+                <span className="xl:hidden">{isHindi ? 'अपॉइंटमेंट' : 'Book'}</span>
               </button>
             </Link>
 
@@ -279,13 +254,13 @@ export const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsMobileDrawerOpen(true)}
-              className="p-2 rounded-full text-[#1B2A26] hover:bg-[#E8F2EE] transition-colors lg:hidden cursor-pointer shrink-0"
+              className="w-11 h-11 flex items-center justify-center rounded-full text-[#1B2A26] hover:bg-[#E8F2EE] transition-colors lg:hidden cursor-pointer shrink-0"
               aria-label="Open navigation menu"
             >
               <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
-        </Container>
+        </div>
       </header>
 
       {/* Modals & Overlays */}

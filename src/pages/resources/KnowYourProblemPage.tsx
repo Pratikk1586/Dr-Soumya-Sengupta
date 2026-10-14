@@ -16,14 +16,17 @@ import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { MedicalDisclaimerBanner } from '../../components/common/MedicalDisclaimerBanner';
 import { useLanguage } from '../../context/useLanguage';
-import { PROBLEMS_DATA } from '../../data/problems';
+import { useService } from '../../hooks/useService';
+import { problemService } from '../../services';
 
 export const KnowYourProblemPage: React.FC = () => {
   const { localize, isHindi, t } = useLanguage();
-  const [selectedTopicId, setSelectedTopicId] = useState<string>(PROBLEMS_DATA[0]?.id || '');
+  const { data: problemsData } = useService(() => problemService.getProblems(), []);
+  const problems = problemsData || [];
+  const [selectedTopicId, setSelectedTopicId] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredTopics = PROBLEMS_DATA.filter((p) => {
+  const filteredTopics = problems.filter((p) => {
     if (!searchQuery.trim()) return true;
     const query = searchQuery.toLowerCase();
     const title = localize(p.title).toLowerCase();
@@ -32,9 +35,9 @@ export const KnowYourProblemPage: React.FC = () => {
   });
 
   const activeTopic =
-    PROBLEMS_DATA.find((p) => p.id === selectedTopicId) ||
+    problems.find((p) => p.id === (selectedTopicId || problems[0]?.id)) ||
     filteredTopics[0] ||
-    PROBLEMS_DATA[0];
+    problems[0];
 
   return (
     <>

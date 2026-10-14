@@ -44,20 +44,15 @@ export const PancreasViewer: React.FC<PancreasViewerProps> = ({
   const [selectedPart, setSelectedPart] = useState<PancreasPartId | null>(initialPart);
   const [activeCategory, setActiveCategory] = useState<PancreasPartCategory>('all');
   const [hasInteracted, setHasInteracted] = useState<boolean>(false);
-  const [isDebugMode, setIsDebugMode] = useState<boolean>(false);
+  const [isDebugMode] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('debug') === '1';
+    }
+    return false;
+  });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Check URL query param ?debug=1
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('debug') === '1') {
-        setIsDebugMode(true);
-      }
-    }
-  }, []);
 
   // Cleanup leave timer on unmount
   useEffect(() => {

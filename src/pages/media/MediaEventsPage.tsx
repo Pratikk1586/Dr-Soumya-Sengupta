@@ -5,10 +5,13 @@ import { Container } from '../../components/common/Container';
 import { Breadcrumb } from '../../components/common/Breadcrumb';
 import { Card } from '../../components/common/Card';
 import { useLanguage } from '../../context/useLanguage';
-import { EVENTS_DATA } from '../../data/events';
+import { useService } from '../../hooks/useService';
+import { eventService } from '../../services';
 
 export const MediaEventsPage: React.FC = () => {
   const { localize, isHindi } = useLanguage();
+  const { data: eventsData } = useService(() => eventService.getEvents(), []);
+  const events = eventsData || [];
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   return (
@@ -48,7 +51,7 @@ export const MediaEventsPage: React.FC = () => {
 
       <Container size="xl" className="py-12 space-y-12">
         <div className="space-y-8 max-w-4xl">
-          {EVENTS_DATA.map((event) => (
+          {events.map((event) => (
             <Card key={event.id} padding="lg" className="bg-white border-slate-200/90 shadow-2xs hover:border-[#65D9D0]/50 transition-all duration-200 space-y-6">
               <div className="grid md:grid-cols-12 gap-6 items-start">
                 {/* Event Image */}

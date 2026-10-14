@@ -18,14 +18,12 @@ import {
   ChevronRight,
   X,
   Bell,
-  Building2,
   Info,
 } from 'lucide-react';
 import { SEO } from '../../components/common/SEO';
 import { Container } from '../../components/common/Container';
 import { Breadcrumb } from '../../components/common/Breadcrumb';
 import { Card } from '../../components/common/Card';
-import { VerificationBadge } from '../../components/common/VerificationBadge';
 import { MapSection } from '../../components/common/MapSection';
 import { ClinicNoticesModal } from '../../components/notices/ClinicNoticesModal';
 import { useLanguage } from '../../context/useLanguage';
@@ -35,7 +33,7 @@ import { ENV, getSafePhoneHref, getSafeWhatsAppHref } from '../../config/env';
 import { VERIFIED_GOOGLE_MAPS_URL } from '../../lib/maps';
 import { formatDateInIST } from '../../utils/date';
 import { CLINIC_IMAGES } from '../../config/images';
-import type { GalleryItem } from '../../data/gallery';
+import type { GalleryItem } from '../../services/types';
 
 export const ClinicOverviewPage: React.FC = () => {
   const { localize, isHindi, t } = useLanguage();
@@ -129,98 +127,288 @@ export const ClinicOverviewPage: React.FC = () => {
       />
 
       {/* 1. HERO / INTRODUCTION SECTION */}
-      <section className="relative bg-gradient-to-b from-[#E8F2EE]/70 via-[#FBF8F1] to-[#FBF8F1] border-b border-[#E8E2D5] pt-6 pb-12 sm:pb-16 overflow-hidden">
-        {/* Subtle decorative background glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0F5C4A]/5 rounded-full blur-3xl pointer-events-none -z-0" />
-        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-[#E8F2EE]/50 rounded-full blur-2xl pointer-events-none -z-0" />
+      <section className="relative border-b border-[#E8E2D5] pt-6 pb-14 sm:pb-20 overflow-hidden">
+        {/* Soft, decorative organic background directly in CSS/SVG */}
+        <div
+          className="absolute inset-0 overflow-hidden pointer-events-none -z-0 select-none"
+          aria-hidden="true"
+        >
+          {/* 1. Base subtle layered cream & pale sage wash */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(135deg, #FAF8F2 0%, #F5F9F6 40%, #EBF4EF 100%)',
+            }}
+          />
+
+          {/* 2. Soft diffused radial glows behind content and on edges */}
+          <div
+            className="absolute -top-20 left-1/4 w-[500px] h-[400px] rounded-full blur-3xl"
+            style={{
+              background:
+                'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(240, 248, 243, 0.5) 60%, transparent 80%)',
+            }}
+          />
+          <div
+            className="absolute -bottom-16 -left-10 w-[420px] h-[340px] rounded-full blur-3xl"
+            style={{
+              background:
+                'radial-gradient(circle at center, rgba(15, 92, 74, 0.12) 0%, rgba(232, 242, 238, 0.6) 50%, transparent 75%)',
+            }}
+          />
+          <div
+            className="absolute -top-10 -right-10 w-[550px] h-[450px] rounded-full blur-3xl"
+            style={{
+              background:
+                'radial-gradient(circle at center, rgba(15, 92, 74, 0.14) 0%, rgba(242, 163, 58, 0.08) 45%, transparent 75%)',
+            }}
+          />
+
+          {/* 3. Left Organic Wave Curves */}
+          <svg
+            className="absolute -left-10 top-0 h-full w-[280px] sm:w-[380px] lg:w-[460px] opacity-45 pointer-events-none"
+            viewBox="0 0 400 500"
+            fill="none"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="clinic-left-wave-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0F5C4A" stopOpacity="0.22" />
+                <stop offset="50%" stopColor="#2D6A4F" stopOpacity="0.10" />
+                <stop offset="100%" stopColor="#52B788" stopOpacity="0.02" />
+              </linearGradient>
+              <linearGradient id="clinic-left-wave-2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#A3C9B8" stopOpacity="0.30" />
+                <stop offset="100%" stopColor="#FAF8F2" stopOpacity="0.0" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M-50 -20 C 180 80, 220 280, 40 520 L -50 520 Z"
+              fill="url(#clinic-left-wave-1)"
+            />
+            <path
+              d="M-50 80 C 120 180, 140 340, -10 520 L -50 520 Z"
+              fill="url(#clinic-left-wave-2)"
+            />
+            {/* Delicate gold contour line */}
+            <path
+              d="M-40 40 C 190 140, 230 310, 50 510"
+              stroke="#B8862B"
+              strokeWidth="1.2"
+              strokeOpacity="0.28"
+              fill="none"
+            />
+          </svg>
+
+          {/* 4. Right Organic Wave Curves & Translucent Botanical Leaves */}
+          <svg
+            className="absolute right-0 top-0 h-full w-[360px] sm:w-[500px] lg:w-[620px] pointer-events-none"
+            viewBox="0 0 600 480"
+            fill="none"
+            preserveAspectRatio="xMaxYMid meet"
+          >
+            <defs>
+              {/* Sage-Emerald Wave Gradient */}
+              <linearGradient id="clinic-right-wave-1" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#0F5C4A" stopOpacity="0.20" />
+                <stop offset="60%" stopColor="#40916C" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="#FAF8F2" stopOpacity="0.0" />
+              </linearGradient>
+
+              {/* Botanical Leaf Gradient */}
+              <linearGradient id="botanical-leaf-grad" x1="30%" y1="0%" x2="70%" y2="100%">
+                <stop offset="0%" stopColor="#2D6A4F" stopOpacity="0.28" />
+                <stop offset="50%" stopColor="#40916C" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#74C69D" stopOpacity="0.10" />
+              </linearGradient>
+
+              {/* Secondary Soft Leaf Gradient */}
+              <linearGradient id="botanical-leaf-grad-soft" x1="0%" y1="30%" x2="100%" y2="70%">
+                <stop offset="0%" stopColor="#1B4332" stopOpacity="0.22" />
+                <stop offset="100%" stopColor="#95D5B2" stopOpacity="0.08" />
+              </linearGradient>
+            </defs>
+
+            {/* Background sweeping organic curves */}
+            <path
+              d="M650 -20 C 420 60, 360 260, 520 500 L 650 500 Z"
+              fill="url(#clinic-right-wave-1)"
+            />
+            <path
+              d="M650 120 C 490 200, 460 360, 580 500 L 650 500 Z"
+              fill="rgba(232, 242, 238, 0.45)"
+            />
+
+            {/* Delicate Champagne-Gold Flowing Contour Lines */}
+            <path
+              d="M620 40 C 390 120, 340 310, 500 490"
+              stroke="#B8862B"
+              strokeWidth="1.2"
+              strokeOpacity="0.32"
+              fill="none"
+            />
+            <path
+              d="M640 100 C 430 180, 380 340, 530 490"
+              stroke="#0F5C4A"
+              strokeWidth="1"
+              strokeOpacity="0.22"
+              fill="none"
+            />
+
+            {/* Botanical Leaf Silhouettes (Elegant stem and leaves matching reference) */}
+            {/* Main botanical stem */}
+            <path
+              d="M580 490 C 530 380, 520 260, 540 110"
+              stroke="#2D6A4F"
+              strokeWidth="1.8"
+              strokeOpacity="0.35"
+              strokeLinecap="round"
+              fill="none"
+            />
+
+            {/* Leaf 1: Top upright leaf */}
+            <g transform="translate(540, 110) rotate(-25)">
+              <path
+                d="M0 0 C -25 -40, -15 -85, 0 -115 C 15 -85, 25 -40, 0 0 Z"
+                fill="url(#botanical-leaf-grad)"
+              />
+              <path
+                d="M0 0 L 0 -105"
+                stroke="#B8862B"
+                strokeWidth="0.9"
+                strokeOpacity="0.4"
+              />
+            </g>
+
+            {/* Leaf 2: Middle-left angled leaf */}
+            <g transform="translate(525, 220) rotate(-65)">
+              <path
+                d="M0 0 C -28 -35, -22 -80, 0 -105 C 22 -80, 28 -35, 0 0 Z"
+                fill="url(#botanical-leaf-grad)"
+              />
+              <path
+                d="M0 0 L 0 -95"
+                stroke="#B8862B"
+                strokeWidth="0.8"
+                strokeOpacity="0.35"
+              />
+            </g>
+
+            {/* Leaf 3: Lower-left wide leaf */}
+            <g transform="translate(535, 330) rotate(-78)">
+              <path
+                d="M0 0 C -30 -30, -26 -75, 0 -95 C 26 -75, 30 -30, 0 0 Z"
+                fill="url(#botanical-leaf-grad-soft)"
+              />
+              <path
+                d="M0 0 L 0 -85"
+                stroke="#B8862B"
+                strokeWidth="0.8"
+                strokeOpacity="0.3"
+              />
+            </g>
+
+            {/* Leaf 4: Right-side accent leaf */}
+            <g transform="translate(560, 260) rotate(35)">
+              <path
+                d="M0 0 C -18 -25, -15 -55, 0 -75 C 15 -55, 18 -25, 0 0 Z"
+                fill="url(#botanical-leaf-grad-soft)"
+              />
+            </g>
+          </svg>
+        </div>
 
         <Container size="xl" className="relative z-10">
+          {/* Breadcrumb at top */}
           <Breadcrumb items={[{ label: t('nav.clinic') }]} />
 
-          <div className="mt-4 max-w-4xl space-y-4">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E8F2EE] text-[#0F5C4A] border border-[#0F5C4A]/20">
-                <Building2 className="w-3.5 h-3.5 text-[#0F5C4A]" />
-                <span>{isHindi ? 'क्लिनिक परिचय' : 'OUR CLINIC'}</span>
-              </span>
-              <VerificationBadge note={isHindi ? 'सत्यापित क्लिनिक विवरण' : 'Verified Clinical Practice'} />
-            </div>
-
-            <div className="flex items-center gap-3.5 sm:gap-4 pt-1">
-              <div className="h-12 sm:h-14 w-auto flex items-center shrink-0 bg-white px-2.5 py-1 rounded-xl border border-[#E8E2D5] shadow-2xs">
+          <div className="mt-4 sm:mt-5 max-w-4xl space-y-4 sm:space-y-4.5">
+            {/* Logo and Clinic Heading Row */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3.5 sm:gap-4.5 pt-1">
+              {/* Compact white logo container */}
+              <div className="h-12 sm:h-14 w-fit flex items-center shrink-0 bg-white px-3 sm:px-3.5 py-1.5 rounded-2xl border border-[#E8E2D5] shadow-2xs">
                 <img
                   src={CLINIC_IMAGES.logo}
                   alt="Cardio Diabetic Clinic Logo"
-                  className="h-8 sm:h-10 w-auto max-w-[80px] sm:max-w-[100px] object-contain"
-                  width={80}
-                  height={40}
+                  className="h-8 sm:h-9.5 w-auto max-w-[110px] sm:max-w-[130px] object-contain"
+                  width={110}
+                  height={38}
                 />
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B2A26] tracking-tight leading-tight">
+
+              {/* Large editorial serif heading */}
+              <h1 className="text-3xl sm:text-4xl md:text-[2.75rem] font-serif font-bold text-[#1B2A26] tracking-tight leading-tight">
                 {clinic ? localize(clinic.name) : 'Cardio Diabetic Clinic'}
               </h1>
             </div>
 
-            <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal max-w-3xl">
+            {/* Description */}
+            <p className="text-sm sm:text-base text-[#4A5753] leading-relaxed font-normal max-w-3xl">
               {isHindi
                 ? 'अमलाटोला, चाईबासा (पश्चिमी सिंहभूम, झारखंड) में स्थित एक समर्पित परामर्श केंद्र — जहां डॉ. सौम्य सेनगुप्ता के प्रत्यक्ष मार्गदर्शन में समग्र मधुमेह प्रबंधन, कार्डियोवैस्कुलर जोखिम मूल्यांकन एवं मेटाबॉलिक जांच की सुविधा उपलब्ध है।'
                 : 'A dedicated clinical setting in Amlatola, Chaibasa, West Singhbhum, providing comprehensive diabetes management, cardiovascular risk screening, and metabolic evaluations under the direct care of Dr. Soumya Sengupta.'}
             </p>
 
-            {/* Quick Highlights Pills */}
-            <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-slate-700 font-medium">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
-                <Clock className="w-4 h-4 text-emerald-600 shrink-0" />
+            {/* Information Pills */}
+            <div className="pt-1 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium text-[#1B2A26]">
+              <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#E8E2D5] shadow-2xs">
+                <Clock className="w-4 h-4 text-[#0F5C4A] shrink-0" aria-hidden="true" />
                 <span>{isHindi ? 'सातों दिन खुला (Open 7 Days)' : 'Open All 7 Days'}</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
-                <MapPin className="w-4 h-4 text-[#103F4A] shrink-0" />
+              <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#E8E2D5] shadow-2xs">
+                <MapPin className="w-4 h-4 text-[#0E7490] shrink-0" aria-hidden="true" />
                 <span>{isHindi ? 'अमलाटोला, चाईबासा' : 'Amlatola, Chaibasa'}</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
-                <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
+              <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#E8E2D5] shadow-2xs">
+                <ShieldCheck className="w-4 h-4 text-[#0284C7] shrink-0" aria-hidden="true" />
                 <span>{isHindi ? 'ऑन-साइट जांच सुविधाएं' : 'On-Site Diagnostic Facilities'}</span>
               </span>
             </div>
 
-            {/* Quick Hero Actions */}
-            <div className="pt-4 flex flex-wrap items-center gap-3">
+            {/* Call-to-Action Buttons */}
+            <div className="pt-3 sm:pt-4 flex flex-wrap items-center gap-2.5 sm:gap-3">
+              {/* 1. Book Appointment */}
               <Link
                 to="/book-appointment"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-[#103F4A] hover:bg-[#0a252f] text-white shadow-sm hover:shadow-md transition-all active:scale-98"
+                className="inline-flex items-center justify-center gap-2 px-5.5 py-3 rounded-xl font-bold text-sm bg-[#0F5C4A] hover:bg-[#0B4636] text-white shadow-sm hover:shadow-md transition-all active:scale-[0.98] min-h-[46px]"
               >
-                <Calendar className="w-4 h-4" />
+                <Calendar className="w-4 h-4 text-white" aria-hidden="true" />
                 <span>{isHindi ? 'अपॉइंटमेंट बुक करें' : 'Book Appointment'}</span>
+                <ArrowRight className="w-4 h-4 text-white" aria-hidden="true" />
               </Link>
 
+              {/* 2. Get Directions */}
               <a
                 href={mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-2xs transition-all active:scale-98"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-white hover:bg-[#FBF8F1] text-[#0F5C4A] border border-[#0F5C4A]/30 shadow-2xs transition-all active:scale-[0.98] min-h-[46px]"
               >
-                <Navigation className="w-4 h-4 text-[#103F4A]" />
-                <span>{isHindi ? 'रास्ता देखें (Google Maps)' : 'Get Directions'}</span>
+                <Navigation className="w-4 h-4 text-[#0F5C4A]" aria-hidden="true" />
+                <span>{isHindi ? 'रास्ता देखें' : 'Get Directions'}</span>
               </a>
 
+              {/* 3. WhatsApp */}
               {ENV.hasWhatsapp && whatsappHref && (
                 <a
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-all active:scale-98"
+                  className="inline-flex items-center justify-center gap-2 px-4.5 py-3 rounded-xl font-semibold text-sm bg-[#E8F7EE] hover:bg-[#DCFCE7] text-[#15803d] border border-[#22C55E]/30 shadow-2xs transition-all active:scale-[0.98] min-h-[46px]"
                 >
-                  <MessageCircle className="w-4 h-4 text-emerald-700" />
+                  <MessageCircle className="w-4 h-4 text-[#16a34a]" aria-hidden="true" />
                   <span>{isHindi ? 'व्हाट्सएप संपर्क' : 'WhatsApp'}</span>
                 </a>
               )}
 
+              {/* 4. Call Clinic */}
               {ENV.hasPhone && phoneHref && (
                 <a
                   href={phoneHref}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-all active:scale-98"
+                  className="inline-flex items-center justify-center gap-2 px-4.5 py-3 rounded-xl font-semibold text-sm bg-white hover:bg-[#FBF8F1] text-[#1B2A26] border border-[#E8E2D5] shadow-2xs transition-all active:scale-[0.98] min-h-[46px]"
                 >
-                  <Phone className="w-4 h-4 text-slate-700" />
+                  <Phone className="w-4 h-4 text-[#4A5753]" aria-hidden="true" />
                   <span>{isHindi ? 'कॉल करें' : 'Call Clinic'}</span>
                 </a>
               )}
@@ -242,7 +430,7 @@ export const ClinicOverviewPage: React.FC = () => {
                     src="/assets/achievements/newspaper-3.webp"
                     alt="Cardio Diabetic Clinic Consultation and Diagnostic Setup"
                     className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-500"
-                    loading="eager"
+                    loading="lazy"
                     onError={(e) => {
                       // Fallback to elegant styled card if image file is absent
                       e.currentTarget.style.display = 'none';
@@ -658,7 +846,6 @@ export const ClinicOverviewPage: React.FC = () => {
                   }}
                   tabIndex={0}
                   role="button"
-                  aria-label={`View photo: ${localize(item.title)}`}
                   className="group relative rounded-2xl overflow-hidden border border-slate-200/90 bg-slate-50 shadow-2xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
                 >
                   <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-100">
@@ -754,7 +941,7 @@ export const ClinicOverviewPage: React.FC = () => {
                 className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3 relative overflow-hidden flex flex-col justify-between"
               >
                 <div className="space-y-2.5">
-                  <span className="text-2xl font-black text-[#103F4A]/25 block font-mono">
+                  <span className="text-2xl font-black text-[#0F5C4A]/70 block font-mono" aria-hidden="true">
                     {st.step}
                   </span>
                   <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">

@@ -51,8 +51,8 @@ export const AboutDoctorSection: React.FC = () => {
           {/* 2. Middle: Doctor Credentials, Specialisation, Bio, and CTA */}
           <div className="lg:col-span-4 space-y-4 sm:space-y-4.5">
             {/* Pill Designation Badge */}
-            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] text-[#B8862B] text-xs font-bold tracking-wider uppercase shadow-2xs">
-              <span>{isHindi ? 'कंसल्टेंट डायबेटोलॉजिस्ट' : 'CONSULTANT DIABETOLOGIST'}</span>
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] text-[#875D14] text-xs font-bold tracking-wider uppercase shadow-2xs">
+              <span>{isHindi ? 'वरिष्ठ कंसल्टेंट डायबेटोलॉजिस्ट' : 'CONSULTANT DIABETOLOGIST & METABOLIC PHYSICIAN'}</span>
             </div>
 
             {/* Serif Doctor Name */}
@@ -63,21 +63,34 @@ export const AboutDoctorSection: React.FC = () => {
             {/* Qualifications & Diabetology Specialties */}
             <div className="space-y-0.5">
               <p className="text-sm sm:text-base font-semibold text-[#1B2A26]">
-                {DOCTOR_CREDENTIALS.degrees || 'MBBS, MD (Medicine), DM (Endocrinology)'}
+                {DOCTOR_CREDENTIALS.degrees || 'MBBS, PGD in Diabetology'}
               </p>
-              <p className="text-xs sm:text-sm font-semibold text-[#B8862B]">
+              <p className="text-xs sm:text-sm font-semibold text-[#8F6317]">
                 {isHindi
-                  ? 'डायबिटीज, थायरॉयड एवं मेटाबोलिक विकारों में विशेषज्ञ'
-                  : 'Specialist in Diabetes, Thyroid & Metabolic Disorders'}
+                  ? 'डायबिटीज, थायरॉयड, उच्च रक्तचाप एवं मेटाबोलिक विकारों में विशेषज्ञ'
+                  : 'Specialist in Diabetes, Thyroid, Hypertension & Metabolic Health'}
               </p>
             </div>
 
-            {/* Short Introduction Paragraph */}
+            {/* Accurate Clinical Biography */}
             <p className="text-xs sm:text-sm text-[#4A5753] leading-relaxed font-normal">
               {isHindi
-                ? 'डायबिटीज और संबंधित एंडोक्राइन विकारों से जूझ रहे रोगियों के लिए दयालु, साक्ष्य-आधारित देखभाल प्रदान करने के लिए समर्पित, जिसका मुख्य उद्देश्य दीर्घकालिक स्वास्थ्य और जीवन की गुणवत्ता में सुधार है।'
-                : 'Dedicated to providing compassionate, evidence-based care for patients with diabetes and related endocrine disorders, with a focus on long-term health and quality of life.'}
+                ? 'कार्डियो डायबिटिक क्लिनिक, चाईबासा में 2007 से कार्यरत (19+ वर्षों का अनुभव)। मधुमेह की शुरुआती पहचान, कंटीन्यूअस ग्लूकोज मॉनिटरिंग और महत्वपूर्ण अंगों (गुर्दे, आंखें, नसें, हृदय) की दीर्घकालिक सुरक्षा के लिए समर्पित।'
+                : 'Practicing physician since 2007 (19+ years in diabetes care) at Cardio Diabetic Clinic, Chaibasa. Dedicated to early glycemic detection, Continuous Glucose Monitoring (CGM), and protecting vital organs (kidneys, eyes, nerves, and heart) so patients lead healthy, independent lives.'}
             </p>
+
+            {/* Credentials Pills */}
+            <div className="flex flex-wrap gap-1.5 pt-1 text-[11px] font-medium text-[#4A5753]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#E8F2EE] text-[#0F5C4A] font-semibold">
+                {isHindi ? '2007 से अभ्यास' : 'Practicing since 2007'}
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-[#F5EFE6] text-[#875D14] font-semibold border border-[#E8E2D5]">
+                {isHindi ? 'कार्डियो डायबिटिक क्लिनिक' : 'Cardio Diabetic Clinic, Chaibasa'}
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-[#F5EFE6] text-[#4A5753] border border-[#E8E2D5]">
+                Member: RSSDI & API
+              </span>
+            </div>
 
             {/* Outlined Pill Button Linking to /about */}
             <div className="pt-2">
@@ -97,55 +110,55 @@ export const AboutDoctorSection: React.FC = () => {
           <div className="lg:col-span-4">
             <div className="p-4 sm:p-5 rounded-3xl bg-[#F5EFE6]/80 border border-[#E8E2D5] shadow-xs">
               <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                {/* Stat 1: Patients Treated */}
+                {/* Stat 1: Patients Screened & Managed */}
                 <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8E2D5] shadow-xs flex flex-col items-center text-center gap-1.5 hover:shadow-sm transition-shadow">
                   <div className="w-10 h-10 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] flex items-center justify-center text-[#B8862B] mb-0.5">
                     <Users className="w-5 h-5" aria-hidden="true" />
                   </div>
                   <span className="font-serif font-bold text-xl sm:text-2xl text-[#0F5C4A] leading-tight">
-                    5000+
+                    15,000+
                   </span>
                   <span className="text-[11px] sm:text-xs font-semibold text-[#4A5753] leading-tight">
-                    {isHindi ? 'उपचारित मरीज' : 'Patients Treated'}
+                    {isHindi ? 'उपचारित एवं जांचे गए मरीज' : 'Patients Managed'}
                   </span>
                 </div>
 
-                {/* Stat 2: Years of Experience */}
+                {/* Stat 2: Years of Experience (Accurate 19+ Years) */}
                 <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8E2D5] shadow-xs flex flex-col items-center text-center gap-1.5 hover:shadow-sm transition-shadow">
                   <div className="w-10 h-10 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] flex items-center justify-center text-[#B8862B] mb-0.5">
                     <Award className="w-5 h-5" aria-hidden="true" />
                   </div>
                   <span className="font-serif font-bold text-xl sm:text-2xl text-[#0F5C4A] leading-tight">
-                    10+ Years
+                    19+ Years
                   </span>
                   <span className="text-[11px] sm:text-xs font-semibold text-[#4A5753] leading-tight">
-                    {isHindi ? 'का क्लिनिकल अनुभव' : 'of Experience'}
+                    {isHindi ? 'का क्लिनिकल अनुभव' : 'in Diabetes Care'}
                   </span>
                 </div>
 
-                {/* Stat 3: Evidence-Based Treatment */}
+                {/* Stat 3: Multi-Organ Protection */}
                 <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8E2D5] shadow-xs flex flex-col items-center text-center gap-1.5 hover:shadow-sm transition-shadow">
                   <div className="w-10 h-10 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] flex items-center justify-center text-[#B8862B] mb-0.5">
                     <ShieldCheck className="w-5 h-5" aria-hidden="true" />
                   </div>
                   <span className="font-serif font-bold text-sm sm:text-base text-[#1B2A26] leading-tight mt-1">
-                    Evidence-Based
+                    Multi-Organ
                   </span>
                   <span className="text-[11px] font-semibold text-[#4A5753] leading-tight">
-                    {isHindi ? 'आधुनिक चिकित्सा' : 'Modern Treatment'}
+                    {isHindi ? 'अंग सुरक्षा विशेषज्ञता' : 'Kidneys & Heart Care'}
                   </span>
                 </div>
 
-                {/* Stat 4: Compassionate Care */}
+                {/* Stat 4: Evidence-Based Care */}
                 <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8E2D5] shadow-xs flex flex-col items-center text-center gap-1.5 hover:shadow-sm transition-shadow">
                   <div className="w-10 h-10 rounded-full bg-[#F5EFE6] border border-[#E8E2D5] flex items-center justify-center text-[#B8862B] mb-0.5">
                     <Heart className="w-5 h-5" aria-hidden="true" />
                   </div>
                   <span className="font-serif font-bold text-sm sm:text-base text-[#1B2A26] leading-tight mt-1">
-                    Compassionate
+                    Evidence-Based
                   </span>
                   <span className="text-[11px] font-semibold text-[#4A5753] leading-tight">
-                    {isHindi ? 'रोगी-केंद्रित देखभाल' : 'Patient-Centred Care'}
+                    {isHindi ? 'साक्ष्य-आधारित चिकित्सा' : 'Modern Diabetology'}
                   </span>
                 </div>
               </div>
